@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 
 public class AbstractDeadLetterConsumer {
 
-    private String sourceName;
+    private final String sourceName;
     private final Config config;
     protected final Logger logger;
 
