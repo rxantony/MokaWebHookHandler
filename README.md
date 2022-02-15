@@ -1,6 +1,6 @@
 # MokaWebhookHandler
 
-This projects just reached 60% from it's completion and has a goal to handle unordered incoming webhook events sent by Mokapos and process it in sequential order based on it modified date.
+This projects just reached 60% from it's completion and has a goal to handle unordered incoming webhook events sent by Mokapos while processing them sequentially based on it modified date in parallel.
 
 ### Tech Stacksa
 
