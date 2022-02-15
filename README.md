@@ -23,7 +23,8 @@ This projects just reached 60% from it's completion and has a goal to handle uno
 
     * Create eventstore\_db database.
     * Create event_source table by running event\_source.sql script.
-    * Create lock_tracker table by running lock\_tracker.sql script.    
+    * Create lock_tracker table by running lock\_tracker.sql script.
+    * Create dead_letter table by running dead\_letter.sql script.      
     * Create mokaaddson\_db database.
     * Create item table by running item.sql script.
     
