@@ -1,6 +1,6 @@
 # MokaWebhookHandler
 
-This projects just reached 60% from it's completion and has a goal to handle unordered incoming webhook events sent by Mokapos while processing them sequentially based on it modified date in parallel.
+This projects just reached 60% from it's completion and has a goal to handle unordered incoming webhook events sent by Mokapos while processing them sequentially based on it modified date in parallel by leveraging MySql row locking to scynronized distributted message processing on RabbitMQ consumers.
 
 ### Tech Stacksa
 
