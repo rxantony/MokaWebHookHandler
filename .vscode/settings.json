@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "*.class": true
+    },
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.dependency.syncWithFolderExplorer": false
+}

@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-webhookhandler-common",
+            "type": "shell",
+            "command": "cd common;mvn clean install -Dmaven.test.skip"
+        },
+        {
+            "label": "build-webhookhandler-api",
+            "type": "shell",
+            "command": "cd api;mvn clean compile -Dmaven.test.skip"
+        },
+        {
+            "label": "build-webhookhandler-consumer",
+            "type": "shell",
+            "command": "cd consumer;mvn clean compile -Dmaven.test.skip"
+        }
+    ]
+}
