@@ -2,7 +2,7 @@
 
 This projects just reached 60% from it's completion and has a goal to handle unordered incoming webhook events sent by Mokapos while processing them sequentially based on it modified date in parallel, leveraging MySql row locking to scynronized distributted message processing on RabbitMQ consumers.
 
-### Tech Stacksa
+### Tech Stacks
 
 * [Oracle](https://www.oracle.com/java/technologies/downloads/) [ / OpenJdk java 11 or higher](https://openjdk.java.net)
 * [Mysql 8 or higher](https://www.mysql.com)
