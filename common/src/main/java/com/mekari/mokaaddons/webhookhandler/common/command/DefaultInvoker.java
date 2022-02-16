@@ -10,14 +10,21 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+@Component
 public class DefaultInvoker implements Invoker {
 
-    private final ObjectMapper mapper;
-    private final CommandEventManager manager;
-    protected final String eventNamePrefix;
-    private final Logger logger;
+    private @Autowired ObjectMapper mapper;
+    private @Autowired CommandEventManager manager;
+    protected String eventNamePrefix;
+
+    private Logger logger;
+
+    public DefaultInvoker() {
+        init();
+    }
 
     public DefaultInvoker(@Autowired CommandEventManager manager, @Autowired ObjectMapper mapper) {
         this(manager, mapper, null);
@@ -29,8 +36,16 @@ public class DefaultInvoker implements Invoker {
 
         this.manager = manager;
         this.mapper = mapper;
-        this.eventNamePrefix = eventNamePrefix != null ? eventNamePrefix.trim() : eventNamePrefix;
+        init();
+    }
+
+    protected void init(){
+        eventNamePrefix = eventNamePrefix != null ? eventNamePrefix.trim() : eventNamePrefix;
         logger = LogManager.getFormatterLogger(this.getClass());
+    }
+
+    protected Logger getLogger(){
+        return logger;
     }
 
     @Override

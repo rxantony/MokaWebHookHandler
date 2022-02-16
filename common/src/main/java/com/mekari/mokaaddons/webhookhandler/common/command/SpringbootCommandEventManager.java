@@ -4,12 +4,17 @@ import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+@Component
 public class SpringbootCommandEventManager implements CommandEventManager {
-    private ApplicationContext appContext;
+    private @Autowired ApplicationContext appContext;
 
-    public SpringbootCommandEventManager(@Autowired ApplicationContext appContext) {
+    public SpringbootCommandEventManager() {
+    }
+
+    public SpringbootCommandEventManager(ApplicationContext appContext) {
         Assert.notNull(appContext, "appContext");
         this.appContext = appContext;
     }
