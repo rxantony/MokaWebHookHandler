@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.processor;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
@@ -7,14 +7,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SpringbootEventProcessorManager implements EventProcessorManager {
+public class SpringbootCommandManager implements CommandManager {
     @Autowired
     private ApplicationContext appContext;
 
     @Override
     @SuppressWarnings("unchecked")
-    public <TEvent extends Event> EventProcessor<TEvent> createProcessor(String eventName)
+    public <TEvent extends Event> CommandEvent<TEvent> createCommand(String eventName)
             throws ClassNotFoundException {
-        return (EventProcessor<TEvent>) appContext.getBean(eventName, EventProcessor.class);
+        return (CommandEvent<TEvent>) appContext.getBean(eventName, CommandEvent.class);
     }
 }

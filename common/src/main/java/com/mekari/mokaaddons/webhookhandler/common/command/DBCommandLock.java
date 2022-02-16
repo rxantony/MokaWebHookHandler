@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.processor;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,40 +14,40 @@ import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage.It
 
 import org.springframework.util.Assert;
 
-public class DbEventLockProcessor<TEvent extends Event> extends AbstractEventProcessor<TEvent> {
+public class DBCommandLock<TEvent extends Event> extends AbstractCommand<TEvent> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
-    private final EventProcessor<TEvent> innerProcessor;
+    private final CommandEvent<TEvent> inner;
 
     private static final String GET_CONNECTIONID_SQL = "SELECT connection_id() id";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE data_id = %s LIMIT 1 FOR UPDATE";
 
-    public DbEventLockProcessor(DataSource dataSource, LockTrackerStorage lockTracker, EventProcessor<TEvent> innerProcessor) {
-        super(innerProcessor.eventClass());
+    public DBCommandLock(DataSource dataSource, LockTrackerStorage lockTracker, CommandEvent<TEvent> inner) {
+        super(inner.eventClass());
 
         Assert.notNull(dataSource, "dataSource must not be null");
         Assert.notNull(lockTracker, "lockTracker must not be null");
 
         this.dataSource = dataSource;
         this.lockTracker = lockTracker;
-        this.innerProcessor = innerProcessor;
+        this.inner = inner;
     }
 
     @Override
-    public void process(TEvent event) throws EventProcessingException {
+    public void execute(TEvent event) throws CommandException {
         try (var conn = createConnection(event);) {
             // we can track a rowlock created by this connection through:
             // select * from INFORMATION_SCHEMA.INNODB_TRX where trx_mysql_thread_id =
             // connId
             var lockItem = lock(conn, event);
             try {
-                innerProcessor.process(event);
+                inner.execute(event);
             } finally {
                 releaseLock(lockItem, conn, event);
             }
         } catch (Exception ex) {
-            throw new EventProcessingException(ex);
+            throw new CommandException(ex);
         }
     }
 
@@ -70,7 +70,8 @@ public class DbEventLockProcessor<TEvent extends Event> extends AbstractEventPro
 
         stmt.executeQuery(query);
 
-        var lockItem = new Item().builder()
+        new Item();
+        var lockItem = Item.builder()
                 .connId(connId)
                 .eventId(event.getHeader().getEventId())
                 .dataId(event.getBody().getData().getId())

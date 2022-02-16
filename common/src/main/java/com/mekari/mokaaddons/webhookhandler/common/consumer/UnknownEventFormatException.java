@@ -6,7 +6,7 @@ public class UnknownEventFormatException extends WebHookHandlingException {
 
     private final String event;
 
-    public UnknownEventFormatException(String event, String message) {
+    public UnknownEventFormatException(String message, String event) {
         super(message);
         this.event = event;
     }

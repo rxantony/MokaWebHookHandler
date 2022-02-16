@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.processor.EventProcessorManager;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,20 +15,20 @@ public class WebHookApi {
     private ObjectMapper mapper;
 
     @Autowired
-    private EventProcessorManager manager;
+    private CommandManager manager;
 
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebHookApi.class);
 
     // it respresents the api endpoint which will be called by partner.
-    public void handle(String event) {
-        LOGGER.debug("receice webhook event, with payload:%s", event);
+    public void handle(String message) {
+        LOGGER.debug("receice webhook message, with payload:%s", message);
         try {
-            var eventNode = mapper.readTree(event);
+            var eventNode = mapper.readTree(message);
             var eventHeaderNode = eventNode.get("header");
             var eventName = eventHeaderNode.get("event_name").asText();
-            var eventProcessor = manager.createProcessor(eventName);
-            var eventObj = mapper.readValue(eventNode.traverse(), eventProcessor.eventClass());
-            eventProcessor.process(eventObj);
+            var eventCmd = manager.createCommand(eventName);
+            var event = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
+            eventCmd.execute(event);
         } catch (Exception ex) {
             LOGGER.error(ex.toString());
         }

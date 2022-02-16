@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.processor;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
@@ -6,12 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.Assert;
 
-public abstract class AbstractEventProcessor<TEvent extends Event> implements EventProcessor<TEvent> {
+public abstract class AbstractCommand<TEvent extends Event> implements CommandEvent<TEvent> {
 
     private final Class<TEvent> eventCls;
     protected final Logger logger;
 
-    protected AbstractEventProcessor(Class<TEvent> eventCls) {
+    protected AbstractCommand(Class<TEvent> eventCls) {
         Assert.notNull(eventCls, "eventCls must not be null");
         this.eventCls = eventCls;
         logger = LogManager.getFormatterLogger(this.getClass());
@@ -23,5 +23,5 @@ public abstract class AbstractEventProcessor<TEvent extends Event> implements Ev
     }
 
     @Override
-    abstract public void process(TEvent event) throws EventProcessingException;
+    abstract public void execute(TEvent event) throws CommandException;
 }

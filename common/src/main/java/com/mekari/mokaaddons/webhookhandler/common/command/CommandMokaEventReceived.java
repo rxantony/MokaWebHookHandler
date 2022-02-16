@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.processor;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -13,7 +13,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
-public class MokaEventReceivedProcessor<TEvent extends AbstractMokaEvent<?>> extends AbstractEventProcessor<TEvent> {
+public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommand<TEvent> {
 
     private ObjectMapper mapper;
     private AmqpTemplate amqpTemplate;
@@ -22,7 +22,7 @@ public class MokaEventReceivedProcessor<TEvent extends AbstractMokaEvent<?>> ext
 
     private static final String INSERT_INTO_EVENT_SOURCE_SQL = "INSERT INTO event_source (data_id, data_updated_at, event_name, payload, event_id, outlet_id , version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    public MokaEventReceivedProcessor(Config config
+    public CommandMokaEventReceived(Config config
         , Class<TEvent> eventCls) {
         super(eventCls);
 
@@ -32,7 +32,7 @@ public class MokaEventReceivedProcessor<TEvent extends AbstractMokaEvent<?>> ext
         this.mapper = config.mapper;
     }
 
-    public void process(TEvent event) throws EventProcessingException {
+    public void execute(TEvent event) throws CommandException {
         try {
             var header = event.getHeader();
             var data = event.getBody().getData();
@@ -44,7 +44,7 @@ public class MokaEventReceivedProcessor<TEvent extends AbstractMokaEvent<?>> ext
             saveEvent(event);
             publishEvent(event);
         } catch (Exception ex) {
-            throw new EventProcessingException(ex);
+            throw new CommandException(ex);
         }
     }
 

@@ -1,10 +1,10 @@
-package com.mekari.mokaaddons.webhookhandler.processor;
+package com.mekari.mokaaddons.webhookhandler.command;
 
 import javax.sql.DataSource;
 
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
-import com.mekari.mokaaddons.webhookhandler.common.processor.AbstractEventProcessor;
-import com.mekari.mokaaddons.webhookhandler.common.processor.EventProcessingException;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class MokaItemReceivedProcessor extends AbstractEventProcessor<MokaItemReceived> {
+public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
 
     private final JdbcTemplate jdbcTemplate;
     private final AmqpTemplate amqpTemplate;
@@ -29,7 +29,7 @@ public class MokaItemReceivedProcessor extends AbstractEventProcessor<MokaItemRe
     private static final String INSERT_ITEM_SQL = "INSERT INTO item (id, name, description, created_at, updated_at) VALUES (?,?,?,?,?)";
     private static final String UPDATE_ITEM_SQL = "UPDATE item SET name=?, description=?, updated_at=? WHERE id=?";
 
-    public MokaItemReceivedProcessor(@Qualifier("mokaaddons") DataSource dataSource
+    public CommandMokaItemReceived(@Qualifier("mokaaddons") DataSource dataSource
         , @Autowired AmqpTemplate amqpTemplate) {
         super(MokaItemReceived.class);
 
@@ -41,7 +41,7 @@ public class MokaItemReceivedProcessor extends AbstractEventProcessor<MokaItemRe
     }
 
     @Override
-    public void process(MokaItemReceived event) throws EventProcessingException {
+    public void execute(MokaItemReceived event) throws CommandException {
         Assert.notNull(event, "event must not be null");
         saveEvent(event);
         publishEvent(event);

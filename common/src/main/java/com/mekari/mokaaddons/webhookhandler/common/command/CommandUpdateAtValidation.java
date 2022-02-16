@@ -1,25 +1,25 @@
-package com.mekari.mokaaddons.webhookhandler.common.processor;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 
 import org.springframework.util.Assert;
 
-public class EventUpdateAtValidationProcessor<TEvent extends Event> extends AbstractEventProcessor<TEvent> {
+public class CommandUpdateAtValidation<TEvent extends Event> extends AbstractCommand<TEvent> {
 
     private final EventSourceStorage storage;
-    private final EventProcessor<TEvent> innerProcessor;
+    private final CommandEvent<TEvent> inner;
 
-    public EventUpdateAtValidationProcessor(EventSourceStorage storage, EventProcessor<TEvent> innerProcessor) {
-        super(innerProcessor.eventClass());
+    public CommandUpdateAtValidation(EventSourceStorage storage, CommandEvent<TEvent> inner) {
+        super(inner.eventClass());
 
         Assert.notNull(storage, "storage must not be null");
         this.storage = storage;
-        this.innerProcessor = innerProcessor;
+        this.inner = inner;
     }
 
     @Override
-    public void process(TEvent event) throws EventProcessingException {
+    public void execute(TEvent event) throws CommandException {
         Assert.notNull(event, "event must not be null");
 
         var header = event.getHeader();
@@ -40,14 +40,14 @@ public class EventUpdateAtValidationProcessor<TEvent extends Event> extends Abst
                     data.getUpdatedAt().toString(), dataUpdatedAt.toString(), isUpdatedAtEquals);
 
             if (isUpdatedAtEquals)
-                innerProcessor.process(event);
+                inner.execute(event);
 
         } catch (Exception ex) {
-            throw new EventProcessingException(ex);
+            throw new CommandException(ex);
         }
     }
 
-    public static class EventSourceDataNotFoundException extends EventProcessingException {
+    public static class EventSourceDataNotFoundException extends CommandException {
         private final String dataId;
 
         public EventSourceDataNotFoundException(String dataId) {

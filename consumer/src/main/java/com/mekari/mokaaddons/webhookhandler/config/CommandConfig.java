@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.processor.DbEventLockProcessor;
-import com.mekari.mokaaddons.webhookhandler.common.processor.EventUpdateAtValidationProcessor;
-import com.mekari.mokaaddons.webhookhandler.common.processor.EventProcessor;
+import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandLock;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandUpdateAtValidation;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ProcessorConfig {
+public class CommandConfig {
 
     @Bean
     public EventSourceStorage eventSourceStorage(@Qualifier("eventstore") DataSource dataSource) {
@@ -30,27 +30,24 @@ public class ProcessorConfig {
     }
 
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
-    public EventProcessor<MokaItemReceived> mokaItemEventReceivedProcessor(@Qualifier("eventstore") DataSource dataSource
-        , EventProcessor<MokaItemReceived> processor
+    public CommandEvent<MokaItemReceived> commandMokaItemEventReceived(@Qualifier("eventstore") DataSource dataSource
+        , CommandEvent<MokaItemReceived> command
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
-        //return  new DbEventLockProcessor<>(dataSource, lockTracker,processor);
-        
-        return new EventUpdateAtValidationProcessor<>(eventSourceStorage,
-                new DbEventLockProcessor<>(dataSource, lockTrackerStorage,
-                        new EventUpdateAtValidationProcessor<>(eventSourceStorage, processor)));
+        return new CommandUpdateAtValidation<>(eventSourceStorage,
+                new DBCommandLock<>(dataSource, lockTrackerStorage,
+                        new CommandUpdateAtValidation<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })
-    public EventProcessor<MokaItemProcessed> mokaItemEventProcessedProcessor(@Qualifier("eventstore") DataSource dataSource
-        , EventProcessor<MokaItemProcessed> processor
+    public CommandEvent<MokaItemProcessed> commandMokaItemEventProcessed(@Qualifier("eventstore") DataSource dataSource
+        , CommandEvent<MokaItemProcessed> command
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTracker) {
         // chain of responsibilty here
-        //return  new DbEventLockProcessor<>(dataSource, lockTracker,processor);
-        return new EventUpdateAtValidationProcessor<>(eventSourceStorage,
-                new DbEventLockProcessor<>(dataSource, lockTracker,
-                        new EventUpdateAtValidationProcessor<>(eventSourceStorage, processor)));
+        return new CommandUpdateAtValidation<>(eventSourceStorage,
+                new DBCommandLock<>(dataSource, lockTracker,
+                        new CommandUpdateAtValidation<>(eventSourceStorage, command)));
     }
 }

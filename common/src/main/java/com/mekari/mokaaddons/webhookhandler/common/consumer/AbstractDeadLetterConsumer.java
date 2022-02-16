@@ -1,5 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler.common.consumer;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.DeadLeterItem;
@@ -17,7 +19,7 @@ public class AbstractDeadLetterConsumer {
     private final String sourceName;
     private final Config config;
     protected final Logger logger;
-
+    
     private static final String HEADER_X_RETRIES_COUNT = "x-retries-count";
     private static final String HEADER_X_DEATH_QUEUE = "x-first-death-queue";
 
@@ -32,24 +34,28 @@ public class AbstractDeadLetterConsumer {
     public void consume(Message message, Channel channel) throws Exception{
         try {
             var header = message.getMessageProperties().getHeaders();
-            var retriesCnt = (Integer) header.get(HEADER_X_RETRIES_COUNT);
-            if (retriesCnt == null) retriesCnt = 1;
-            if (retriesCnt > config.maxRetriesCount) {
+            var attempt = (Integer) header.get(HEADER_X_RETRIES_COUNT);
+            if (attempt == null) attempt = 1;
+            if (attempt > config.maxRetriesCount) {
                 saveFailedMessage(message);
                 logger.info("Discarding and save message %s into dead_letter storage", new String(message.getBody()));
                 return;
             }
-            var toQueue = (String)header.get(HEADER_X_DEATH_QUEUE);
-            var toExchange = toQueue.substring(0, toQueue.length() - "Queue".length());
+            var toExchange = getOriginalExchane(header);
 
             var toRoutingKey = message.getMessageProperties().getReceivedRoutingKey();
             toRoutingKey = toExchange==null||toExchange.length() == 0 ? toRoutingKey : toRoutingKey;
 
-            header.put(HEADER_X_RETRIES_COUNT, ++retriesCnt);
+            header.put(HEADER_X_RETRIES_COUNT, ++attempt);
             config.amqpTemplate.send(toExchange, toRoutingKey, message);
         } catch (Exception ex) {
             logger.error(ex.toString());
         }
+    }
+
+    private String getOriginalExchane(Map<String, Object> header){
+        var toQueue = (String)header.get(HEADER_X_DEATH_QUEUE);
+        return toQueue.substring(0, toQueue.length() - "Queue".length());
     }
 
     protected void saveFailedMessage(Message message) throws Exception{

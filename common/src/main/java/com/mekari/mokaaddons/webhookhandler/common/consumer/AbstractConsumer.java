@@ -3,7 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.common.consumer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.WebHookHandlingException;
-import com.mekari.mokaaddons.webhookhandler.common.processor.EventProcessorManager;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandManager;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,20 +14,22 @@ import org.springframework.util.Assert;
 public abstract class AbstractConsumer {
 
     private ObjectMapper mapper;
-    private EventProcessorManager eventProcessorManager;
+    private CommandManager commandManager;
 
     protected final String eventNamePrefix;
     protected final Logger logger;
 
-    protected AbstractConsumer(EventProcessorManager eventProcessorManager, ObjectMapper mapper) {
-        this(eventProcessorManager, mapper, null);
+    private static final String X_REJECTED_INFO = "reason";
+
+    protected AbstractConsumer(CommandManager commandManager, ObjectMapper mapper) {
+        this(commandManager, mapper, null);
     }
 
-    protected AbstractConsumer(EventProcessorManager eventProcessorManager, ObjectMapper mapper, String eventNamePrefix) {
-        Assert.notNull(eventProcessorManager, "eventProcessorManager must not be null");
+    protected AbstractConsumer(CommandManager commandManager, ObjectMapper mapper, String eventNamePrefix) {
+        Assert.notNull(commandManager, "commandManager must not be null");
         Assert.notNull(mapper, "mapper must not be null");
 
-        this.eventProcessorManager = eventProcessorManager;
+        this.commandManager = commandManager;
         this.mapper = mapper;
         this.eventNamePrefix = eventNamePrefix!=null ? eventNamePrefix.trim() : eventNamePrefix;
         logger = LogManager.getLogger(this.getClass());
@@ -38,12 +40,17 @@ public abstract class AbstractConsumer {
             var event = new String(message.getBody());
             var eventNode = mapper.readTree(event);
             var eventName = validateAndGetEventName(event, eventNode);
-            var eventProcesor = eventProcessorManager.createProcessor(eventName);
-            var eventObj = mapper.readValue(eventNode.traverse(), eventProcesor.eventClass());
-            eventProcesor.process(eventObj);
+            var eventCmd = commandManager.createCommand(eventName);
+            var eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
+            eventCmd.execute(eventObj);
         }
         catch(Exception ex){
+            //TODO need a thorough reserching for send actual error message cause the message is rejected
             logger.error(ex.getMessage());
+            message.getMessageProperties().setAppId("cxdxrx");
+            var header = message.getMessageProperties().getHeaders();
+            if(header.get(X_REJECTED_INFO) == null) 
+                header.put(X_REJECTED_INFO, ex.getMessage());
             throw ex;
         }
     }
@@ -54,7 +61,7 @@ public abstract class AbstractConsumer {
         if (eventIdNode == null)
             throw new UnknownEventFormatException("eventId is required", event);
 
-        var eventNameNode = header.get("event_name");
+        var eventNameNode = header.get("event_names");
         if (eventNameNode == null)
             throw new EventNameRequiredException(eventIdNode.asText(), event);
 
