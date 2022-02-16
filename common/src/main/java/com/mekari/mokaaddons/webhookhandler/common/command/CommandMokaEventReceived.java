@@ -13,7 +13,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
-public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommand<TEvent> {
+public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommandEvent<TEvent> {
 
     private ObjectMapper mapper;
     private AmqpTemplate amqpTemplate;

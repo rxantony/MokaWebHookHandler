@@ -6,12 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.Assert;
 
-public abstract class AbstractCommand<TEvent extends Event> implements CommandEvent<TEvent> {
+public abstract class AbstractCommandEvent<TEvent extends Event> implements CommandEvent<TEvent> {
 
     private final Class<TEvent> eventCls;
     protected final Logger logger;
 
-    protected AbstractCommand(Class<TEvent> eventCls) {
+    protected AbstractCommandEvent(Class<TEvent> eventCls) {
         Assert.notNull(eventCls, "eventCls must not be null");
         this.eventCls = eventCls;
         logger = LogManager.getFormatterLogger(this.getClass());

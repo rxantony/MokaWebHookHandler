@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
-public class SpringbootCommandManager implements CommandManager {
+public class SpringbootCommandEventManager implements CommandEventManager {
     private ApplicationContext appContext;
 
-    public SpringbootCommandManager(@Autowired ApplicationContext appContext) {
+    public SpringbootCommandEventManager(@Autowired ApplicationContext appContext) {
         Assert.notNull(appContext, "appContext");
         this.appContext = appContext;
     }

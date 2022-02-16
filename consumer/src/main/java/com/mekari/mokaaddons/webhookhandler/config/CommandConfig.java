@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandLock;
+import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandEventLock;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandUpdateAtValidation;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventUpdateAtValidation;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
@@ -35,9 +35,9 @@ public class CommandConfig {
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
-        return new CommandUpdateAtValidation<>(eventSourceStorage,
-                new DBCommandLock<>(dataSource, lockTrackerStorage,
-                        new CommandUpdateAtValidation<>(eventSourceStorage, command)));
+        return new CommandEventUpdateAtValidation<>(eventSourceStorage,
+                new DBCommandEventLock<>(dataSource, lockTrackerStorage,
+                        new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })
@@ -46,8 +46,8 @@ public class CommandConfig {
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTracker) {
         // chain of responsibilty here
-        return new CommandUpdateAtValidation<>(eventSourceStorage,
-                new DBCommandLock<>(dataSource, lockTracker,
-                        new CommandUpdateAtValidation<>(eventSourceStorage, command)));
+        return new CommandEventUpdateAtValidation<>(eventSourceStorage,
+                new DBCommandEventLock<>(dataSource, lockTracker,
+                        new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
     }
 }

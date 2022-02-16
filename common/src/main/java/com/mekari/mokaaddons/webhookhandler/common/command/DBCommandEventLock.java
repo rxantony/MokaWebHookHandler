@@ -14,7 +14,7 @@ import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage.It
 
 import org.springframework.util.Assert;
 
-public class DBCommandLock<TEvent extends Event> extends AbstractCommand<TEvent> {
+public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEvent<TEvent> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
@@ -23,7 +23,7 @@ public class DBCommandLock<TEvent extends Event> extends AbstractCommand<TEvent>
     private static final String GET_CONNECTIONID_SQL = "SELECT connection_id() id";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE data_id = %s LIMIT 1 FOR UPDATE";
 
-    public DBCommandLock(DataSource dataSource, LockTrackerStorage lockTracker, CommandEvent<TEvent> inner) {
+    public DBCommandEventLock(DataSource dataSource, LockTrackerStorage lockTracker, CommandEvent<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(dataSource, "dataSource must not be null");

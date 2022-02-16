@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandManager;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ public class WebHookApi {
     private ObjectMapper mapper;
 
     @Autowired
-    private CommandManager manager;
+    private CommandEventManager manager;
 
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebHookApi.class);
 

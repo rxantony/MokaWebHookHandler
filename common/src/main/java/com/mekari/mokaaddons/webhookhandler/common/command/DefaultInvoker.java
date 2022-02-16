@@ -15,15 +15,15 @@ import org.springframework.util.Assert;
 public class DefaultInvoker implements Invoker {
 
     private final ObjectMapper mapper;
-    private final CommandManager manager;
+    private final CommandEventManager manager;
     protected final String eventNamePrefix;
     private final Logger logger;
 
-    public DefaultInvoker(@Autowired CommandManager manager, @Autowired ObjectMapper mapper) {
+    public DefaultInvoker(@Autowired CommandEventManager manager, @Autowired ObjectMapper mapper) {
         this(manager, mapper, null);
     }
 
-    public DefaultInvoker(CommandManager manager, ObjectMapper mapper, String eventNamePrefix) {
+    public DefaultInvoker(CommandEventManager manager, ObjectMapper mapper, String eventNamePrefix) {
         Assert.notNull(manager, "managger must not be null");
         Assert.notNull(mapper, "mapper must not be null");
 

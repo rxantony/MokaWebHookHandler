@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.command;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommandEvent;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
+public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceived> {
 
     private final JdbcTemplate jdbcTemplate;
     private final AmqpTemplate amqpTemplate;

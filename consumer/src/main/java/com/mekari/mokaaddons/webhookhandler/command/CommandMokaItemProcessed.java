@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommandEvent;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class CommandMokaItemProcessed extends AbstractCommand<MokaItemProcessed> {
+public class CommandMokaItemProcessed extends AbstractCommandEvent<MokaItemProcessed> {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_ITEM_SQL = "SELECT jurnal_id FROM item WHERE id=?";
