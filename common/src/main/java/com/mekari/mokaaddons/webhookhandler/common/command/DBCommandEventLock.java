@@ -98,8 +98,9 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
         logger.debug("eventId:%s-dataId:%s releases a row locking through connId:%d", header.getEventId(),
                 data.getId(), lockItem.getConnId());
 
+        // TODO: need to ensure the unlock mechanism for any condition has already been prpepared
         conn.rollback();
-        
+
         try{
             lockTracker.delete(lockItem.getConnId(), lockItem.getCreatedAt());
         }
