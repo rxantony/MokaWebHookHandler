@@ -1,7 +1,6 @@
 package com.mekari.mokaaddons.webhookhandler.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandManager;
+import com.mekari.mokaaddons.webhookhandler.common.command.Invoker;
 import com.mekari.mokaaddons.webhookhandler.common.consumer.AbstractConsumer;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.rabbitmq.client.Channel;
@@ -14,9 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MokaEventProcessedConsumer extends AbstractConsumer {
 
-    public MokaEventProcessedConsumer(@Autowired CommandManager commandManager
-        , @Autowired ObjectMapper mapper) {
-        super(commandManager, mapper);
+    public MokaEventProcessedConsumer(@Autowired Invoker invoker) {
+        super(invoker);
     }
 
     @Override

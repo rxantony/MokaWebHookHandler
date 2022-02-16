@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.consumer;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 public class EventNameRequiredException extends UnknownEventFormatException {
 
