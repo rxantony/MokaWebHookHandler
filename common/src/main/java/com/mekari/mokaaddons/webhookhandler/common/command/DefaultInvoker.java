@@ -53,7 +53,7 @@ public class DefaultInvoker implements Invoker {
         } catch (Exception ex) {
             iex = ex;
         } finally {
-            afterInvoke(eventObj, iex);
+            afterInvoke(message, eventObj, iex);
             if (iex != null)
                 throw iex;
         }
@@ -62,7 +62,7 @@ public class DefaultInvoker implements Invoker {
     protected void beforeInvoke(Message message) {
     }
 
-    protected void afterInvoke(Event event, Exception ex) {
+    protected void afterInvoke(Message message, Event event, Exception ex) {
     }
 
     protected String getEventName(JsonNode eventNode) {
