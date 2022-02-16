@@ -79,7 +79,13 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
                 .createdAt(Instant.now().atOffset(ZoneOffset.UTC))
                 .build();
 
-        lockTracker.insert(lockItem);
+        try{
+            lockTracker.insert(lockItem);
+        }
+        catch(Exception ex){
+            logger.error(ex.toString());
+        }
+
         logger.debug("eventId:%s-dataId:%s successfully acquire a row locking through connId:%d", header.getEventId(),
                 data.getId(), connId);
         return lockItem;
@@ -93,7 +99,13 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
                 data.getId(), lockItem.getConnId());
 
         conn.rollback();
-        lockTracker.delete(lockItem.getConnId(), lockItem.getCreatedAt());
+        
+        try{
+            lockTracker.delete(lockItem.getConnId(), lockItem.getCreatedAt());
+        }
+        catch(Exception ex){
+            logger.error(ex.toString());
+        }
     }
 
     private Connection createConnection(TEvent event) throws SQLException {
