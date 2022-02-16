@@ -29,7 +29,7 @@ public abstract class AbstractConsumer {
         logger = LogManager.getLogger(this.getClass());
     }
 
-    protected Logger getLogger(){
+    protected final Logger getLogger(){
         return logger;
     }
 

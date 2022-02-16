@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class MokaEventProcessedConsumer extends AbstractConsumer {
 
     @Override
-    @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE, concurrency = "1")
+    @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE, concurrency = "1-10")
     public void consume(Message message, Channel channel) throws Exception{
         super.consume(message, channel);
     }

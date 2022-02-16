@@ -12,23 +12,40 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 public class AbstractDeadLetterConsumer {
 
-    private final String sourceName;
-    private final Config config;
-    protected final Logger logger;
+    private String sourceName;
+    private @Autowired Config config;
+    private Logger logger;
     
     private static final String HEADER_X_RETRIES_COUNT = "x-retries-count";
     private static final String HEADER_X_DEATH_QUEUE = "x-first-death-queue";
+
+    protected AbstractDeadLetterConsumer(){
+        init();
+    }
 
     protected AbstractDeadLetterConsumer(Config config){
         Assert.notNull(config, "config must not be null");
 
         this.config = config;
+        init();
+    }
+
+    protected void init(){
         sourceName = this.getClass().getName();
         logger = LogManager.getFormatterLogger(this.getClass());
+    }
+
+    protected final String getSourceName(){
+        return sourceName;
+    }
+
+    protected final Logger getLogger(){
+        return logger;
     }
 
     public void consume(Message message, Channel channel) throws Exception{
