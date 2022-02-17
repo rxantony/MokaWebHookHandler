@@ -28,7 +28,7 @@ public class CommandMokaItemProcessed extends AbstractCommandEvent<MokaItemProce
     }
 
     @Override
-    public void execute(MokaItemProcessed event) throws CommandException {
+    protected void executeInternal(MokaItemProcessed event) throws Exception {
         Assert.notNull(event, "event must not be null");
 
         var data = event.getBody().getData();

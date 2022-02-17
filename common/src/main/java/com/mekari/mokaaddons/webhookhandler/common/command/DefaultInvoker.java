@@ -39,18 +39,17 @@ public class DefaultInvoker implements Invoker {
         init();
     }
 
-    protected void init(){
+    protected void init() {
         eventNamePrefix = eventNamePrefix != null ? eventNamePrefix.trim() : eventNamePrefix;
         logger = LogManager.getFormatterLogger(this.getClass());
     }
 
-    protected Logger getLogger(){
+    protected Logger getLogger() {
         return logger;
     }
 
     @Override
     public final void invoke(Message message) throws Exception {
-
         beforeInvoke(message);
 
         var event = new String(message.getBody());

@@ -32,20 +32,16 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
         this.mapper = config.mapper;
     }
 
-    public void execute(TEvent event) throws CommandException {
-        try {
-            var header = event.getHeader();
-            var data = event.getBody().getData();
+    protected void executeInternal(TEvent event) throws Exception {
+        var header = event.getHeader();
+        var data = event.getBody().getData();
 
-            logger.info("start processing eventId:%s, eventName:%s, dataId:%s; updatedAt:%s",
-                    header.getEventId(), header.getEventName(), data.getId(),
-                    data.getUpdatedAt().toString());
+        logger.info("start processing eventId:%s, eventName:%s, dataId:%s; updatedAt:%s",
+                header.getEventId(), header.getEventName(), data.getId(),
+                data.getUpdatedAt().toString());
 
-            saveEvent(event);
-            publishEvent(event);
-        } catch (Exception ex) {
-            throw new CommandException(ex);
-        }
+        saveEvent(event);
+        publishEvent(event);
     }
 
     protected void saveEvent(TEvent event) throws JsonProcessingException {

@@ -23,5 +23,16 @@ public abstract class AbstractCommandEvent<TEvent extends Event> implements Comm
     }
 
     @Override
-    abstract public void execute(TEvent event) throws CommandException;
+    public void execute(TEvent event) throws CommandException{
+
+        try{
+            executeInternal(event);
+        }
+        catch(Exception ex){
+            if( ex instanceof CommandException)throw (CommandException)ex;
+            throw new CommandException(ex);
+        }
+    }
+
+    abstract protected void executeInternal(TEvent event) throws Exception;
 }

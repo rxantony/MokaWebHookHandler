@@ -35,7 +35,7 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     }
 
     @Override
-    public void execute(TEvent event) throws CommandException {
+    protected void executeInternal(TEvent event) throws Exception {
         try (var conn = createConnection(event);) {
             // we can track a rowlock created by this connection through:
             // select * from INFORMATION_SCHEMA.INNODB_TRX where trx_mysql_thread_id =
@@ -51,11 +51,7 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
             } finally {
                 releaseLock(lockItem, conn, event);
             }
-        } catch (CommandException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new CommandException(ex);
-        }
+        } 
     }
 
     private Object[] getConnIdAndEventSourceId(Connection conn, TEvent event) throws Exception {

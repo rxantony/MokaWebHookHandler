@@ -19,7 +19,7 @@ public class CommandEventUpdateAtValidation<TEvent extends Event> extends Abstra
     }
 
     @Override
-    public void execute(TEvent event) throws CommandException {
+    protected void executeInternal(TEvent event) throws Exception {
         Assert.notNull(event, "event must not be null");
 
         var header = event.getHeader();
@@ -28,23 +28,18 @@ public class CommandEventUpdateAtValidation<TEvent extends Event> extends Abstra
         logger.debug("eventId:%s-dataId:%s tries to connect to db for updatedAt date comparing ", header.getEventId(),
                 data.getId());
 
-        try{
-            var dataUpdatedAt = storage.getUpdateAt(data.getId());
-            if(dataUpdatedAt.isEmpty())
-                throw new EventSourceDataNotFoundException(data.getId());
+        var dataUpdatedAt = storage.getUpdateAt(data.getId());
+        if(dataUpdatedAt.isEmpty())
+            throw new EventSourceDataNotFoundException(data.getId());
 
-            var isUpdatedAtEquals = data.getUpdatedAt().equals(dataUpdatedAt.get());
-            logger.info(
-                    "eventId:%s-dataId:%s compares updatedAt:%s to eventsource updatedAt:%s, result:%b",
-                    header.getEventId(), data.getId(),
-                    data.getUpdatedAt().toString(), dataUpdatedAt.toString(), isUpdatedAtEquals);
+        var isUpdatedAtEquals = data.getUpdatedAt().equals(dataUpdatedAt.get());
+        logger.info(
+                "eventId:%s-dataId:%s compares updatedAt:%s to eventsource updatedAt:%s, result:%b",
+                header.getEventId(), data.getId(),
+                data.getUpdatedAt().toString(), dataUpdatedAt.toString(), isUpdatedAtEquals);
 
-            if (isUpdatedAtEquals)
-                inner.execute(event);
-
-        } catch (Exception ex) {
-            throw new CommandException(ex);
-        }
+        if (isUpdatedAtEquals)
+            inner.execute(event);
     }
 
     public static class EventSourceDataNotFoundException extends CommandException {

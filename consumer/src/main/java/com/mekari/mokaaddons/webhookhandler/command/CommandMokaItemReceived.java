@@ -41,7 +41,7 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
     }
 
     @Override
-    public void execute(MokaItemReceived event) throws CommandException {
+    protected void executeInternal(MokaItemReceived event) throws Exception {
         Assert.notNull(event, "event must not be null");
         saveEvent(event);
         publishEvent(event);
