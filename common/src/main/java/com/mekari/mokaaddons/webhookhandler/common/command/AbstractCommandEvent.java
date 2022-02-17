@@ -18,12 +18,12 @@ public abstract class AbstractCommandEvent<TEvent extends Event> implements Comm
     }
 
     @Override
-    public Class<TEvent> eventClass() {
+    public final Class<TEvent> eventClass() {
         return eventCls;
     }
 
     @Override
-    public void execute(TEvent event) throws CommandException{
+    public final void execute(TEvent event) throws CommandException{
 
         try{
             executeInternal(event);
