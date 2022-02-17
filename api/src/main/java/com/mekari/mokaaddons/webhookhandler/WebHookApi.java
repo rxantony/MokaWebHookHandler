@@ -28,6 +28,7 @@ public class WebHookApi {
     @Autowired
     private DeadLetterStorage deadLetterStorage;
 
+    private static final String SOURCE_NAME = WebHookApi.class.getName();
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebHookApi.class);
 
     // it respresents the api endpoint which will be called by partner.
@@ -52,7 +53,7 @@ public class WebHookApi {
             var builder = Item.builder()
                             .payload(message)
                             .reason(ex.toString())
-                            .source(this.getClass().getName())
+                            .source(SOURCE_NAME)
                             .createdAt(DateUtil.now());
 
             if(eventNode != null){
