@@ -61,7 +61,7 @@ public class AbstractDeadLetterConsumer {
             if (attempt == null)
                 attempt = 1;
             if (attempt > config.maxRetriesCount) {
-                saveFailedMessage(message, /*temporary*/ "rejected");
+                saveDeadLetter(message, /*temporary*/ "rejected");
                 logger.info("Discarding and save message %s into dead_letter storage", new String(message.getBody()));
                 return;
             }
@@ -74,7 +74,7 @@ public class AbstractDeadLetterConsumer {
             config.amqpTemplate.send(toExchange, toRoutingKey, message);
         } catch (Exception ex) {
             logger.error(ex.toString());
-            saveFailedMessage(message, ex.toString());
+            saveDeadLetter(message, ex.toString());
         }
     }
 
@@ -83,10 +83,10 @@ public class AbstractDeadLetterConsumer {
         return toQueue.substring(0, toQueue.length() - "Queue".length());
     }
 
-    protected void saveFailedMessage(Message message, String reason) {
+    protected void saveDeadLetter(Message message, String reason) {
         try{
             var msg = new String(message.getBody());
-            var itemBuilder = Item.builder()
+            var builder = Item.builder()
                     .source(sourceName)
                     .payload(msg)
                     .properties(message.getMessageProperties().toString())
@@ -97,9 +97,9 @@ public class AbstractDeadLetterConsumer {
             if (header != null) {
                 var event_id = header.get("event_id");
                 if (event_id != null)
-                    itemBuilder.eventId(event_id.asText());
+                    builder.eventId(event_id.asText());
             }
-            config.deadLetterStorage.insert(itemBuilder.build());
+            config.deadLetterStorage.insert(builder.build());
         }
         catch(Exception ex){
             logger.error(ex.toString());
