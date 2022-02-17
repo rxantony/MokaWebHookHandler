@@ -26,10 +26,10 @@
         },
         "body": {
             "item": {
-                "id": "2",
+                "id": "1",
                 "name": "tembakau",
                 "description": "tembakau asli indonesia",
-                "updated_at": "2022-01-01T01:10:02Z"
+                "updated_at": "2022-01-01T01:10:03Z"
             }
         }
     },
@@ -43,7 +43,7 @@
         },
         "body": {
             "item": {
-                "id": "3",
+                "id": "1",
                 "name": "tembakau",
                 "description": "tembakau asli indonesia",
                 "updated_at": "2022-01-01T01:10:02Z"

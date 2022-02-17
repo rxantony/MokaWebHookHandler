@@ -17,7 +17,7 @@ public class DbDeadLetterStorage implements DeadLetterStorage {
     }
 
     @Override
-    public void insert(DeadLeterItem item) throws Exception {
+    public void insert(Item item) throws Exception {
         Assert.notNull(item, "item must not be null");
         jdbcTemplate.update(INSERT_INTO_DEADLETTER_SQL, item.getSource(), item.getEventId(), item.getPayload(), item.getProperties(), item.getCreatedAt());
     }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
-import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.DeadLeterItem;
+import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.Item;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.rabbitmq.client.Channel;
 
@@ -77,7 +77,7 @@ public class AbstractDeadLetterConsumer {
 
     protected void saveFailedMessage(Message message) throws Exception{
         var msg = new String(message.getBody());
-        var itemBuilder = DeadLeterItem.builder()
+        var itemBuilder = Item.builder()
                 .source(sourceName)
                 .payload(msg)
                 .properties(message.getMessageProperties().toString())
