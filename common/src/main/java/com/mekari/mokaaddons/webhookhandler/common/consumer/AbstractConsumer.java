@@ -35,7 +35,8 @@ public abstract class AbstractConsumer {
 
     public void consume(Message message, Channel channel) throws Exception {
         try {
-            invoker.invoke(message);
+            var msg = new String(message.getBody());
+            invoker.invoke(msg);
         } catch (Exception ex) {
             // TODO need a thorough research for sending actual error message that cause the
             // message is rejected

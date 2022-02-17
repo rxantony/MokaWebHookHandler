@@ -49,10 +49,9 @@ public class DefaultInvoker implements Invoker {
     }
 
     @Override
-    public final void invoke(Message message) throws Exception {
-        beforeInvoke(message);
+    public final void invoke(String event) throws Exception {
+        beforeInvoke(event);
 
-        var event = new String(message.getBody());
         var eventNode = mapper.readTree(event);
 
         validate(event, eventNode);
@@ -67,16 +66,16 @@ public class DefaultInvoker implements Invoker {
         } catch (Exception ex) {
             iex = ex;
         } finally {
-            afterInvoke(message, eventObj, iex);
+            afterInvoke(event, eventObj, iex);
             if (iex != null)
                 throw iex;
         }
     }
 
-    protected void beforeInvoke(Message message) {
+    protected void beforeInvoke(String message) {
     }
 
-    protected void afterInvoke(Message message, Event event, Exception ex) {
+    protected void afterInvoke(String message, Event event, Exception ex) {
     }
 
     protected String getEventName(JsonNode eventNode) {
