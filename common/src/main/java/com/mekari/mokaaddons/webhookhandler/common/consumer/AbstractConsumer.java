@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 public abstract class AbstractConsumer {
-
+    
     private @Autowired Invoker invoker;
     private Logger logger;
-    private static final String X_REJECTED_INFO = "reason";
 
-    protected AbstractConsumer(){
+    /**
+     * do not use this default constructor, using another parameterized constructors
+     * for manual instantiation.
+     * this constuctor is neccessary by springboot to instantiate this class.
+     */
+    protected AbstractConsumer() {
         init();
     }
 
@@ -25,27 +29,21 @@ public abstract class AbstractConsumer {
         init();
     }
 
-    protected void init(){
+    protected void init() {
         logger = LogManager.getLogger(this.getClass());
     }
 
-    protected final Logger getLogger(){
+    protected final Logger getLogger() {
         return logger;
     }
 
-    public void consume(Message message, Channel channel) throws Exception {
+    public void consume(Message message, Channel channel) {
         try {
             var msg = new String(message.getBody());
             invoker.invoke(msg);
         } catch (Exception ex) {
-            // TODO need a thorough research for sending actual error message that cause the
-            // message is rejected
-            logger.error(ex.getMessage());
-            message.getMessageProperties().setAppId("cxdxrx");
-            var header = message.getMessageProperties().getHeaders();
-            if (header.get(X_REJECTED_INFO) == null)
-                header.put(X_REJECTED_INFO, ex.getMessage());
-            throw ex;
+            logger.error(ex.toString());
+            throw new RuntimeException(ex);
         }
     }
 }

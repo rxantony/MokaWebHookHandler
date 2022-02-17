@@ -8,7 +8,6 @@ import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -21,6 +20,11 @@ public class DefaultInvoker implements Invoker {
     private String eventNamePrefix;
     private Logger logger;
 
+    /**
+     * do not use this default constructor, using another parameterized constructors
+     * for manual instantiation.
+     * this constuctor is neccessary by springboot to instantiate this class.
+     */
     public DefaultInvoker() {
         init();
     }
@@ -43,7 +47,7 @@ public class DefaultInvoker implements Invoker {
         logger = LogManager.getFormatterLogger(this.getClass());
     }
 
-    protected Logger getLogger() {
+    protected final Logger getLogger() {
         return logger;
     }
 

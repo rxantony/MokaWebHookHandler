@@ -21,6 +21,7 @@ public interface DeadLetterStorage{
         private String eventId;
         private String payload;
         private String properties;
+        private String reason;
         private OffsetDateTime createdAt;
     }
 }

@@ -8,9 +8,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class SpringbootCommandEventManager implements CommandEventManager {
+public final class SpringbootCommandEventManager implements CommandEventManager {
     private @Autowired ApplicationContext appContext;
 
+    /**
+     * do not use this default constructor, using another parameterized constructors
+     * for manual instantiation.
+     * this constuctor is neccessary by springboot to instantiate this class.
+     */
     public SpringbootCommandEventManager() {
     }
 
