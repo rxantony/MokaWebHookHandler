@@ -53,7 +53,6 @@ public class DefaultInvoker implements Invoker {
         beforeInvoke(event);
 
         var eventNode = mapper.readTree(event);
-
         validate(event, eventNode);
 
         var eventName = getEventName(eventNode);
@@ -72,12 +71,6 @@ public class DefaultInvoker implements Invoker {
         }
     }
 
-    protected void beforeInvoke(String message) {
-    }
-
-    protected void afterInvoke(String message, Event event, Exception ex) {
-    }
-
     protected String getEventName(JsonNode eventNode) {
         var eventName = eventNode.get("header").get("event_name").asText();
         if (Strings.isNotBlank(eventNamePrefix))
@@ -94,4 +87,10 @@ public class DefaultInvoker implements Invoker {
             throw new EventNameRequiredException(eventIdNode.asText(), event);
     }
 
+    // hook methods
+    protected void beforeInvoke(String message) {
+    }
+
+    protected void afterInvoke(String message, Event event, Exception ex) {
+    }
 }
