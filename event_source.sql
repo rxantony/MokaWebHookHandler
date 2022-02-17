@@ -11,5 +11,5 @@ CREATE TABLE `event_source` (
   `created_at` timestamp(6) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `data_id_IDX` (`data_id`),
-  KEY `data_id_updated_at_IDX` (`data_updated_at`,`data_id`,`created_at`)
+  KEY `data_id_updated_at_IDX` (`data_updated_at` DESC,`data_id`,`created_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1071 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
