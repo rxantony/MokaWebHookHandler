@@ -3,7 +3,6 @@ package com.mekari.mokaaddons.webhookhandler.command;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommandEvent;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
@@ -29,8 +28,8 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
     private static final String INSERT_ITEM_SQL = "INSERT INTO item (id, name, description, created_at, updated_at) VALUES (?,?,?,?,?)";
     private static final String UPDATE_ITEM_SQL = "UPDATE item SET name=?, description=?, updated_at=? WHERE id=?";
 
-    public CommandMokaItemReceived(@Qualifier("mokaaddons") DataSource dataSource
-        , @Autowired AmqpTemplate amqpTemplate) {
+    public CommandMokaItemReceived(@Qualifier("mokaaddons") DataSource dataSource,
+            @Autowired AmqpTemplate amqpTemplate) {
         super(MokaItemReceived.class);
 
         Assert.notNull(dataSource, "dataSource must not be null");
@@ -47,7 +46,7 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
         publishEvent(event);
     }
 
-    private void saveEvent(MokaItemReceived event){
+    private void saveEvent(MokaItemReceived event) {
         var header = event.getHeader();
         var data = event.getBody().getData();
 
