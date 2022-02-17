@@ -1,5 +1,5 @@
 package com.mekari.mokaaddons.webhookhandler.common.command;
 
-public interface Invoker {
+public interface CommandInvoker {
     void invoke(String message) throws Exception;
 }
