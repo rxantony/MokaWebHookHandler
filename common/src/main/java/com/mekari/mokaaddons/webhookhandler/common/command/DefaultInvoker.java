@@ -18,8 +18,7 @@ public class DefaultInvoker implements Invoker {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired CommandEventManager manager;
-    protected String eventNamePrefix;
-
+    private String eventNamePrefix;
     private Logger logger;
 
     public DefaultInvoker() {
