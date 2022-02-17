@@ -16,8 +16,10 @@ This projects just reached 60% from it's completion and has a goal to handle uno
 
     * Create webHookEventReceived exchange.
     * Create webHookEventProcessed exchane.
-    * Create webHookEventReceivedQueue and bind it to webHookEventReceived exchange.
-    * Create webHookEventProcessedQueue and bind it to webHookEventProcessed exchange
+    * Create webHookDeadLetter.dlx exchane.
+    * Create webHookEventReceivedQueue with x-dead-letter-exchange=webHookDeadLetter.dlx and bind it to webHookEventReceived exchange.
+    * Create webHookEventProcessedQueue and bind it to webHookEventProcessed exchange.
+    * Create webHookDeadLetter.dlq queue and bind it to Create webHookDeadLetter.dlx exchange.
     
 * **On Mysql**
 
