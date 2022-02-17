@@ -1,5 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler.consumer;
 
+import java.lang.System.Logger;
+
 import com.mekari.mokaaddons.webhookhandler.common.consumer.AbstractConsumer;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.rabbitmq.client.Channel;
@@ -12,8 +14,9 @@ import org.springframework.stereotype.Component;
 public class MokaEventProcessedConsumer extends AbstractConsumer {
 
     @Override
-    @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE, concurrency = "1-10")
+    @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE)
     public void consume(Message message, Channel channel) throws Exception{
+        getLogger().info("received event :" + new String(message.getBody()));
         super.consume(message, channel);
     }
 }

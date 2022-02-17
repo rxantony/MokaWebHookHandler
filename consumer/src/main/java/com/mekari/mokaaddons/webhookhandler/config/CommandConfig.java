@@ -37,7 +37,7 @@ public class CommandConfig {
         // chain of responsibilty here
         return new CommandEventUpdateAtValidation<>(eventSourceStorage,
                 new DBCommandEventLock<>(dataSource, lockTrackerStorage,
-                        new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
+                    new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })

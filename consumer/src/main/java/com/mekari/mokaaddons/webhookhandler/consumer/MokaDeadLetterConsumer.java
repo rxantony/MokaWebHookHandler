@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MokaDeadLetterConsumer extends AbstractDeadLetterConsumer {
 
-    @RabbitListener(queues = AppConstant.QueueName.MOKA_DLQ, concurrency = "1")
+    @RabbitListener(queues = AppConstant.QueueName.MOKA_DLQ)
     public void consume(Message message, Channel channel) {
         try {
             super.consume(message, channel);

@@ -1,8 +1,8 @@
 [
     {
         "header": {
-            "event_id": "1",
-            "event_name": "moka.item.updated",
+            "event_id": "2",
+            "event_name": "moka.item.added",
             "timestamp": "2021-01-01T02:02:02Z",
             "outlet_id": "G123456",
             "version": 1
@@ -10,9 +10,9 @@
         "body": {
             "item": {
                 "id": "1",
-                "name": "tembakau update-1",
+                "name": "tembakau",
                 "description": "tembakau asli indonesia",
-                "updated_at": "2022-01-01T03:10:01Z"
+                "updated_at": "2022-01-01T01:10:02Z"
             }
         }
     },
@@ -35,7 +35,7 @@
     },
     {
         "header": {
-            "event_id": "3",
+            "event_id": "2",
             "event_name": "moka.item.added",
             "timestamp": "2021-01-01T02:02:02Z",
             "outlet_id": "G123456",
@@ -44,6 +44,23 @@
         "body": {
             "item": {
                 "id": "3",
+                "name": "tembakau",
+                "description": "tembakau asli indonesia",
+                "updated_at": "2022-01-01T01:10:02Z"
+            }
+        }
+    },
+    {
+        "header": {
+            "event_id": "2",
+            "event_name": "moka.item.added",
+            "timestamp": "2021-01-01T02:02:02Z",
+            "outlet_id": "G123456",
+            "version": 1
+        },
+        "body": {
+            "item": {
+                "id": "4",
                 "name": "tembakau",
                 "description": "tembakau asli indonesia",
                 "updated_at": "2022-01-01T01:10:02Z"

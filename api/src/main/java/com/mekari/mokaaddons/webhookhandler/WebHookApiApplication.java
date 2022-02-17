@@ -31,7 +31,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... arg0) throws Exception {
-		var maxTrhread = 1;
+		var maxTrhread = 20;
 		if (arg0.length > 0)
 			maxTrhread = Integer.parseInt(arg0[0]);
 
@@ -64,7 +64,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 	}
 
 	private JsonNode[] getItemEvents() throws IOException {
-		var file = ResourceUtils.getFile("classpath:item_events.json");
+		var file = ResourceUtils.getFile("classpath:item_event_collections.json");
 		try (var in = new FileInputStream(file);) {
 			var writer = new StringWriter();
 			IOUtils.copy(in, writer, "UTF-8");
