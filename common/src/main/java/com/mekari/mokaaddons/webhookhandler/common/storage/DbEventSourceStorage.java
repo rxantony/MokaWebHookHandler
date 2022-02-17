@@ -10,20 +10,22 @@ public class DbEventSourceStorage implements EventSourceStorage {
     private final DataSource dataSource;
     private static final String GET_UPDATEDAT_SQL = "SELECT data_updated_at FROM event_source WHERE data_id = ? LIMIT 1";
 
-    public DbEventSourceStorage(DataSource dataSource){
+    public DbEventSourceStorage(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public Optional<OffsetDateTime> getUpdateAt(String id) throws Exception {
         try (var conn = dataSource.getConnection();) {
-            var stmt = conn.prepareStatement(GET_UPDATEDAT_SQL);
-            stmt.setString(1, id);
-            var rs = stmt.executeQuery();
-            if (!rs.next())
-                return Optional.empty();
-            var updatedAt = rs.getObject(1, OffsetDateTime.class);
-            return Optional.of(updatedAt);
+            try (var stmt = conn.prepareStatement(GET_UPDATEDAT_SQL);) {
+                stmt.setString(1, id);
+                try (var rs = stmt.executeQuery();) {
+                    if (!rs.next())
+                        return Optional.empty();
+                    var updatedAt = rs.getObject(1, OffsetDateTime.class);
+                    return Optional.of(updatedAt);
+                }
+            }
         }
     }
 }

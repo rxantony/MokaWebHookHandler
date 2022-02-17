@@ -18,7 +18,7 @@ import org.springframework.util.ResourceUtils;
 
 @SpringBootApplication
 public class WebHookApiApplication implements CommandLineRunner {
-	
+
 	@Autowired
 	private WebHookApi webhookApi;
 
@@ -42,7 +42,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 		for (var i = 0; i < (d * maxTrhread + m); i += maxTrhread) {
 			var threadCount = i + (maxTrhread) > events.length ? m != 0 ? m : d : maxTrhread;
 			var threads = new Thread[threadCount];
-			
+
 			for (var x = 0; x < threadCount; x++) {
 				var event = events[i + x];
 				Runnable r = () -> {
@@ -64,13 +64,14 @@ public class WebHookApiApplication implements CommandLineRunner {
 	}
 
 	private JsonNode[] getItemEvents() throws IOException {
-		var file = ResourceUtils.getFile("classpath:item_event_collections.json");
+		var file = ResourceUtils.getFile("classpath:item_events.json");
 		try (var in = new FileInputStream(file);) {
 			var writer = new StringWriter();
 			IOUtils.copy(in, writer, "UTF-8");
 			var eventNodes = mapper.readTree(writer.toString());
 			return StreamSupport
-					.stream(Spliterators.spliteratorUnknownSize(eventNodes.iterator(), 0), false).toArray(JsonNode[]::new);
+					.stream(Spliterators.spliteratorUnknownSize(eventNodes.iterator(), 0), false)
+					.toArray(JsonNode[]::new);
 		}
 	}
 }

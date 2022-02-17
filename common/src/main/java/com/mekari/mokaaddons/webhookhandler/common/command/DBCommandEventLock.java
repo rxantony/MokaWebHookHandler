@@ -41,20 +41,19 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
             // select * from INFORMATION_SCHEMA.INNODB_TRX where trx_mysql_thread_id =
             // connId
             var lockItem = lock(conn, event);
-            try{
-                //var header = event.getHeader();
-                //var data = event.getBody().getData();
-                //logger.debug("###eventId:%s-dataId:%s sleep 5000, connId:%d", header.getEventId(), data.getId(), lockItem.getConnId());
-                //Thread.sleep(5000);
+            try {
+                // var header = event.getHeader();
+                // var data = event.getBody().getData();
+                // logger.debug("###eventId:%s-dataId:%s sleep 5000, connId:%d",
+                // header.getEventId(), data.getId(), lockItem.getConnId());
+                // Thread.sleep(5000);
                 inner.execute(event);
             } finally {
                 releaseLock(lockItem, conn, event);
             }
-        }
-        catch (CommandException ex){
+        } catch (CommandException ex) {
             throw ex;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new CommandException(ex);
         }
     }
@@ -62,37 +61,40 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     private Object[] getConnIdAndEventSourceId(Connection conn, TEvent event) throws Exception {
         var header = event.getHeader();
         var data = event.getBody().getData();
+        try (var stmt = conn.prepareStatement(GET_CONNID_EVID_SQL);) {
+            stmt.setString(1, data.getId());
+            try (var rs = stmt.executeQuery();) {
+                rs.next();
+                var connId = rs.getInt(1);
 
-        var stmt = conn.prepareStatement(GET_CONNID_EVID_SQL);
-        stmt.setString(1, data.getId());
-        var rs = stmt.executeQuery();
-
-        rs.next();
-        var connId = rs.getInt(1);
-
-        if(!rs.next())
-            throw new CommandException(String.format("eventId:%s-dataId:%s no event_source with data_id:%s", header.getEventId(), data.getId(), data.getId()));
-        var evsId = rs.getString(1);
-        return new Object[] {connId, evsId};
+                if (!rs.next())
+                    throw new CommandException(String.format("eventId:%s-dataId:%s no event_source with data_id:%s",
+                            header.getEventId(), data.getId(), data.getId()));
+                var evsId = rs.getString(1);
+                return new Object[] { connId, evsId };
+            }
+        }
     }
 
     private Item lock(Connection conn, TEvent event) throws Exception {
         var header = event.getHeader();
         var data = event.getBody().getData();
         var ctx = getConnIdAndEventSourceId(conn, event);
-        var connId = (int)ctx[0];
-        var evsId = (String)ctx[1];
+        var connId = (int) ctx[0];
+        var evsId = (String) ctx[1];
         var query = String.format(LOCKING_ROW_SQL, evsId);
 
         var stmt = conn.createStatement(ResultSet.CLOSE_CURSORS_AT_COMMIT, ResultSet.CONCUR_UPDATABLE);
         stmt.setPoolable(false);
 
-        logger.debug("eventId:%s-dataId:%s tries to acquire a row lock through connId:%d with query:[%s]", header.getEventId(),
+        logger.debug("eventId:%s-dataId:%s tries to acquire a row lock through connId:%d with query:[%s]",
+                header.getEventId(),
                 data.getId(), connId, query);
 
         var rs = stmt.executeQuery(query);
-        if(!rs.next())
-            throw new CommandException(String.format("eventId:%s-dataId:%s no event_source with id:%s", header.getEventId(), data.getId(), evsId));
+        if (!rs.next())
+            throw new CommandException(String.format("eventId:%s-dataId:%s no event_source with id:%s",
+                    header.getEventId(), data.getId(), evsId));
 
         var lockItem = Item.builder()
                 .connId(connId)
@@ -102,14 +104,14 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
                 .createdAt(Instant.now().atOffset(ZoneOffset.UTC))
                 .build();
 
-        try{
+        try {
             lockTracker.insert(lockItem);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             logger.error(ex.toString());
         }
 
-        logger.debug("###eventId:%s-dataId:%s [successfully] acquire a row locking through connId:%d", header.getEventId(),
+        logger.debug("###eventId:%s-dataId:%s [successfully] acquire a row locking through connId:%d",
+                header.getEventId(),
                 data.getId(), connId);
         return lockItem;
     }
@@ -121,14 +123,14 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
         logger.debug("###eventId:%s-dataId:%s [releases] a row locking through connId:%d", header.getEventId(),
                 data.getId(), lockItem.getConnId());
 
-        // TODO: need to ensure the unlock mechanism for any condition has already been prpepared well
+        // TODO: need to ensure the unlock mechanism for any condition has already been
+        // prpepared well
         conn.rollback();
-        //conn.endRequest();
+        conn.close();
 
-        try{
+        try {
             lockTracker.delete(lockItem.getConnId(), lockItem.getCreatedAt());
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             logger.error(ex.toString());
         }
     }
@@ -142,8 +144,6 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
 
         var conn = dataSource.getConnection();
         conn.setAutoCommit(false);
-        //conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-        //conn.beginRequest();
         
         logger.debug("eventId:%s-dataId:%s is successfully connected to db for a row locking", header.getEventId(),
                 data.getId());
