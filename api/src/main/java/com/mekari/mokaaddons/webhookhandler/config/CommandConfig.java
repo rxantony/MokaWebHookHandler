@@ -27,7 +27,7 @@ public class CommandConfig {
     public Config eventConfig(DataSource dataSource
         , AmqpTemplate  amqpTemplate
         , ObjectMapper mapper){
-        return new Config(AppConstant.EventName.MOKA_EVENT_RECEIVED, dataSource, amqpTemplate, mapper);
+        return new Config(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, dataSource, amqpTemplate, mapper);
     }
 
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
