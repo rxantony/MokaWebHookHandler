@@ -26,7 +26,7 @@ public class AbstractDeadLetterConsumer {
 
     /**
      * do not use this default constructor, using another parameterized constructors
-     * for manual instantiation.
+     * for manual instantiation instead.
      * this constuctor is neccessary by springboot to instantiate this class.
      */
     protected AbstractDeadLetterConsumer() {
