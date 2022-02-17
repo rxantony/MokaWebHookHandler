@@ -66,7 +66,6 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
             try (var rs = stmt.executeQuery();) {
                 rs.next();
                 var connId = rs.getInt(1);
-
                 if (!rs.next())
                     throw new CommandException(String.format("eventId:%s-dataId:%s no event_source with data_id:%s",
                             header.getEventId(), data.getId(), data.getId()));
@@ -144,7 +143,7 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
 
         var conn = dataSource.getConnection();
         conn.setAutoCommit(false);
-        
+
         logger.debug("eventId:%s-dataId:%s is successfully connected to db for a row locking", header.getEventId(),
                 data.getId());
 
