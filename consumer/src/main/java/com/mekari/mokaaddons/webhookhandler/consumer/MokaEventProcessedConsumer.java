@@ -1,7 +1,5 @@
 package com.mekari.mokaaddons.webhookhandler.consumer;
 
-import java.lang.System.Logger;
-
 import com.mekari.mokaaddons.webhookhandler.common.consumer.AbstractConsumer;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.rabbitmq.client.Channel;

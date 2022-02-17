@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandMokaEventReceived;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandMokaEventReceived.Config;
+import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
+import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
 import com.mekari.mokaaddons.webhookhandler.event.MokaTransactionReceived;
 
@@ -15,6 +17,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CommandConfig {
+
+    @Bean
+    public DeadLetterStorage deadLetterConsumerConfig(DataSource dataSource){
+        return new DbDeadLetterStorage(dataSource);
+    }
 
     @Bean
     public Config eventConfig(DataSource dataSource

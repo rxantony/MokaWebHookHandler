@@ -2,30 +2,40 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "common:com.mekari.mokaaddons.webhookhandler.common.event.EventValidator::validate (java11)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "${workspaceFolder}/common",
+                "lambdaHandler": "com.mekari.mokaaddons.webhookhandler.common.event.EventValidator::validate"
+            },
+            "lambda": {
+                "runtime": "java11",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
             "name": "Debug-Webhookhandler-api",
             "type": "java",
             "request": "launch",
-            "externalConsole": false,                //user input dosen't work if set it to false :(
+            "externalConsole": false,
             "stopOnEntry": true,
             "console": "integratedTerminal",
-            "preLaunchTask": "build-webhookhandler-api",                 // Runs the task created above before running this configuration
-            //"jdkPath": "${env:JAVA_HOME}/bin",        // You need to set JAVA_HOME enviroment variable
+            "preLaunchTask": "build-webhookhandler-api",
             "cwd": "${workspaceRoot}",
             "projectName": "mokaaddons-webhookhandler-api",
-            "mainClass": "com.mekari.mokaaddons.webhookhandler.WebHookApiApplication",
-            //"sourcePath": ["${workspaceRoot}"],   // Indicates where your source (.java) files are
-            //"classpath": ["${workspaceRoot}"],    // Indicates the location of your .class files
-            //"options": [],                             // Additional options to pass to the java executable
-            //"args": []                                // Command line arguments to pass to the startup class
+            "mainClass": "com.mekari.mokaaddons.webhookhandler.WebHookApiApplication"
         },
         {
             "name": "Debug-Webhookhandler-consumer",
             "type": "java",
             "request": "launch",
-            "externalConsole": false,  
+            "externalConsole": false,
             "stopOnEntry": true,
             "console": "integratedTerminal",
-            "preLaunchTask": "build-webhookhandler-consumer",          
+            "preLaunchTask": "build-webhookhandler-consumer",
             "cwd": "${workspaceRoot}",
             "projectName": "mokaaddons-webhookhandler-consumer",
             "mainClass": "com.mekari.mokaaddons.webhookhandler.WebHookConsumerApplication"

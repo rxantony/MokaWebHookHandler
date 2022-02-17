@@ -2,8 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.WebHookHandlingException;
+import com.mekari.mokaaddons.webhookhandler.common.event.DefaultJsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
+import com.mekari.mokaaddons.webhookhandler.common.event.JsonEventValidator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,7 @@ public class DefaultInvoker implements Invoker {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired CommandEventManager manager;
+    private @Autowired JsonEventValidator validator;
     private String eventNamePrefix;
     private Logger logger;
 
@@ -29,16 +31,22 @@ public class DefaultInvoker implements Invoker {
         init();
     }
 
-    public DefaultInvoker(@Autowired CommandEventManager manager, @Autowired ObjectMapper mapper) {
-        this(manager, mapper, null);
+    public DefaultInvoker(CommandEventManager manager, ObjectMapper mapper) {
+        this(manager, mapper, DefaultJsonEventValidator.SINGLETON);
     }
 
-    public DefaultInvoker(CommandEventManager manager, ObjectMapper mapper, String eventNamePrefix) {
+    public DefaultInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator) {
+        this(manager, mapper, validator, null);
+    }
+
+    public DefaultInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator, String eventNamePrefix) {
         Assert.notNull(manager, "managger must not be null");
         Assert.notNull(mapper, "mapper must not be null");
+        Assert.notNull(validator, "validator must not be null");
 
         this.manager = manager;
         this.mapper = mapper;
+        this.validator = validator;
         init();
     }
 
@@ -56,7 +64,7 @@ public class DefaultInvoker implements Invoker {
         beforeInvoke(event);
 
         var eventNode = mapper.readTree(event);
-        validate(event, eventNode);
+        validator.validate(eventNode);
 
         var eventName = getEventName(eventNode);
         var eventCmd = manager.createCommand(eventName);
@@ -79,15 +87,6 @@ public class DefaultInvoker implements Invoker {
         if (Strings.isNotBlank(eventNamePrefix))
             return eventNamePrefix + ":" + eventName;
         return eventName;
-    }
-
-    protected void validate(String event, JsonNode eventNode) throws WebHookHandlingException {
-        var header = eventNode.get("header");
-        var eventIdNode = header.get("event_id");
-        if (eventIdNode == null)
-            throw new UnknownEventFormatException("eventId is required", event);
-        if (header.get("event_name") == null)
-            throw new EventNameRequiredException(eventIdNode.asText(), event);
     }
 
     // hook methods

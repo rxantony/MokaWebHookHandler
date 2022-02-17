@@ -18,9 +18,6 @@ public class ConsumerConfig {
     public Config deadLetterConsumerConfig(@Qualifier("eventstore") DataSource dataSource
         , AmqpTemplate  amqpTemplate
         , ObjectMapper mapper){
-        return new Config(new DbDeadLetterStorage(dataSource)
-                            , amqpTemplate
-                            , mapper
-                            , 4);
+        return new Config(new DbDeadLetterStorage(dataSource), amqpTemplate, mapper, 4);
     }
 }
