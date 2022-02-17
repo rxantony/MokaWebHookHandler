@@ -1,8 +1,8 @@
 package com.mekari.mokaaddons.webhookhandler.common.event;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
+import com.mekari.mokaaddons.webhookhandler.common.WebHookHandlingException;
 
-public class UnknownEventFormatException extends CommandException {
+public class UnknownEventFormatException extends WebHookHandlingException {
 
     private final String event;
 
