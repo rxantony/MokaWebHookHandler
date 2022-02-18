@@ -3,6 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.config;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventUpdateAtValidation;
 import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandEventLock;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
@@ -34,7 +35,8 @@ public class CommandConfig {
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
-        return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
+        return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
+        //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
         /*return new CommandEventUpdateAtValidation<>(eventSourceStorage,
                 new DBCommandEventLock<>(dataSource, lockTrackerStorage,
                     new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));*/
@@ -46,7 +48,8 @@ public class CommandConfig {
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
-        return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
+        return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
+        //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
         /*return new CommandEventUpdateAtValidation<>(eventSourceStorage,
                 new DBCommandEventLock<>(dataSource, lockTrackerStorage,
                         new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));*/

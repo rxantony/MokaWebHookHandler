@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractMokaEvent;
+import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,20 +16,14 @@ import org.springframework.util.Assert;
 
 public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommandEvent<TEvent> {
 
-    private ObjectMapper mapper;
-    private AmqpTemplate amqpTemplate;
-    private JdbcTemplate jdbcTemplate;
-    private String exchangeName;
+    private Config config;
 
     private static final String INSERT_INTO_EVENT_SOURCE_SQL = "INSERT INTO event_source (data_id, data_updated_at, event_name, payload, event_id, outlet_id , version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public CommandMokaEventReceived(Config config, Class<TEvent> eventCls) {
         super(eventCls);
-
-        this.exchangeName = config.exchangeName;
-        jdbcTemplate = new JdbcTemplate(config.dataSource);
-        this.amqpTemplate = config.amqpTemplate;
-        this.mapper = config.mapper;
+        Assert.notNull(config, "config must not be null");
+        this.config = config;
     }
 
     protected void executeInternal(TEvent event) throws Exception {
@@ -36,7 +31,7 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
         publishEvent(event);
     }
 
-    protected void saveEvent(TEvent event) throws JsonProcessingException {
+    protected void saveEvent(TEvent event) throws Exception {
         var header = event.getHeader();
         var data = event.getBody().getData();
 
@@ -44,10 +39,26 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
                 header.getEventId(), header.getEventName(), data.getId(),
                 data.getUpdatedAt().toString());
 
-        jdbcTemplate.update(INSERT_INTO_EVENT_SOURCE_SQL, data.getId(), data.getUpdatedAt(),
+        try (var conn = config.dataSource.getConnection()) {
+            conn.setAutoCommit(true);
+            try (var stmt = conn.prepareStatement(INSERT_INTO_EVENT_SOURCE_SQL)) {
+                stmt.setString(1, data.getId());
+                stmt.setObject(2, data.getUpdatedAt());
+                stmt.setString(3, header.getEventName());
+                stmt.setString(4, config.mapper.writeValueAsString(event));
+                stmt.setString(5, header.getEventId());
+                stmt.setString(6, header.getOutletId());
+                stmt.setInt(7, header.getVersion());
+                stmt.setObject(8, header.getTimestamp());
+                stmt.setObject(9, DateUtil.now());
+                stmt.executeUpdate();
+            }
+        }
+        /*jdbcTemplate.update(INSERT_INTO_EVENT_SOURCE_SQL, data.getId(), data.getUpdatedAt(),
                 header.getEventName(), mapper.writeValueAsString(event), header.getEventId(),
                 header.getOutletId(), header.getVersion(), header.getTimestamp(),
-                Instant.now().atOffset(ZoneOffset.UTC));
+                Instant.now().atOffset(ZoneOffset.UTC));*/
+
     }
 
     protected void publishEvent(TEvent event) {
@@ -56,9 +67,9 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
 
         logger.info(
                 "publish webHookEventReceived eventId:%s-eventName:%s-dataId:%s with updatedAt:%s into Queue:%sQueue",
-                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(), exchangeName);
+                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(), config.exchangeName);
 
-        amqpTemplate.convertAndSend(exchangeName, null, event);
+        config.amqpTemplate.convertAndSend(config.exchangeName, null, event);
     }
 
     public static class Config {
