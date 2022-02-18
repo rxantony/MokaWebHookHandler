@@ -49,14 +49,15 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
     private void saveEvent(MokaItemReceived event) {
         var header = event.getHeader();
         var data = event.getBody().getData();
-
         var rs = jdbcTemplate.queryForRowSet(IS_ITEM_EXISTS_SQL, data.getId());
         if (!rs.next()) {
-            logger.debug("eventId:%s-dataId:%s inserts a new moka item", header.getEventId(), data.getId());
+            logger.info("eventId:%s-eventName:%s-dataId:%s inserts a new moka item",
+                    header.getEventId(), header.getEventName(), data.getId());
             jdbcTemplate.update(INSERT_ITEM_SQL, data.getId(), data.getName(), data.getDescription(),
                     DateUtil.now(), data.getUpdatedAt());
         } else {
-            logger.debug("eventId:%s-dataId:%s updates a moka item", header.getEventId(), data.getId());
+            logger.info("eventId:%s-eventName:%s-dataId:%s updates a moka item",
+                    header.getEventId(), header.getEventName(), data.getId());
             jdbcTemplate.update(UPDATE_ITEM_SQL, data.getName(), data.getDescription(), data.getUpdatedAt(),
                     data.getId());
         }
@@ -66,12 +67,13 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
         var header = event.getHeader();
         var data = event.getBody().getData();
         logger.info(
-                "eventId:%s-dataId:%s publishes webHookEventProcessedcwith  moka.item.processed into Queue:%sQueue",
-                header.getEventId(), data.getId(), AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
+                "eventId:%s-eventName:%s-dataId:%s publishes webHookEventProcessedcwith  moka.item.processed into Queue:%sQueue",
+                header.getEventId(), header.getEventName(), data.getId(),
+                AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
 
-        var eventProcessedheader = new EventHeader(header.getEventId(), "moka.item.processed");
-        var eventProcessedBody = new Body(new Item(data.getId(), data.getUpdatedAt()));
-        var eventProcessed = new MokaItemProcessed(eventProcessedheader, eventProcessedBody);
-        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, eventProcessed);
+        var eventProcheader = new EventHeader(header.getEventId(), "moka.item.processed");
+        var eventProcBody = new Body(new Item(data.getId(), data.getUpdatedAt()));
+        var eventProc = new MokaItemProcessed(eventProcheader, eventProcBody);
+        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, eventProc);
     }
 }

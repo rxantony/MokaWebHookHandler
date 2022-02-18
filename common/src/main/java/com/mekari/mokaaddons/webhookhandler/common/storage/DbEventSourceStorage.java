@@ -16,10 +16,10 @@ public class DbEventSourceStorage implements EventSourceStorage {
 
     @Override
     public Optional<OffsetDateTime> getUpdateAt(String id) throws Exception {
-        try (var conn = dataSource.getConnection();) {
-            try (var stmt = conn.prepareStatement(GET_UPDATEDAT_SQL);) {
+        try (var conn = dataSource.getConnection()) {
+            try (var stmt = conn.prepareStatement(GET_UPDATEDAT_SQL)) {
                 stmt.setString(1, id);
-                try (var rs = stmt.executeQuery();) {
+                try (var rs = stmt.executeQuery()) {
                     if (!rs.next())
                         return Optional.empty();
                     var updatedAt = rs.getObject(1, OffsetDateTime.class);

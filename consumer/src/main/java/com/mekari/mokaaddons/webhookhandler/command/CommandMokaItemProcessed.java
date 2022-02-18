@@ -32,7 +32,6 @@ public class CommandMokaItemProcessed extends AbstractCommandEvent<MokaItemProce
         Assert.notNull(event, "event must not be null");
 
         var data = event.getBody().getData();
-
         var rs = jdbcTemplate.queryForRowSet(SELECT_ITEM_SQL, data.getId());
         if (!rs.next())
             throw new CommandException(String.format("item with id%s is not exists", data.getId()));
@@ -47,17 +46,17 @@ public class CommandMokaItemProcessed extends AbstractCommandEvent<MokaItemProce
 
         if (jurnalId != null) {
             // call a jurnal api to update jurnal item
-            logger.debug("eventId:%s-dataId:%s calls jurnal api to update an jurnal item with jurnalId:jurnalId:%s",
-                    header.getEventId(), data.getId(), jurnalId);
+            logger.info(
+                    "eventId:%s-eventName:%s-dataId:%s calls jurnal api to update an jurnal item with jurnalId:jurnalId:%s",
+                    header.getEventId(), header.getEventName(), data.getId(), jurnalId);
         } else {
-            logger.debug("eventId:%s-dataId:%s, call jurnal api to create a new jurnal item",
-                    header.getEventId(), data.getId());
-
+            logger.info("eventId:%s-eventName:%s-dataId:%s, call jurnal api to create a new jurnal item",
+                    header.getEventId(), header.getEventName(), data.getId());
             // call a jurnal api to create a new jurnal item
             jurnalId = (UUID.randomUUID().toString());
 
-            logger.debug("eventId:%s-dataId:%s update jurnal_id with %s",
-                    header.getEventId(), data.getId(), jurnalId);
+            logger.info("eventId:%s-eventName:%s-dataId:%s update jurnal_id with %s",
+                    header.getEventId(), header.getEventName(), data.getId(), jurnalId);
             jdbcTemplate.update(UPDATE_ITEM_JURNAL_ID_SQL, jurnalId, data.getId());
 
         }

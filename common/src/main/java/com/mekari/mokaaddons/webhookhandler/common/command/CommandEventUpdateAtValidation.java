@@ -25,18 +25,16 @@ public class CommandEventUpdateAtValidation<TEvent extends Event> extends Abstra
         var header = event.getHeader();
         var data = event.getBody().getData();
 
-        logger.debug("eventId:%s-dataId:%s tries to connect to db for updatedAt date comparing ", header.getEventId(),
-                data.getId());
+        logger.debug("eventId:%s-eventName:%s-dataId:%s tries to connect to db for updatedAt date comparing ", 
+                header.getEventId(), header.getEventName(), data.getId());
 
         var dataUpdatedAt = storage.getUpdateAt(data.getId());
         if(dataUpdatedAt.isEmpty())
-            throw new EventSourceDataNotFoundException(data.getId());
+            throw new EventSourceDataNotFoundException(header.getEventId(), header.getEventName(), data.getId());
 
         var isUpdatedAtEquals = data.getUpdatedAt().equals(dataUpdatedAt.get());
-        logger.info(
-                "eventId:%s-dataId:%s compares updatedAt:%s to eventsource updatedAt:%s, result:%b",
-                header.getEventId(), data.getId(),
-                data.getUpdatedAt().toString(), dataUpdatedAt.toString(), isUpdatedAtEquals);
+        logger.info( "eventId:%s-eventName:%s-dataId:%s compares updatedAt:%s to eventsource updatedAt:%s, result:%b",
+                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(), dataUpdatedAt.toString(), isUpdatedAtEquals);
 
         if (isUpdatedAtEquals)
             inner.execute(event);
@@ -45,8 +43,8 @@ public class CommandEventUpdateAtValidation<TEvent extends Event> extends Abstra
     public static class EventSourceDataNotFoundException extends CommandException {
         private final String dataId;
 
-        public EventSourceDataNotFoundException(String dataId) {
-            super(String.format("dataId:%s is not found on event_source", dataId));
+        public EventSourceDataNotFoundException(String eventId, String eventName, String dataId) {
+            super(String.format("eventId:%s-eventName:%s-dataId:%s is not found on event_source", eventId, eventName, dataId));
             this.dataId = dataId;
         }
 

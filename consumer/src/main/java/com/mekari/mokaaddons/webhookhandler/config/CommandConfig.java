@@ -35,19 +35,21 @@ public class CommandConfig {
         , DbEventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
-        return new CommandEventUpdateAtValidation<>(eventSourceStorage,
+        return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
+        /*return new CommandEventUpdateAtValidation<>(eventSourceStorage,
                 new DBCommandEventLock<>(dataSource, lockTrackerStorage,
-                    new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
+                    new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));*/
     }
 
     @Bean({ "moka.item.processed" })
     public CommandEvent<MokaItemProcessed> commandMokaItemEventProcessed(@Qualifier("eventstore") DataSource dataSource
         , CommandEvent<MokaItemProcessed> command
         , DbEventSourceStorage eventSourceStorage
-        , LockTrackerStorage lockTracker) {
+        , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
-        return new CommandEventUpdateAtValidation<>(eventSourceStorage,
-                new DBCommandEventLock<>(dataSource, lockTracker,
-                        new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
+        return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
+        /*return new CommandEventUpdateAtValidation<>(eventSourceStorage,
+                new DBCommandEventLock<>(dataSource, lockTrackerStorage,
+                        new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));*/
     }
 }

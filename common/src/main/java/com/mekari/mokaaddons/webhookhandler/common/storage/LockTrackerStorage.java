@@ -20,9 +20,12 @@ public interface LockTrackerStorage {
     @NoArgsConstructor
     public static class Item {
         private int connId;
+        private int trxId;
         private String eventId;
+        private String eventName;
         private String dataId;
         private String query;
+        private OffsetDateTime trxStarted;
         private OffsetDateTime createdAt;
     }
 }

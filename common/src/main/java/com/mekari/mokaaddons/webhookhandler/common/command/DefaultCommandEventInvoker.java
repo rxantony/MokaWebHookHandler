@@ -61,7 +61,6 @@ public class DefaultCommandEventInvoker implements CommandInvoker {
 
     @Override
     public final void invoke(String event) throws Exception {
-
         Exception iex = null;
         Event eventObj = null;
         JsonNode eventNode = null;
