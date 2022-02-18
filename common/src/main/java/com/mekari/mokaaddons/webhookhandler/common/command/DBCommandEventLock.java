@@ -3,8 +3,6 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.ZoneOffset;
 
 import javax.sql.DataSource;
 

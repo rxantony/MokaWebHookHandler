@@ -2,9 +2,8 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandEventLock;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventUpdateAtValidation;
+import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandEventLock;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
