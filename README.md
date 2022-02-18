@@ -8,7 +8,7 @@ This projects just reached 60% from it's completion and has a goal to handle uno
 * [Mysql 8 or higher](https://www.mysql.com)
 * [RabbitMQ 3.6.15 or higher](https://www.rabbitmq.com)
 * [Apache Maven](https://maven.apache.org)
-* [Springboot 2.6.3](https://spring.io/projects/spring-boot)
+* [Springboot 2.6.3 or higher](https://spring.io/projects/spring-boot)
 
 ### How to debug and run the app
 
@@ -32,10 +32,13 @@ This projects just reached 60% from it's completion and has a goal to handle uno
     
 * **Debugging On VS Code**
 
-    * Open this solution and select "open and debug" menu on left panels, chose "Debug-Webhookhandler-consumer-api" to run all projects  
-      at the same time
+    * Open this solution using VSCode IDE.
+    * Install the Coding Pack for Java - (Windows/MacOS) extension.
+    * Go to "explorer" left menu panel, find Maven menu section and expand webhookhandler-common lifecycle than run install.
+    * Go to "open and debug" menu on left panel, chose "Debug-Webhookhandler-consumer-api" to run all projects  
+      at the same time.
     
 * **Running the app**
     * .
 
-**Note**: all the classes in common folder are going to be moved into separate project as a library.
+**Happy Coding**
