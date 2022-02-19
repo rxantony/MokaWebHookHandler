@@ -1,17 +1,12 @@
 package com.mekari.mokaaddons.webhookhandler.common.command;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-
 import javax.sql.DataSource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
 public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommandEvent<TEvent> {
