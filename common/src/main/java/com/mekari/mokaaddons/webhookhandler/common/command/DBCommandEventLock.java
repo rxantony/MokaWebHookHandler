@@ -78,16 +78,17 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
         var evsId = (String) ctx[1];
         var query = String.format(LOCKING_ROW_SQL, evsId);
 
-        var stmt = conn.createStatement(ResultSet.CLOSE_CURSORS_AT_COMMIT, ResultSet.CONCUR_UPDATABLE);
-        stmt.setPoolable(false);
-
         logger.debug("eventId:%s-eventName:%s-dataId:%s tries to acquire a row lock through connId:%d with query:[%s]",
                 header.getEventId(), header.getEventName(), data.getId(), connId, query);
 
-        var rs = stmt.executeQuery(query);
-        if (!rs.next())
-            throw new CommandException(String.format("eventId:%s-eventName:%s-dataId:%s no event_source with id:%s",
-                    header.getEventId(), header.getEventName(), data.getId(), evsId));
+        try(var stmt = conn.createStatement(ResultSet.CLOSE_CURSORS_AT_COMMIT, ResultSet.CONCUR_UPDATABLE)){
+            stmt.setPoolable(false);
+            try(var rs = stmt.executeQuery(query)){
+                if (!rs.next())
+                    throw new CommandException(String.format("eventId:%s-eventName:%s-dataId:%s no event_source with id:%s",
+                        header.getEventId(), header.getEventName(), data.getId(), evsId));
+            }
+        }
 
         var lockItem = Item.builder()
                 .connId(connId)
