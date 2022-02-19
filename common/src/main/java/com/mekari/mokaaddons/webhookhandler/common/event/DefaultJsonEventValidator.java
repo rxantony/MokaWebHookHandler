@@ -44,7 +44,7 @@ public class DefaultJsonEventValidator implements JsonEventValidator {
 
         if (dataNode.get("updated_at") == null)
             throw new UnknownEventFormatException(
-                    String.format("body data id is required for eventId:%s", eventIdNode.asText()),
+                    String.format("body data updateds_at is required for eventId:%s", eventIdNode.asText()),
                     eventNode.toString());
     }
 }

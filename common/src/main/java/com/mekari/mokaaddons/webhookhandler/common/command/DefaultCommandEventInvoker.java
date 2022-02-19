@@ -76,7 +76,7 @@ public class DefaultCommandEventInvoker implements CommandInvoker {
         } catch (Exception ex) {
             iex = ex;
         } finally {
-            afterInvoked(event, eventObj, iex);
+            afterInvoked(new AfterInvokedContext(event, eventNode, eventObj, iex));
         }
     }
 
@@ -88,8 +88,21 @@ public class DefaultCommandEventInvoker implements CommandInvoker {
     }
 
     // hook methods
-    protected void afterInvoked(String message, Event event, Exception ex) throws Exception {
-        if(ex != null)
-            throw ex;
+    protected void afterInvoked(AfterInvokedContext context) throws Exception {
+        if(context.exception != null)
+            throw context.exception;
+    }
+
+    public static class AfterInvokedContext{
+        public final String event;
+        public final JsonNode eventNode;
+        public final Event eventObj;
+        public final Exception exception;
+        public AfterInvokedContext(String event, JsonNode eventNode, Event eventObj, Exception exception){
+            this.event = event;
+            this.eventNode = eventNode;
+            this.eventObj = eventObj;
+            this.exception = exception;
+        }
     }
 }
