@@ -93,9 +93,9 @@ public class AbstractDeadLetterConsumer {
                     .reason(reason)
                     .createdAt(DateUtil.now());
             var msgNode = config.mapper.readTree(msg);
-            var header = msgNode.get("header");
-            if (header != null) {
-                var event_id = header.get("event_id");
+            var headerNode = msgNode.get("header");
+            if (headerNode != null) {
+                var event_id = headerNode.get("event_id");
                 if (event_id != null)
                     builder.eventId(event_id.asText());
             }
