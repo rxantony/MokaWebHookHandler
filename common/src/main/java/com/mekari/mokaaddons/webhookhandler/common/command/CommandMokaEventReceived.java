@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 
 public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommandEvent<TEvent> {
 
-    private Config config;
+    private final Config config;
     private static final String INSERT_INTO_EVENT_SOURCE_SQL = "INSERT INTO event_source (data_id, data_updated_at, event_name, payload, event_id, outlet_id , version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public CommandMokaEventReceived(Config config, Class<TEvent> eventCls) {

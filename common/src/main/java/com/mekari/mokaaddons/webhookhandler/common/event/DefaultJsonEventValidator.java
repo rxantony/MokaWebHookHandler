@@ -3,6 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.common.event;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 @Component
 public class DefaultJsonEventValidator implements JsonEventValidator {
@@ -10,6 +11,8 @@ public class DefaultJsonEventValidator implements JsonEventValidator {
     public static final DefaultJsonEventValidator SINGLETON = new DefaultJsonEventValidator();
 
     public void validate(JsonNode eventNode) throws UnknownEventFormatException {
+        Assert.notNull(eventNode, "eventNode must not be null");
+
         var headerNode = eventNode.get("header");
         if (headerNode == null)
             throw new UnknownEventFormatException("header is required", eventNode.toString());
