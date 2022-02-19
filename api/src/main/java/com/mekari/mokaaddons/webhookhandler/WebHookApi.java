@@ -36,9 +36,9 @@ public class WebHookApi {
                 if(jsEx.eventNode != null){                
                     var headerNode = jsEx.eventNode.get("header");
                     if (headerNode != null) {
-                        var event_id = headerNode.get("event_id");
-                        if (event_id != null)
-                            builder.eventId(event_id.asText());
+                        var eventIdNode = headerNode.get("event_id");
+                        if (eventIdNode != null)
+                            builder.eventId(eventIdNode.asText());
                     }
                 }
             }
