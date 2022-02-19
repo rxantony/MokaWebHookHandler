@@ -17,8 +17,8 @@ import org.springframework.util.Assert;
 
 public class AbstractDeadLetterConsumer {
 
-    private String sourceName;
     private @Autowired Config config;
+    private String sourceName;
     private Logger logger;
 
     private static final String HEADER_X_RETRIES_COUNT = "x-retries-count";
