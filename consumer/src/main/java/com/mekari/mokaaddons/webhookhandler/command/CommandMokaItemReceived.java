@@ -7,8 +7,7 @@ import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
-import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.Body;
-import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.Item;
+import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.*;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
 
 import org.springframework.amqp.core.AmqpTemplate;
@@ -66,6 +65,7 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
     private void publishEvent(MokaItemReceived event) {
         var header = event.getHeader();
         var data = event.getBody().getData();
+        
         logger.info(
                 "eventId:%s-eventName:%s-dataId:%s publishes webHookEventProcessedcwith  moka.item.processed into Queue:%sQueue",
                 header.getEventId(), header.getEventName(), data.getId(),

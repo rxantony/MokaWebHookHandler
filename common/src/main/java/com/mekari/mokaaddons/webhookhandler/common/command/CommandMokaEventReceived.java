@@ -20,6 +20,7 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
         this.config = config;
     }
 
+    @Override
     protected void executeInternal(TEvent event) throws Exception {
         saveEvent(event);
         publishEvent(event);
@@ -47,13 +48,6 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
                 stmt.executeUpdate();
             }
         }
-        /*
-         * jdbcTemplate.update(INSERT_INTO_EVENT_SOURCE_SQL, data.getId(),
-         * data.getUpdatedAt(),
-         * header.getEventName(), mapper.writeValueAsString(event), header.getEventId(),
-         * header.getOutletId(), header.getVersion(), header.getTimestamp(),
-         * Instant.now().atOffset(ZoneOffset.UTC));
-         */
     }
 
     protected void publishEvent(TEvent event) {

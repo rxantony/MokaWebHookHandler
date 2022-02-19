@@ -5,7 +5,7 @@ import java.util.UUID;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommandEvent;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventException;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,7 +34,7 @@ public class CommandMokaItemProcessed extends AbstractCommandEvent<MokaItemProce
         var data = event.getBody().getData();
         var rs = jdbcTemplate.queryForRowSet(SELECT_ITEM_SQL, data.getId());
         if (!rs.next())
-            throw new CommandException(String.format("item with id%s is not exists", data.getId()));
+            throw new CommandEventException(String.format("item with id%s is not exists", data.getId()), event);
 
         var jurnalId = rs.getString("jurnal_id");
         callJurnalApiForCRUD(event, jurnalId);

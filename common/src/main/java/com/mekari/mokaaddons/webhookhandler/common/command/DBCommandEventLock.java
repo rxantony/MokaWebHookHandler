@@ -41,11 +41,6 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
             // connId
             var lockItem = lock(conn, event);
             try {
-                // var header = event.getHeader();
-                // var data = event.getBody().getData();
-                // logger.debug("###eventId:%s-dataId:%s sleep 5000, connId:%d",
-                // header.getEventId(), data.getId(), lockItem.getConnId());
-                // Thread.sleep(5000);
                 inner.execute(event);
             } finally {
                 releaseLock(lockItem, conn, event);
@@ -54,7 +49,6 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     }
 
     private Object[] getConnIdAndEventSourceId(Connection conn, TEvent event) throws Exception {
-        var header = event.getHeader();
         var data = event.getBody().getData();
         try (var stmt = conn.prepareStatement(GET_CONNID_EVID_SQL)) {
             stmt.setString(1, data.getId());
@@ -62,9 +56,7 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
                 rs.next();
                 var connId = rs.getInt(1);
                 if (!rs.next())
-                    throw new CommandException(
-                            String.format("eventId:%s-eventName:%s-dataId:%s no event_source with data_id:%s",
-                                    header.getEventId(), header.getEventName(), data.getId(), data.getId()));
+                    throw new EventSourceDataNotFoundException(event);
                 var evsId = rs.getString(1);
                 return new Object[] { connId, evsId };
             }
@@ -86,9 +78,9 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
             stmt.setPoolable(false);
             try (var rs = stmt.executeQuery(query)) {
                 if (!rs.next())
-                    throw new CommandException(
+                    throw new EventSourceDataNotFoundException(
                             String.format("eventId:%s-eventName:%s-dataId:%s no event_source with id:%s",
-                                    header.getEventId(), header.getEventName(), data.getId(), evsId));
+                                    header.getEventId(), header.getEventName(), data.getId(), evsId), event);
             }
         }
 

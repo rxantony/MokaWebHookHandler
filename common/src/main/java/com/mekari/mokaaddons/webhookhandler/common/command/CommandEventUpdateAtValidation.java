@@ -30,7 +30,7 @@ public class CommandEventUpdateAtValidation<TEvent extends Event> extends Abstra
 
         var dataUpdatedAt = storage.getUpdateAt(data.getId());
         if(dataUpdatedAt.isEmpty())
-            throw new EventSourceDataNotFoundException(header.getEventId(), header.getEventName(), data.getId());
+            throw new EventSourceDataNotFoundException(event);
 
         var isUpdatedAtEquals = data.getUpdatedAt().equals(dataUpdatedAt.get());
         logger.info( "eventId:%s-eventName:%s-dataId:%s compares updatedAt:%s to eventsource updatedAt:%s, result:%b",
@@ -39,18 +39,4 @@ public class CommandEventUpdateAtValidation<TEvent extends Event> extends Abstra
         if (isUpdatedAtEquals)
             inner.execute(event);
     }
-
-    public static class EventSourceDataNotFoundException extends CommandException {
-        private final String dataId;
-
-        public EventSourceDataNotFoundException(String eventId, String eventName, String dataId) {
-            super(String.format("eventId:%s-eventName:%s-dataId:%s is not found on event_source", eventId, eventName, dataId));
-            this.dataId = dataId;
-        }
-
-        public String getDataId() {
-            return dataId;
-        }
-    }
-
 }

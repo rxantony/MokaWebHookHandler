@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class DefaultCommandEventInvoker implements CommandInvoker {
+public class CommandJsonEventInvoker implements CommandInvoker {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired CommandEventManager manager;
@@ -27,19 +27,19 @@ public class DefaultCommandEventInvoker implements CommandInvoker {
      * for manual instantiation instead.
      * this constuctor is neccessary by springboot to instantiate this class.
      */
-    public DefaultCommandEventInvoker() {
+    public CommandJsonEventInvoker() {
         init();
     }
 
-    public DefaultCommandEventInvoker(CommandEventManager manager, ObjectMapper mapper) {
+    public CommandJsonEventInvoker(CommandEventManager manager, ObjectMapper mapper) {
         this(manager, mapper, DefaultJsonEventValidator.SINGLETON);
     }
 
-    public DefaultCommandEventInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator) {
+    public CommandJsonEventInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator) {
         this(manager, mapper, validator, null);
     }
 
-    public DefaultCommandEventInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator, String eventNamePrefix) {
+    public CommandJsonEventInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator, String eventNamePrefix) {
         Assert.notNull(manager, "managger must not be null");
         Assert.notNull(mapper, "mapper must not be null");
         Assert.notNull(validator, "validator must not be null");
@@ -60,23 +60,18 @@ public class DefaultCommandEventInvoker implements CommandInvoker {
     }
 
     @Override
-    public final void invoke(String event) throws Exception {
-        Exception iex = null;
+    public final void invoke(String event) throws CommandJsonEventInvokerException {
         Event eventObj = null;
         JsonNode eventNode = null;
         try {
             eventNode = mapper.readTree(event);
             validator.validate(eventNode);
-    
             var eventName = getEventName(eventNode);
             var eventCmd = manager.createCommand(eventName);
-
             eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
             eventCmd.execute(eventObj);
         } catch (Exception ex) {
-            iex = ex;
-        } finally {
-            afterInvoked(new AfterInvokedContext(event, eventNode, eventObj, iex));
+            throw new CommandJsonEventInvokerException (event, eventNode, eventObj, ex);
         }
     }
 
@@ -85,24 +80,5 @@ public class DefaultCommandEventInvoker implements CommandInvoker {
         if (Strings.isNotBlank(eventNamePrefix))
             return eventNamePrefix + ":" + eventName;
         return eventName;
-    }
-
-    // hook methods
-    protected void afterInvoked(AfterInvokedContext context) throws Exception {
-        if(context.exception != null)
-            throw context.exception;
-    }
-
-    public static class AfterInvokedContext{
-        public final String event;
-        public final JsonNode eventNode;
-        public final Event eventObj;
-        public final Exception exception;
-        public AfterInvokedContext(String event, JsonNode eventNode, Event eventObj, Exception exception){
-            this.event = event;
-            this.eventNode = eventNode;
-            this.eventObj = eventObj;
-            this.exception = exception;
-        }
     }
 }
