@@ -5,6 +5,7 @@ import com.mekari.mokaaddons.webhookhandler.common.command.CommandJsonEventInvok
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.Item;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
+import com.mekari.mokaaddons.webhookhandler.common.util.JsonNodeUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,16 +33,8 @@ public class WebHookApi {
                 .createdAt(DateUtil.now());
 
             var jsEx = (CommandJsonEventInvokerException) ex;
-            if(jsEx != null){
-                if(jsEx.eventNode != null){                
-                    var headerNode = jsEx.eventNode.get("header");
-                    if (headerNode != null) {
-                        var eventIdNode = headerNode.get("event_id");
-                        if (eventIdNode != null)
-                            builder.eventId(eventIdNode.asText());
-                    }
-                }
-            }
+            if(jsEx != null)
+                JsonNodeUtil.fillEventIdAndName(builder, jsEx.eventNode);
 
             try{
                 deadLetterStorage.insert(builder.build());

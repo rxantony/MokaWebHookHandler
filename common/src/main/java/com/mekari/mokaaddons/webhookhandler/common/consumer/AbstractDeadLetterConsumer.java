@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.Item;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
+import com.mekari.mokaaddons.webhookhandler.common.util.JsonNodeUtil;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +36,6 @@ public class AbstractDeadLetterConsumer {
 
     protected AbstractDeadLetterConsumer(Config config) {
         Assert.notNull(config, "config must not be null");
-
         this.config = config;
         init();
     }
@@ -83,24 +83,26 @@ public class AbstractDeadLetterConsumer {
     }
 
     protected void saveDeadLetter(Message message, String reason) {
+        var msg = new String(message.getBody());
+        var builder = Item.builder()
+                .source(sourceName)
+                .payload(msg)
+                .properties(message.getMessageProperties().toString())
+                .reason(reason)
+                .createdAt(DateUtil.now());
         try {
-            var msg = new String(message.getBody());
-            var builder = Item.builder()
-                    .source(sourceName)
-                    .payload(msg)
-                    .properties(message.getMessageProperties().toString())
-                    .reason(reason)
-                    .createdAt(DateUtil.now());
             var msgNode = config.mapper.readTree(msg);
-            var headerNode = msgNode.get("header");
-            if (headerNode != null) {
-                var eventIdNode = headerNode.get("event_id");
-                if (eventIdNode != null)
-                    builder.eventId( eventIdNode.asText());
-            }
-            config.deadLetterStorage.insert(builder.build());
+            JsonNodeUtil.fillEventIdAndName(builder, msgNode);
         } catch (Exception ex) {
             logger.error(ex.toString());
+        }
+        finally{
+            try{
+                config.deadLetterStorage.insert(builder.build());
+            }
+            catch(Exception ex){
+                logger.error(ex.toString());
+            }
         }
     }
 
