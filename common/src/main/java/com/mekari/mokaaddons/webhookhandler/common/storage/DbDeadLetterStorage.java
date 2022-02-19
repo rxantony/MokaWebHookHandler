@@ -9,7 +9,7 @@ public class DbDeadLetterStorage implements DeadLetterStorage {
 
     private final JdbcTemplate jdbcTemplate;
     
-    private static final String INSERT_INTO_DEADLETTER_SQL = "INSERT INTO dead_letter(source, event_id, pay_load, properties, reason, created_at) VALUES (?,?,?,?,?,?)";
+    private static final String INSERT_INTO_DEADLETTER_SQL = "INSERT INTO dead_letter(source, event_id, payload, properties, reason, created_at) VALUES (?,?,?,?,?,?)";
 
     public DbDeadLetterStorage (DataSource dataSource){
         Assert.notNull(dataSource, "dataSource must not be null");
