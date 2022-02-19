@@ -1,6 +1,6 @@
 package com.mekari.mokaaddons.webhookhandler.common.consumer;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandInvoker;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventInvoker;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 
 public abstract class AbstractConsumer {
     
-    private @Autowired CommandInvoker invoker;
+    private @Autowired CommandEventInvoker invoker;
     private Logger logger;
 
     /**
@@ -23,7 +23,7 @@ public abstract class AbstractConsumer {
         init();
     }
 
-    protected AbstractConsumer(CommandInvoker invoker) {
+    protected AbstractConsumer(CommandEventInvoker invoker) {
         Assert.notNull(invoker, "invoker must not be null");
         this.invoker = invoker;
         init();

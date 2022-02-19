@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class CommandJsonEventInvoker implements CommandInvoker {
+public class CommandJsonEventInvoker implements CommandEventInvoker {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired CommandEventManager manager;
