@@ -61,15 +61,14 @@ public class AbstractDeadLetterConsumer {
             if (attempt == null)
                 attempt = 1;
             if (attempt > config.maxRetriesCount) {
-                saveDeadLetter(message, /*temporary*/ "rejected");
-                logger.info("Discarding and save message %s into dead_letter storage", new String(message.getBody()));
+                logger.info("Discarding message and save %s into dead_letter storage", new String(message.getBody()));
+                saveDeadLetter(message, /* temporary */ "rejected");
                 return;
             }
 
             var toExchange = getOriginalExchane(header);
             var toRoutingKey = message.getMessageProperties().getReceivedRoutingKey();
             toRoutingKey = toExchange == null || toExchange.length() == 0 ? toRoutingKey : toRoutingKey;
-
             header.put(HEADER_X_RETRIES_COUNT, ++attempt);
             config.amqpTemplate.send(toExchange, toRoutingKey, message);
         } catch (Exception ex) {
@@ -84,7 +83,7 @@ public class AbstractDeadLetterConsumer {
     }
 
     protected void saveDeadLetter(Message message, String reason) {
-        try{
+        try {
             var msg = new String(message.getBody());
             var builder = Item.builder()
                     .source(sourceName)
@@ -100,8 +99,7 @@ public class AbstractDeadLetterConsumer {
                     builder.eventId(event_id.asText());
             }
             config.deadLetterStorage.insert(builder.build());
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             logger.error(ex.toString());
         }
     }
