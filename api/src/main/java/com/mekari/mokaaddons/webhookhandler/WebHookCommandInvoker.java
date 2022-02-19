@@ -28,9 +28,9 @@ public class WebHookCommandInvoker extends DefaultCommandEventInvoker {
                             .source(SOURCE_NAME)
                             .createdAt(DateUtil.now());
             if(context.eventNode != null){                
-                var header = context.eventNode.get("header");
-                if (header != null) {
-                    var event_id = header.get("event_id");
+                var headerNode = context.eventNode.get("header");
+                if (headerNode != null) {
+                    var event_id = headerNode.get("event_id");
                     if (event_id != null)
                         builder.eventId(event_id.asText());
                 }
