@@ -21,6 +21,7 @@ public class DbLockTrackerStorage implements LockTrackerStorage {
 
     @Override
     public void insert(Item item) throws Exception {
+        Assert.notNull(item, "item must not be null");
         jdbcTemplate.update(INSERT_INTO_LOCKTRACKER_SQL, item.getConnId(), item.getEventId(), item.getEventName(), item.getDataId(), item.getQuery(), item.getCreatedAt(), item.getConnId());
     }
 
