@@ -37,13 +37,8 @@ public abstract class AbstractConsumer {
         return logger;
     }
 
-    public void consume(Message message, Channel channel) {
-        try {
-            var msg = new String(message.getBody());
-            invoker.invoke(msg);
-        } catch (Exception ex) {
-            logger.error(ex.toString());
-            throw new RuntimeException(ex);
-        }
+    public void consume(Message message, Channel channel) throws Exception{
+        var msg = new String(message.getBody());
+        invoker.invoke(msg);
     }
 }

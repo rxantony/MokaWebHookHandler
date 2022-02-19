@@ -13,7 +13,7 @@ public class MokaEventProcessedConsumer extends AbstractConsumer {
 
     @Override
     @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE)
-    public void consume(Message message, Channel channel){
+    public void consume(Message message, Channel channel) throws Exception{
         super.consume(message, channel);
     }
 }
