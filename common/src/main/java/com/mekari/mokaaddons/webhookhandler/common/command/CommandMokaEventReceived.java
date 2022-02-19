@@ -12,7 +12,6 @@ import org.springframework.util.Assert;
 public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommandEvent<TEvent> {
 
     private Config config;
-
     private static final String INSERT_INTO_EVENT_SOURCE_SQL = "INSERT INTO event_source (data_id, data_updated_at, event_name, payload, event_id, outlet_id , version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public CommandMokaEventReceived(Config config, Class<TEvent> eventCls) {
@@ -31,8 +30,7 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
         var data = event.getBody().getData();
 
         logger.info("insert event into even_store eventId:%s-eventName:%s-dataId:%s with updatedAt:%s",
-                header.getEventId(), header.getEventName(), data.getId(),
-                data.getUpdatedAt().toString());
+                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString());
 
         try (var conn = config.dataSource.getConnection()) {
             conn.setAutoCommit(true);
@@ -49,11 +47,13 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
                 stmt.executeUpdate();
             }
         }
-        /*jdbcTemplate.update(INSERT_INTO_EVENT_SOURCE_SQL, data.getId(), data.getUpdatedAt(),
-                header.getEventName(), mapper.writeValueAsString(event), header.getEventId(),
-                header.getOutletId(), header.getVersion(), header.getTimestamp(),
-                Instant.now().atOffset(ZoneOffset.UTC));*/
-
+        /*
+         * jdbcTemplate.update(INSERT_INTO_EVENT_SOURCE_SQL, data.getId(),
+         * data.getUpdatedAt(),
+         * header.getEventName(), mapper.writeValueAsString(event), header.getEventId(),
+         * header.getOutletId(), header.getVersion(), header.getTimestamp(),
+         * Instant.now().atOffset(ZoneOffset.UTC));
+         */
     }
 
     protected void publishEvent(TEvent event) {
@@ -62,7 +62,8 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
 
         logger.info(
                 "publish webHookEventReceived eventId:%s-eventName:%s-dataId:%s with updatedAt:%s into Queue:%sQueue",
-                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(), config.exchangeName);
+                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(),
+                config.exchangeName);
 
         config.amqpTemplate.convertAndSend(config.exchangeName, null, event);
     }
