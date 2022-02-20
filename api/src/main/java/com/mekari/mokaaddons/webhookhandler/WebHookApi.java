@@ -1,11 +1,13 @@
 package com.mekari.mokaaddons.webhookhandler;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventInvoker;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandJsonEventInvokerException;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.Item;
+import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.Item.ItemBuilder;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
-import com.mekari.mokaaddons.webhookhandler.common.util.JsonNodeUtil;
+import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,17 +28,16 @@ public class WebHookApi {
             invoker.invoke(message);
         }
         catch(Exception ex){
-            var builder = Item.builder()
-                .payload(message)
-                .source(SOURCE_NAME)
-                .reason(ex.toString())
-                .createdAt(DateUtil.now());
-
-            var jsEx = (CommandJsonEventInvokerException) ex;
-            if(jsEx != null)
-                JsonNodeUtil.fillEventIdAndName(builder, jsEx.eventNode);
+            JsonNode msgNode = null;
+            if(ex instanceof CommandJsonEventInvokerException )
+                msgNode = ((CommandJsonEventInvokerException)ex).eventNode;
 
             try{
+                var builder = BuilderUtil.createDeadLetterStorageItemBuilder(msgNode)
+                    .payload(message)
+                    .source(SOURCE_NAME)
+                    .reason(ex.toString())
+                    .createdAt(DateUtil.now());
                 deadLetterStorage.insert(builder.build());
             }
             // basically we can forward this exception into ApiExceptionHandler.

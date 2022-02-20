@@ -2,11 +2,12 @@ package com.mekari.mokaaddons.webhookhandler.common.consumer;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage.Item;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
-import com.mekari.mokaaddons.webhookhandler.common.util.JsonNodeUtil;
+import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -84,20 +85,20 @@ public class AbstractDeadLetterConsumer {
 
     protected void saveDeadLetter(Message message, String reason) {
         var msg = new String(message.getBody());
-        var builder = Item.builder()
-                .source(sourceName)
-                .payload(msg)
-                .properties(message.getMessageProperties().toString())
-                .reason(reason)
-                .createdAt(DateUtil.now());
+        JsonNode msgNode = null;
         try {
-            var msgNode = config.mapper.readTree(msg);
-            JsonNodeUtil.fillEventIdAndName(builder, msgNode);
+            msgNode = config.mapper.readTree(msg);
         } catch (Exception ex) {
             logger.error(ex.toString());
         }
         finally{
             try{
+                var builder = BuilderUtil.createDeadLetterStorageItemBuilder(msgNode)
+                    .source(sourceName)
+                    .payload(msg)
+                    .properties(message.getMessageProperties().toString())
+                    .reason(reason)
+                    .createdAt(DateUtil.now());
                 config.deadLetterStorage.insert(builder.build());
             }
             catch(Exception ex){
