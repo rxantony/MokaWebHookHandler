@@ -3,7 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.config;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventUpdateAtValidation;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventDateCompare;
 import com.mekari.mokaaddons.webhookhandler.common.command.DBCommandEventLock;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
@@ -37,9 +37,9 @@ public class CommandConfig {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new CommandEventUpdateAtValidation<>(eventSourceStorage,
+        return new CommandEventDateCompare<>(eventSourceStorage,
                 new DBCommandEventLock<>(dataSource, lockTrackerStorage,
-                    new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
+                    new CommandEventDateCompare<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })
@@ -50,8 +50,8 @@ public class CommandConfig {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new CommandEventUpdateAtValidation<>(eventSourceStorage,
+        return new CommandEventDateCompare<>(eventSourceStorage,
                 new DBCommandEventLock<>(dataSource, lockTrackerStorage,
-                        new CommandEventUpdateAtValidation<>(eventSourceStorage, command)));
+                        new CommandEventDateCompare<>(eventSourceStorage, command)));
     }
 }

@@ -5,12 +5,12 @@ import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 
 import org.springframework.util.Assert;
 
-public class CommandEventUpdateAtValidation<TEvent extends Event> extends AbstractCommandEvent<TEvent> {
+public class CommandEventDateCompare<TEvent extends Event> extends AbstractCommandEvent<TEvent> {
 
     private final EventSourceStorage storage;
     private final CommandEvent<TEvent> inner;
 
-    public CommandEventUpdateAtValidation(EventSourceStorage storage, CommandEvent<TEvent> inner) {
+    public CommandEventDateCompare(EventSourceStorage storage, CommandEvent<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(storage, "storage must not be null");
