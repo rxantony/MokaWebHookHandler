@@ -14,6 +14,8 @@ public class CommandEventDateCompare<TEvent extends Event> extends AbstractComma
         super(inner.eventClass());
 
         Assert.notNull(storage, "storage must not be null");
+        Assert.notNull(inner, "inner must not be null");
+        
         this.storage = storage;
         this.inner = inner;
     }

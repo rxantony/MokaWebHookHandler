@@ -27,6 +27,7 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
 
         Assert.notNull(dataSource, "dataSource must not be null");
         Assert.notNull(lockTracker, "lockTracker must not be null");
+        Assert.notNull(inner, "inner must not be null");
 
         this.dataSource = dataSource;
         this.lockTracker = lockTracker;
