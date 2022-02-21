@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandMokaEventReceived;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandMokaEventReceived.Config;
+import com.mekari.mokaaddons.webhookhandler.common.event.MokaJsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
@@ -14,9 +15,16 @@ import com.mekari.mokaaddons.webhookhandler.event.MokaTransactionReceived;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class CommandConfig {
+
+    @Bean
+    @Primary
+    public MokaJsonEventValidator mokaEventValidator(){
+        return new MokaJsonEventValidator();
+    }
 
     @Bean
     public DeadLetterStorage deadLetterConsumerConfig(DataSource dataSource){
