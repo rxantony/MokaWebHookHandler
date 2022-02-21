@@ -30,13 +30,13 @@ public class CommandEventDateCompare<TEvent extends Event> extends AbstractComma
         logger.debug("eventId:%s-eventName:%s-dataId:%s tries to connect to db for updatedAt date comparing ", 
                 header.getEventId(), header.getEventName(), data.getId());
 
-        var dataUpdatedAt = storage.getUpdateAt(data.getId());
-        if(dataUpdatedAt.isEmpty())
+        var eventDate = storage.getEventDate(event);
+        if(eventDate.isEmpty())
             throw new EventSourceDataNotFoundException(event);
 
-        var isUpdatedAtEquals = data.getUpdatedAt().equals(dataUpdatedAt.get());
+        var isUpdatedAtEquals = data.getUpdatedAt().equals(eventDate.get());
         logger.info( "eventId:%s-eventName:%s-dataId:%s compares updatedAt:%s to eventsource updatedAt:%s, result:%b",
-                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(), dataUpdatedAt.toString(), isUpdatedAtEquals);
+                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(), eventDate.toString(), isUpdatedAtEquals);
 
         if (isUpdatedAtEquals)
             inner.execute(event);
