@@ -20,7 +20,7 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     private final CommandEvent<TEvent> inner;
 
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
-    private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s LIMIT 1 FOR UPDATE;";
+    private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
 
     public DBCommandEventLock(DataSource dataSource, LockTrackerStorage lockTracker, CommandEvent<TEvent> inner) {
         super(inner.eventClass());
