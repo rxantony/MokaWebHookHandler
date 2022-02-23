@@ -4,7 +4,7 @@ import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.EventCommand;
 import com.mekari.mokaaddons.webhookhandler.common.command.EventDateCompareCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.DBEventCommandLock;
+import com.mekari.mokaaddons.webhookhandler.common.command.DBEventLockCommand;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
@@ -38,7 +38,7 @@ public class CommandConfig {
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
         return new EventDateCompareCommand<>(eventSourceStorage,
-                new DBEventCommandLock<>(dataSource, lockTrackerStorage,
+                new DBEventLockCommand<>(dataSource, lockTrackerStorage,
                     new EventDateCompareCommand<>(eventSourceStorage, command)));
     }
 
@@ -51,7 +51,7 @@ public class CommandConfig {
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
         return new EventDateCompareCommand<>(eventSourceStorage,
-                new DBEventCommandLock<>(dataSource, lockTrackerStorage,
+                new DBEventLockCommand<>(dataSource, lockTrackerStorage,
                         new EventDateCompareCommand<>(eventSourceStorage, command)));
     }
 }
