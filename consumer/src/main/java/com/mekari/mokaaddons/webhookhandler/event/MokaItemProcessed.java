@@ -1,7 +1,6 @@
 package com.mekari.mokaaddons.webhookhandler.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lmax.disruptor.EventHandler;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEvent;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEventBody;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventData;
