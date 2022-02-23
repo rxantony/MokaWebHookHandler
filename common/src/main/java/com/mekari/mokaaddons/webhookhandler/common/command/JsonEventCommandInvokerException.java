@@ -7,7 +7,7 @@ public class JsonEventCommandInvokerException extends EventCommandInvokerExcepti
     public final JsonNode eventNode;
     public final Event eventObj;
 
-    public JsonEventCommandInvokerException(String event, JsonNode eventNode, Event eventObj, Exception cause) {
+    public JsonEventCommandInvokerException(String event, JsonNode eventNode, Event eventObj, Throwable cause) {
         super(event, cause);
         this.eventNode = eventNode;
         this.eventObj = eventObj;

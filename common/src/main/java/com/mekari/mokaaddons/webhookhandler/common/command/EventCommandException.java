@@ -7,14 +7,14 @@ public class EventCommandException extends WebHookHandlingException {
     public final Event event;
 
     public EventCommandException(String message, Event event) {
-        this(message, null, event);
+        this(message, event, null);
     }
 
     public EventCommandException(Exception inner, Event event) {
-        this(null, inner, event);
+        this(null, event, inner);
     }
 
-    public EventCommandException(String message, Exception inner, Event event) {
+    public EventCommandException(String message, Event event, Throwable inner) {
         super(message, inner);
         this.event = event;
     }

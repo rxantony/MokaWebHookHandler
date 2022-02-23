@@ -6,11 +6,11 @@ public class WebHookHandlingException extends Exception {
         super(message);
     }
 
-    public WebHookHandlingException(Exception inner) {
+    public WebHookHandlingException(Throwable inner) {
         super(inner);
     }
 
-    public WebHookHandlingException(String message, Exception inner) {
+    public WebHookHandlingException(String message, Throwable inner) {
         super(message, inner);
     }
 }

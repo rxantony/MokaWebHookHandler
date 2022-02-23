@@ -67,9 +67,10 @@ public class AbstractDeadLetterConsumer {
                 return;
             }
 
-            var toExchange = getOriginalExchane(header);
+            var toExchange = getOriginalExchange(header);
             var toRoutingKey = message.getMessageProperties().getReceivedRoutingKey();
             toRoutingKey = toExchange == null || toExchange.length() == 0 ? toRoutingKey : toRoutingKey;
+
             header.put(HEADER_X_RETRIES_COUNT, ++attempt);
             config.amqpTemplate.send(toExchange, toRoutingKey, message);
         } catch (Exception ex) {
@@ -78,7 +79,7 @@ public class AbstractDeadLetterConsumer {
         }
     }
 
-    private String getOriginalExchane(Map<String, Object> header) {
+    protected String getOriginalExchange(Map<String, Object> header) {
         var toQueue = (String) header.get(HEADER_X_DEATH_QUEUE);
         return toQueue.substring(0, toQueue.length() - "Queue".length());
     }
