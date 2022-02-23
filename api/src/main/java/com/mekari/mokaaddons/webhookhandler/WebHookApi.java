@@ -1,8 +1,8 @@
 package com.mekari.mokaaddons.webhookhandler;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandEventInvoker;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandJsonEventInvokerException;
+import com.mekari.mokaaddons.webhookhandler.common.command.EventCommandInvoker;
+import com.mekari.mokaaddons.webhookhandler.common.command.JsonEventCommandInvokerException;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WebHookApi {
-    private @Autowired CommandEventInvoker invoker;
+    private @Autowired EventCommandInvoker invoker;
     private @Autowired DeadLetterStorage deadLetterStorage;
     private static final String SOURCE_NAME = WebHookApi.class.getName();
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebHookApi.class);
@@ -27,8 +27,8 @@ public class WebHookApi {
         }
         catch(Exception ex){
             JsonNode msgNode = null;
-            if(ex instanceof CommandJsonEventInvokerException )
-                msgNode = ((CommandJsonEventInvokerException)ex).eventNode;
+            if(ex instanceof JsonEventCommandInvokerException )
+                msgNode = ((JsonEventCommandInvokerException)ex).eventNode;
 
             try{
                 var builder = BuilderUtil.createDeadLetterStorageItemBuilder(msgNode)

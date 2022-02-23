@@ -22,7 +22,7 @@ public interface LockTrackerStorage {
         private int connId;
         private int trxId;
         private String eventId;
-        private String eventName;
+        private String eventName;;
         private String dataId;
         private String query;
         private OffsetDateTime trxStarted;

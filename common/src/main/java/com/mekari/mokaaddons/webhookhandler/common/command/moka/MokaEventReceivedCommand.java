@@ -1,20 +1,21 @@
-package com.mekari.mokaaddons.webhookhandler.common.command;
+package com.mekari.mokaaddons.webhookhandler.common.command.moka;
 
 import javax.sql.DataSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.event.AbstractMokaEvent;
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractEventCommand;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.util.Assert;
 
-public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> extends AbstractCommandEvent<TEvent> {
+public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> extends AbstractEventCommand<TEvent> {
 
     private final Config config;
-    private static final String INSERT_INTO_EVENT_SOURCE_SQL = "INSERT INTO event_source (data_id, data_updated_at, event_name, payload, event_id, outlet_id , version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_INTO_EVENT_SOURCE_SQL = "INSERT INTO event_source (data_id, event_date, event_name, payload, event_id, outlet_id , version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    public CommandMokaEventReceived(Config config, Class<TEvent> eventCls) {
+    public MokaEventReceivedCommand(Config config, Class<TEvent> eventCls) {
         super(eventCls);
         Assert.notNull(config, "config must not be null");
         this.config = config;
@@ -31,13 +32,13 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
         var data = event.getBody().getData();
 
         logger.info("insert event into even_store eventId:%s-eventName:%s-dataId:%s with updatedAt:%s",
-                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString());
+                header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString());
 
         try (var conn = config.dataSource.getConnection()) {
             conn.setAutoCommit(true);
             try (var stmt = conn.prepareStatement(INSERT_INTO_EVENT_SOURCE_SQL)) {
                 stmt.setString(1, data.getId());
-                stmt.setObject(2, data.getUpdatedAt());
+                stmt.setObject(2, header.getTimestamp());
                 stmt.setString(3, header.getEventName());
                 stmt.setString(4, config.mapper.writeValueAsString(event));
                 stmt.setString(5, header.getEventId());
@@ -55,8 +56,8 @@ public class CommandMokaEventReceived<TEvent extends AbstractMokaEvent<?>> exten
         var data = event.getBody().getData();
 
         logger.info(
-                "publish webHookEventReceived eventId:%s-eventName:%s-dataId:%s with updatedAt:%s into Queue:%sQueue",
-                header.getEventId(), header.getEventName(), data.getId(), data.getUpdatedAt().toString(),
+                "publish webHookEventReceived eventId:%s-eventName:%s-dataId:%s with eventDate:%s into Queue:%sQueue",
+                header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString(),
                 config.exchangeName);
 
         config.amqpTemplate.convertAndSend(config.exchangeName, null, event);

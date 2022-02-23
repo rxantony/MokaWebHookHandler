@@ -5,8 +5,8 @@ import java.util.Currency;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEventBody;
-import com.mekari.mokaaddons.webhookhandler.common.event.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventData;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.AbstractMokaEvent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -97,11 +97,8 @@ public class MokaTransactionReceived extends AbstractMokaEvent<MokaTransactionRe
 
     @Getter
     @Setter
-    public static class Transaction extends EventData {
-        /*
-            property "id" and "updated_at" have been on parent properties EventData.id and EventData.updatedAt, 
-            so do not need to redeclare it on this class
-        */
+    public static class Transaction implements EventData {
+        private String id;
         private OffsetDateTime date;
         private Currency subtotal;
 

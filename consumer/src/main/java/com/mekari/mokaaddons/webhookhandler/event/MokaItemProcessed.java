@@ -1,14 +1,14 @@
 package com.mekari.mokaaddons.webhookhandler.event;
 
-import java.time.OffsetDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lmax.disruptor.EventHandler;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEvent;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEventBody;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventData;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,27 +16,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class MokaItemProcessed extends AbstractEvent<MokaItemProcessed.Item> {
 
+    private EventHeader header;
     private Body body;
 
-    public MokaItemProcessed(EventHeader header, Body body) {
-        setHeader(header);
-        setBody(body);
-    }
-
+    @Getter
+    @Setter
+    @Builder
     @NoArgsConstructor
-    public static class Item extends EventData {
-        public Item(String id, OffsetDateTime updatedAt) {
-            super(id, updatedAt);
-        }
+    @AllArgsConstructor
+    public static class Item implements EventData {
+        private String id;
     }
 
     @Getter
     @Setter
-    @AllArgsConstructor
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Body extends AbstractEventBody<Item> {
+
         @JsonProperty("item")
         private Item data;
     }

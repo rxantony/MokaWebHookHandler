@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.event.DefaultJsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 import com.mekari.mokaaddons.webhookhandler.common.event.JsonEventValidator;
+import com.mekari.mokaaddons.webhookhandler.common.util.SingletonUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class CommandJsonEventInvoker implements CommandEventInvoker {
+public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
 
     private @Autowired ObjectMapper mapper;
-    private @Autowired CommandEventManager manager;
+    private @Autowired EventCommandManager manager;
     private @Autowired JsonEventValidator validator;
     private String eventNamePrefix;
     private Logger logger;
@@ -27,19 +27,19 @@ public class CommandJsonEventInvoker implements CommandEventInvoker {
      * for manual instantiation instead.
      * this constuctor is neccessary by springboot to instantiate this class.
      */
-    public CommandJsonEventInvoker() {
+    public DefaultJsonEventCommandInvoker() {
         init();
     }
 
-    public CommandJsonEventInvoker(CommandEventManager manager, ObjectMapper mapper) {
-        this(manager, mapper, DefaultJsonEventValidator.SINGLETON);
+    public DefaultJsonEventCommandInvoker(EventCommandManager manager, ObjectMapper mapper) {
+        this(manager, mapper, SingletonUtil.DEFAULT_JSONEVENT_VALIDATOR);
     }
 
-    public CommandJsonEventInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator) {
+    public DefaultJsonEventCommandInvoker(EventCommandManager manager, ObjectMapper mapper, JsonEventValidator validator) {
         this(manager, mapper, validator, null);
     }
 
-    public CommandJsonEventInvoker(CommandEventManager manager, ObjectMapper mapper, JsonEventValidator validator, String eventNamePrefix) {
+    public DefaultJsonEventCommandInvoker(EventCommandManager manager, ObjectMapper mapper, JsonEventValidator validator, String eventNamePrefix) {
         Assert.notNull(manager, "managger must not be null");
         Assert.notNull(mapper, "mapper must not be null");
         Assert.notNull(validator, "validator must not be null");
@@ -60,18 +60,20 @@ public class CommandJsonEventInvoker implements CommandEventInvoker {
     }
 
     @Override
-    public final void invoke(String event) throws CommandJsonEventInvokerException {
+    public final void invoke(String event) throws JsonEventCommandInvokerException {
         Event eventObj = null;
         JsonNode eventNode = null;
         try {
             eventNode = mapper.readTree(event);
             validator.validate(eventNode);
+
             var eventName = getEventName(eventNode);
             var eventCmd = manager.createCommand(eventName);
+            
             eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
             eventCmd.execute(eventObj);
         } catch (Exception ex) {
-            throw new CommandJsonEventInvokerException (event, eventNode, eventObj, ex);
+            throw new JsonEventCommandInvokerException (event, eventNode, eventObj, ex);
         }
     }
 

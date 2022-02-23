@@ -3,10 +3,10 @@ package com.mekari.mokaaddons.webhookhandler.config;
 import javax.sql.DataSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandEvent;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandMokaEventReceived;
-import com.mekari.mokaaddons.webhookhandler.common.command.CommandMokaEventReceived.Config;
-import com.mekari.mokaaddons.webhookhandler.common.event.MokaJsonEventValidator;
+import com.mekari.mokaaddons.webhookhandler.common.command.EventCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.moka.MokaEventReceivedCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.moka.MokaEventReceivedCommand.Config;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaJsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
@@ -39,12 +39,12 @@ public class CommandConfig {
     }
 
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
-    public CommandEvent<MokaItemReceived> commandItem(Config config) {
-        return new CommandMokaEventReceived<MokaItemReceived>(config, MokaItemReceived.class);
+    public EventCommand<MokaItemReceived> commandItem(Config config) {
+        return new MokaEventReceivedCommand<MokaItemReceived>(config, MokaItemReceived.class);
     }
 
     @Bean({ "moka.transaction.added", "moka.transaction.updated", "moka.transaction.deleted" })
-    public CommandEvent<MokaTransactionReceived> commandTransaction(Config config) {
-        return new CommandMokaEventReceived<MokaTransactionReceived>(config, MokaTransactionReceived.class);
+    public EventCommand<MokaTransactionReceived> commandTransaction(Config config) {
+        return new MokaEventReceivedCommand<MokaTransactionReceived>(config, MokaTransactionReceived.class);
     }
 }

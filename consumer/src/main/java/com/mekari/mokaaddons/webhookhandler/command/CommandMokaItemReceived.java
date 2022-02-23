@@ -2,8 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.command;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommandEvent;
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractEventCommand;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaEventHeader;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceived> {
+public class CommandMokaItemReceived extends AbstractEventCommand<MokaItemReceived> {
 
     private final JdbcTemplate jdbcTemplate;
     private final AmqpTemplate amqpTemplate;
@@ -40,7 +41,6 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
 
     @Override
     protected void executeInternal(MokaItemReceived event) throws Exception {
-        Assert.notNull(event, "event must not be null");
         saveEvent(event);
         publishEvent(event);
     }
@@ -53,11 +53,11 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
             logger.info("eventId:%s-eventName:%s-dataId:%s inserts a new moka item",
                     header.getEventId(), header.getEventName(), data.getId());
             jdbcTemplate.update(INSERT_ITEM_SQL, data.getId(), data.getName(), data.getDescription(),
-                    DateUtil.now(), data.getUpdatedAt());
+                    DateUtil.now(), DateUtil.now());
         } else {
             logger.info("eventId:%s-eventName:%s-dataId:%s updates a moka item",
                     header.getEventId(), header.getEventName(), data.getId());
-            jdbcTemplate.update(UPDATE_ITEM_SQL, data.getName(), data.getDescription(), data.getUpdatedAt(),
+            jdbcTemplate.update(UPDATE_ITEM_SQL, data.getName(), data.getDescription(), DateUtil.now(),
                     data.getId());
         }
     }
@@ -71,9 +71,10 @@ public class CommandMokaItemReceived extends AbstractCommandEvent<MokaItemReceiv
                 header.getEventId(), header.getEventName(), data.getId(),
                 AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
 
-        var eventProcheader = new EventHeader(header.getEventId(), "moka.item.processed");
-        var eventProcBody = new Body(new Item(data.getId(), data.getUpdatedAt()));
-        var eventProc = new MokaItemProcessed(eventProcheader, eventProcBody);
-        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, eventProc);
+        var nextEventHeader = new EventHeader(header.getEventId(), "moka.item.processed", header.getTimestamp());
+        var nextEventBody = new Body(new Item(event.getBody().getId()));
+        var nextEvent = new MokaItemProcessed(nextEventHeader,nextEventBody);
+
+        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, nextEvent);
     }
 }

@@ -1,11 +1,29 @@
 package com.mekari.mokaaddons.webhookhandler.common.event;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.time.OffsetDateTime;
 
-@Getter
-@Setter
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class AbstractEvent<TData extends EventData> implements Event {
-    private EventHeader header;
-    public abstract  AbstractEventBody<TData> getBody();
+    
+    @Override
+    @JsonIgnore()
+    public String geId() {
+        return getHeader().getEventId();
+    }
+
+    @Override
+    @JsonIgnore()
+    public String getName(){
+        return this.getHeader().getEventName();
+    }
+
+    @Override
+    @JsonIgnore()
+    public OffsetDateTime getDate() {
+        return getHeader().getTimestamp();
+    }
+
+    public abstract EventHeader getHeader();
+    public abstract AbstractEventBody<TData> getBody();
 }

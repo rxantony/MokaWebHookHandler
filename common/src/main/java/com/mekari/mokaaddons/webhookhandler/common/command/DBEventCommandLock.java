@@ -13,16 +13,16 @@ import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.util.Assert;
 
-public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEvent<TEvent> {
+public class DBEventCommandLock<TEvent extends Event> extends AbstractEventCommand<TEvent> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
-    private final CommandEvent<TEvent> inner;
+    private final EventCommand<TEvent> inner;
 
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
 
-    public DBCommandEventLock(DataSource dataSource, LockTrackerStorage lockTracker, CommandEvent<TEvent> inner) {
+    public DBEventCommandLock(DataSource dataSource, LockTrackerStorage lockTracker, EventCommand<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(dataSource, "dataSource must not be null");
@@ -50,9 +50,8 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     }
 
     private Object[] getConnIdAndEventSourceId(Connection conn, TEvent event) throws Exception {
-        var data = event.getBody().getData();
         try (var stmt = conn.prepareStatement(GET_CONNID_EVID_SQL)) {
-            stmt.setString(1, data.getId());
+            stmt.setString(1, event.getBody().getId());
             try (var rs = stmt.executeQuery()) {
                 rs.next();
                 var connId = rs.getInt(1);
@@ -65,31 +64,30 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     }
 
     private Item lock(Connection conn, TEvent event) throws Exception {
-        var header = event.getHeader();
-        var data = event.getBody().getData();
         var ctx = getConnIdAndEventSourceId(conn, event);
         var connId = (int) ctx[0];
         var evsId = (String) ctx[1];
         var query = String.format(LOCKING_ROW_SQL, evsId);
 
-        logger.debug("eventId:%s-eventName:%s-dataId:%s tries to acquire a row lock through connId:%d with query:[%s]",
-                header.getEventId(), header.getEventName(), data.getId(), connId, query);
+        logger.debug("eventId:%s-eventName:%s-bodyId:%s tries to acquire a row lock through connId:%d with query:[%s]",
+                event.geId(), event.getName(), event.getBody().getId(), connId, query);
 
         try (var stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
             stmt.setPoolable(false);
             try (var rs = stmt.executeQuery(query)) {
                 if (!rs.next())
                     throw new EventSourceDataNotFoundException(
-                            String.format("eventId:%s-eventName:%s-dataId:%s no event_source with id:%s",
-                                    header.getEventId(), header.getEventName(), data.getId(), evsId), event);
+                            String.format("eventId:%s-eventName:%s-bodyId:%s no event_source with id:%s",
+                                    event.geId(), event.getName(), event.getBody().getId(), evsId),
+                            event);
             }
         }
 
         var lockItem = Item.builder()
                 .connId(connId)
-                .eventId(event.getHeader().getEventId())
-                .eventName(header.getEventName())
-                .dataId(event.getBody().getData().getId())
+                .eventId(event.geId())
+                .eventName(event.getName())
+                .dataId(event.getBody().getId())
                 .query(query)
                 .createdAt(DateUtil.now())
                 .build();
@@ -100,17 +98,14 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
             logger.error(ex.toString());
         }
 
-        logger.info("###eventId:%s-eventName:%s-dataId:%s [successfully] acquire a row locking through connId:%d",
-                header.getEventId(), header.getEventName(), data.getId(), connId);
+        logger.info("###eventId:%s-eventName:%s-bodyId:%s [successfully] acquire a row locking through connId:%d", 
+                event.geId(), event.getName(), event.getBody().getId(), connId);
         return lockItem;
     }
 
     private void releaseLock(Item lockItem, Connection conn, TEvent event) throws Exception {
-        var header = event.getHeader();
-        var data = event.getBody().getData();
-
-        logger.info("###eventId:%s-eventName:%s-dataId:%s [releases] a row locking through connId:%d",
-                header.getEventId(), header.getEventName(), data.getId(), lockItem.getConnId());
+        logger.info("###eventId:%s-eventName:%s-bodyId:%s [releases] a row locking through connId:%d",
+                event.geId(), event.getName(), event.getBody().getId(), lockItem.getConnId());
 
         conn.rollback();
         conn.setAutoCommit(true);
@@ -123,17 +118,14 @@ public class DBCommandEventLock<TEvent extends Event> extends AbstractCommandEve
     }
 
     private Connection createConnection(TEvent event) throws SQLException {
-        var header = event.getHeader();
-        var data = event.getBody().getData();
-
-        logger.debug("eventId:%s-eventName:%s-dataId:%s tries to connect to database for a row locking",
-                header.getEventId(), header.getEventName(), data.getId());
+        logger.debug("eventId:%s-eventName:%s-bodyId:%s tries to connect to database for a row locking",
+                event.geId(), event.getName(), event.getBody().getId());
 
         var conn = dataSource.getConnection();
         conn.setAutoCommit(false);
 
-        logger.debug("eventId:%s-eventName:%s-dataId:%s is successfully connected to db for a row locking",
-                header.getEventId(), header.getEventName(), data.getId());
+        logger.debug("eventId:%s-eventName:%s-bodyId:%s is successfully connected to db for a row locking",
+                event.geId(), event.getName(), event.getBody().getId());
 
         return conn;
     }
