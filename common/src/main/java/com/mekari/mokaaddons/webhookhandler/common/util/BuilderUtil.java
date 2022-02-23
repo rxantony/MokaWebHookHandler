@@ -6,8 +6,8 @@ import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 public class BuilderUtil {
     private BuilderUtil(){}
 
-    public static DeadLetterStorage.Item.ItemBuilder createDeadLetterStorageItemBuilder(JsonNode eventNode){
-        var builder = DeadLetterStorage.Item.builder();  
+    public static DeadLetterStorage.NewItem.NewItemBuilder createDeadLetterStorageItemBuilder(JsonNode eventNode){
+        var builder = DeadLetterStorage.NewItem.builder();  
         if(eventNode == null)
             return builder;  
 

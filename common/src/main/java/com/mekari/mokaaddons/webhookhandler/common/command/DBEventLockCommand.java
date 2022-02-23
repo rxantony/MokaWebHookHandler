@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage;
-import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage.Item;
+import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage.NewItem;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.util.Assert;
@@ -63,7 +63,7 @@ public class DBEventLockCommand<TEvent extends Event> extends AbstractEventComma
         }
     }
 
-    private Item lock(Connection conn, TEvent event) throws Exception {
+    private NewItem lock(Connection conn, TEvent event) throws Exception {
         var ctx = getConnIdAndEventSourceId(conn, event);
         var connId = (int) ctx[0];
         var evsId = (String) ctx[1];
@@ -83,7 +83,7 @@ public class DBEventLockCommand<TEvent extends Event> extends AbstractEventComma
             }
         }
 
-        var lockItem = Item.builder()
+        var lockItem = NewItem.builder()
                 .connId(connId)
                 .eventId(event.geId())
                 .eventName(event.getName())
@@ -103,7 +103,7 @@ public class DBEventLockCommand<TEvent extends Event> extends AbstractEventComma
         return lockItem;
     }
 
-    private void releaseLock(Item lockItem, Connection conn, TEvent event) throws Exception {
+    private void releaseLock(NewItem lockItem, Connection conn, TEvent event) throws Exception {
         logger.info("###eventId:%s-eventName:%s-bodyId:%s [releases] a row locking through connId:%d",
                 event.geId(), event.getName(), event.getBody().getId(), lockItem.getConnId());
 

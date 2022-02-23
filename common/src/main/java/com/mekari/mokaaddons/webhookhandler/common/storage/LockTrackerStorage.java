@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public interface LockTrackerStorage {
-    void insert(Item item) throws Exception;
+    void insert(NewItem item) throws Exception;
 
     void delete(int connId, OffsetDateTime date) throws Exception;
 
@@ -18,7 +18,7 @@ public interface LockTrackerStorage {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Item {
+    public static class NewItem {
         private int connId;
         private int trxId;
         private String eventId;

@@ -8,7 +8,9 @@ import com.mekari.mokaaddons.webhookhandler.common.command.moka.MokaEventReceive
 import com.mekari.mokaaddons.webhookhandler.common.command.moka.MokaEventReceivedCommand.Config;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaJsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
+import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
+import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
 import com.mekari.mokaaddons.webhookhandler.event.MokaTransactionReceived;
 
@@ -27,15 +29,20 @@ public class CommandConfig {
     }
 
     @Bean
+    public EventSourceStorage eventStoreStorage(DataSource dataSource){
+        return new DbEventSourceStorage(dataSource);
+    }
+
+    @Bean
     public DeadLetterStorage deadLetterConsumerConfig(DataSource dataSource){
         return new DbDeadLetterStorage(dataSource);
     }
 
     @Bean
-    public Config eventConfig(DataSource dataSource
+    public Config eventConfig(EventSourceStorage eventSourceStorage
         , AmqpTemplate  amqpTemplate
         , ObjectMapper mapper){
-        return new Config(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, dataSource, amqpTemplate, mapper);
+        return new Config(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, eventSourceStorage, amqpTemplate, mapper);
     }
 
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
