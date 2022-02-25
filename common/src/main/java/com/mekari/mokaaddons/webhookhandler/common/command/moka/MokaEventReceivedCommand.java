@@ -37,7 +37,7 @@ public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> exten
                 .insert(NewItem
                         .builder()
                         .dataId(data.getId())
-                        .eventDate(header.getTimestamp())
+                        .eventDate(event.getDate())
                         .eventName(header.getEventName())
                         .payload(config.mapper.writeValueAsString(event))
                         .eventId(header.getEventId())

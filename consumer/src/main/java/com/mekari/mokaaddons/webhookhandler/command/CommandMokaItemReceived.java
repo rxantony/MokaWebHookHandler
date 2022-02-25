@@ -72,7 +72,7 @@ public class CommandMokaItemReceived extends AbstractEventCommand<MokaItemReceiv
                 AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
 
         var nextEventHeader = new EventHeader(header.getEventId(), "moka.item.processed", header.getTimestamp());
-        var nextEventBody = new Body(new Item(event.getBody().getId()));
+        var nextEventBody = new Body(new Item(event.getBody().getData().getId(), event.getBody().getData().getDate()));
         var nextEvent = new MokaItemProcessed(nextEventHeader,nextEventBody);
 
         amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, nextEvent);

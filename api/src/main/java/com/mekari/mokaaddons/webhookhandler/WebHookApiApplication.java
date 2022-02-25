@@ -64,7 +64,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 	}
 
 	private JsonNode[] getItemEvents() throws IOException {
-		var file = ResourceUtils.getFile("classpath:item_events.json");
+		var file = ResourceUtils.getFile("classpath:item_event_collections.json");
 		try (var in = new FileInputStream(file);) {
 			var writer = new StringWriter();
 			IOUtils.copy(in, writer, "UTF-8");
