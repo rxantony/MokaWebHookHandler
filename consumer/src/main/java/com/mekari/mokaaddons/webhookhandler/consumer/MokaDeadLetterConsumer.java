@@ -13,10 +13,6 @@ public class MokaDeadLetterConsumer extends AbstractDeadLetterConsumer {
 
     @RabbitListener(queues = AppConstant.QueueName.MOKA_DLQ)
     public void consume(Message message, Channel channel) {
-        try {
-            super.consume(message, channel);
-        } catch (Exception ex) {
-            getLogger().error(ex.toString());
-        }
+        super.consume(message, channel);
     }
 }
