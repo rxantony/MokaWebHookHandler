@@ -1,15 +1,14 @@
 package com.mekari.mokaaddons.webhookhandler.common.storage;
 
-import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.util.Optional;
+
+import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
 public interface EventSourceStorage {
 
