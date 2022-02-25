@@ -16,6 +16,8 @@ import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import lombok.Builder;
+
 public class AbstractDeadLetterConsumer {
 
     private @Autowired Config config;
@@ -66,21 +68,21 @@ public class AbstractDeadLetterConsumer {
                 return;
             }
 
-            var toExchange = getOriginalExchange(header);
-            var toRoutingKey = message.getMessageProperties().getReceivedRoutingKey();
-            toRoutingKey = toExchange == null || toExchange.length() == 0 ? toRoutingKey : toRoutingKey;
-
+            var exchangeRoutingKey = config.exchangeRoutingStrategy.get(message);
             header.put(HEADER_X_RETRIES_COUNT, ++attempt);
-            config.amqpTemplate.send(toExchange, toRoutingKey, message);
+            config.amqpTemplate.send(exchangeRoutingKey.exchangeName, exchangeRoutingKey.routingKey, message);
         } catch (Exception ex) {
             logger.error(ex.toString());
             saveDeadLetter(message, ex.toString());
         }
     }
 
-    protected String getOriginalExchange(Map<String, Object> header) {
-        var toQueue = (String) header.get(HEADER_X_DEATH_QUEUE);
-        return toQueue.substring(0, toQueue.length() - "Queue".length());
+    private static ExchangeRoutingStrategy.Result getExchangeRoutingKey(Message message) {
+        var headers = message.getMessageProperties().getHeaders();
+        var toQueue = (String) headers.get(HEADER_X_DEATH_QUEUE);
+        var exchange = toQueue.substring(0, toQueue.length() - "Queue".length());
+        var routingKey = message.getMessageProperties().getReceivedRoutingKey();
+        return new ExchangeRoutingStrategy.Result(exchange, routingKey);
     }
 
     protected void saveDeadLetter(Message message, String reason) {
@@ -107,14 +109,16 @@ public class AbstractDeadLetterConsumer {
         }
     }
 
+    @Builder
     public static class Config {
         public final DeadLetterStorage deadLetterStorage;
         public final AmqpTemplate amqpTemplate;
         public final ObjectMapper mapper;
         public final int maxRetriesCount;
+        public final ExchangeRoutingStrategy exchangeRoutingStrategy;
 
         public Config(DeadLetterStorage deadLetterStorage, AmqpTemplate amqpTemplate, ObjectMapper mapper,
-                int maxRetriesCount) {
+            int maxRetriesCount, ExchangeRoutingStrategy exchangeRoutingStrategy) {
             Assert.notNull(deadLetterStorage, "deadLetterStorage must not be null");
             Assert.notNull(amqpTemplate, "amqpTemplate must not be null");
             Assert.notNull(mapper, "mapper must not be null");
@@ -124,6 +128,24 @@ public class AbstractDeadLetterConsumer {
             this.amqpTemplate = amqpTemplate;
             this.mapper = mapper;
             this.maxRetriesCount = maxRetriesCount;
+
+            if(exchangeRoutingStrategy != null) 
+                this.exchangeRoutingStrategy = exchangeRoutingStrategy;
+            else this.exchangeRoutingStrategy =  AbstractDeadLetterConsumer::getExchangeRoutingKey;
+        }
+    }
+
+    public static interface ExchangeRoutingStrategy{
+        Result get(Message message);
+
+        public static class Result{
+            public final String exchangeName;
+            public final String routingKey;
+    
+            public Result(String exchangeName, String routingKey){
+                this.exchangeName = exchangeName;
+                this.routingKey = routingKey;
+            }
         }
     }
 }
