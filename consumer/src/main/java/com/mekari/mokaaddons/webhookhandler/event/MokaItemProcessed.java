@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEvent;
 import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEventBody;
-import com.mekari.mokaaddons.webhookhandler.common.event.EventData;
 import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaEventData;
 
