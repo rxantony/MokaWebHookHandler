@@ -19,7 +19,7 @@ public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> exten
     private @Autowired AmqpTemplate amqpTemplate;
     private @Autowired ObjectMapper mapper;
 
-    private String publishToExchangeName;
+    private final String publishToExchangeName;
 
     public MokaEventReceivedCommand(String publishToExchangeName, Class<TEvent> eventCls) {
         super(eventCls);
