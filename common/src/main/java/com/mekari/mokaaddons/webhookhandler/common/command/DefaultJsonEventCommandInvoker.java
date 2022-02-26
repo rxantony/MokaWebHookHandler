@@ -3,7 +3,6 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
-import com.mekari.mokaaddons.webhookhandler.common.event.UnknownEventFormatException;
 import com.mekari.mokaaddons.webhookhandler.common.util.SingletonUtil;
 
 import org.apache.logging.log4j.LogManager;

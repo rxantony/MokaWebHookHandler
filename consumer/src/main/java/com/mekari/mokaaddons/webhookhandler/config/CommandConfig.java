@@ -2,13 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
+import com.mekari.mokaaddons.webhookhandler.common.command.DBEventLockCommand;
 import com.mekari.mokaaddons.webhookhandler.common.command.EventCommand;
 import com.mekari.mokaaddons.webhookhandler.common.command.EventDateCompareCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.DBEventLockCommand;
-import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
-import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
-import com.mekari.mokaaddons.webhookhandler.common.storage.DbLockTrackerStorage;
-import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;

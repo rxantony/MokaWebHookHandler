@@ -1,6 +1,5 @@
 package com.mekari.mokaaddons.webhookhandler.common.command;
 
-import com.mekari.mokaaddons.webhookhandler.common.event.JsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.util.SingletonUtil;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
