@@ -21,7 +21,7 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
     private @Autowired EventCommandManager commandManager;
     private @Autowired JsonEventValidatorManager validatorManager;
     private String eventNamePrefix;
-    private Logger logger;
+    private static final Logger LOGGER = LogManager.getFormatterLogger(DefaultJsonEventCommandInvoker.class);
 
     /**
      * do not use this default constructor, using another parameterized constructors
@@ -32,22 +32,23 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
         init();
     }
 
+    public DefaultJsonEventCommandInvoker(String eventNamePrefix) {
+        this.eventNamePrefix = eventNamePrefix;
+        init();
+    }
+
     public DefaultJsonEventCommandInvoker(Config config) {
         Assert.notNull(config, "config must not be null");
 
         this.commandManager = config.commandManager;
         this.validatorManager = config.validatorManager;
         this.mapper = config.mapper;
-        this.eventNamePrefix = config.eventNamePrefix != null ? config.eventNamePrefix.trim() : config.eventNamePrefix;;
+        this.eventNamePrefix = config.eventNamePrefix != null ? config.eventNamePrefix.trim() : config.eventNamePrefix;
         init();
     }
 
-    protected void init() {
-        logger = LogManager.getFormatterLogger(this.getClass());
-    }
-
-    protected final Logger getLogger() {
-        return logger;
+    private void init() {
+        this.eventNamePrefix = eventNamePrefix != null ? eventNamePrefix.trim() : eventNamePrefix;
     }
 
     @Override
@@ -71,17 +72,17 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
             defaultValidator = SingletonUtil.DEFAULT_JSONEVENT_VALIDATOR;
         defaultValidator.validate(eventNode);
 
-        var eventName = getEventName(eventNode, eventNamePrefix);
+        var eventName = getEventName(eventNode);
         var validator = validatorManager.crateValidator(eventName);
         if(validator != null)
             validator.validate(eventNode);
         return eventName;
     }
     
-    protected String getEventName(JsonNode eventNode, String namePrefix) {
+    private String getEventName(JsonNode eventNode) {
         var eventName = eventNode.get("header").get("event_name").asText();
-        if (Strings.isNotBlank(namePrefix))
-            return namePrefix + ":" + eventName;
+        if (Strings.isNotBlank(eventNamePrefix))
+            return eventNamePrefix + ":" + eventName;
         return eventName;
     }
 
