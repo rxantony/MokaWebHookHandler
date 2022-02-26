@@ -29,7 +29,6 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
      * this constuctor is neccessary by springboot to instantiate this class.
      */
     public DefaultJsonEventCommandInvoker() {
-        init();
     }
 
     public DefaultJsonEventCommandInvoker(String eventNamePrefix) {
@@ -43,7 +42,7 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
         this.commandManager = config.commandManager;
         this.validatorManager = config.validatorManager;
         this.mapper = config.mapper;
-        this.eventNamePrefix = config.eventNamePrefix != null ? config.eventNamePrefix.trim() : config.eventNamePrefix;
+        this.eventNamePrefix = config.eventNamePrefix;
         init();
     }
 
