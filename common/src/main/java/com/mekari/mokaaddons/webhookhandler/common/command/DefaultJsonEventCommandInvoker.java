@@ -51,17 +51,17 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
     }
 
     @Override
-    public final void invoke(String event) throws JsonEventCommandInvokerException {
+    public final void invoke(String jsonEvent) throws JsonEventCommandInvokerException {
         Event eventObj = null;
         JsonNode eventNode = null;
         try {
-            eventNode = mapper.readTree(event);
+            eventNode = mapper.readTree(jsonEvent);
             var eventName = validateAndGetEventName(eventNode);
             var eventCmd = commandManager.createCommand(eventName);
             eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
             eventCmd.execute(eventObj);
         } catch (Exception ex) {
-            throw new JsonEventCommandInvokerException (event, eventNode, eventObj, ex);
+            throw new JsonEventCommandInvokerException (jsonEvent, eventNode, eventObj, ex);
         }
     }
     
