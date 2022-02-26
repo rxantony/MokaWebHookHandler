@@ -3,7 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
-import com.mekari.mokaaddons.webhookhandler.common.event.JsonEventValidator;
+import com.mekari.mokaaddons.webhookhandler.common.event.UnknownEventFormatException;
 import com.mekari.mokaaddons.webhookhandler.common.util.SingletonUtil;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import lombok.Builder;
+
 @Component
 public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
 
     private @Autowired ObjectMapper mapper;
-    private @Autowired EventCommandManager manager;
-    private @Autowired JsonEventValidator validator;
+    private @Autowired EventCommandManager commandManager;
+    private @Autowired JsonEventValidatorManager validatorManager;
     private String eventNamePrefix;
     private Logger logger;
 
@@ -31,27 +33,17 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
         init();
     }
 
-    public DefaultJsonEventCommandInvoker(EventCommandManager manager, ObjectMapper mapper) {
-        this(manager, mapper, SingletonUtil.DEFAULT_JSONEVENT_VALIDATOR);
-    }
+    public DefaultJsonEventCommandInvoker(Config config) {
+        Assert.notNull(config, "config must not be null");
 
-    public DefaultJsonEventCommandInvoker(EventCommandManager manager, ObjectMapper mapper, JsonEventValidator validator) {
-        this(manager, mapper, validator, null);
-    }
-
-    public DefaultJsonEventCommandInvoker(EventCommandManager manager, ObjectMapper mapper, JsonEventValidator validator, String eventNamePrefix) {
-        Assert.notNull(manager, "managger must not be null");
-        Assert.notNull(mapper, "mapper must not be null");
-        Assert.notNull(validator, "validator must not be null");
-
-        this.manager = manager;
-        this.mapper = mapper;
-        this.validator = validator;
+        this.commandManager = config.commandManager;
+        this.validatorManager = config.validatorManager;
+        this.mapper = config.mapper;
+        this.eventNamePrefix = config.eventNamePrefix != null ? config.eventNamePrefix.trim() : config.eventNamePrefix;;
         init();
     }
 
     protected void init() {
-        eventNamePrefix = eventNamePrefix != null ? eventNamePrefix.trim() : eventNamePrefix;
         logger = LogManager.getFormatterLogger(this.getClass());
     }
 
@@ -65,22 +57,54 @@ public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
         JsonNode eventNode = null;
         try {
             eventNode = mapper.readTree(event);
-            validator.validate(eventNode);
-
-            var eventName = getEventName(eventNode);
-            var eventCmd = manager.createCommand(eventName);
-            
+            var eventName = validateAndGetEventName(eventNode);
+            var eventCmd = commandManager.createCommand(eventName);
             eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
             eventCmd.execute(eventObj);
         } catch (Exception ex) {
             throw new JsonEventCommandInvokerException (event, eventNode, eventObj, ex);
         }
     }
+    
+    private String validateAndGetEventName(JsonNode eventNode) throws UnknownEventFormatException{
+        var defaultValidator = validatorManager.getDeafultValidator();
+        if(defaultValidator == null)
+            defaultValidator = SingletonUtil.DEFAULT_JSONEVENT_VALIDATOR;
+        defaultValidator.validate(eventNode);
 
-    protected String getEventName(JsonNode eventNode) {
-        var eventName = eventNode.get("header").get("event_name").asText();
-        if (Strings.isNotBlank(eventNamePrefix))
-            return eventNamePrefix + ":" + eventName;
+        var eventName = getEventName(eventNode, eventNamePrefix);
+        var validator = validatorManager.crateValidator(eventName);
+        if(validator != null)
+            validator.validate(eventNode);
         return eventName;
+    }
+    
+    protected String getEventName(JsonNode eventNode, String namePrefix) {
+        var eventName = eventNode.get("header").get("event_name").asText();
+        if (Strings.isNotBlank(namePrefix))
+            return namePrefix + ":" + eventName;
+        return eventName;
+    }
+
+    @Builder
+    public static class Config {
+        private EventCommandManager commandManager;
+        private JsonEventValidatorManager validatorManager;
+        private ObjectMapper mapper;
+        private String eventNamePrefix;
+
+        public Config(EventCommandManager commandManager
+                , JsonEventValidatorManager validatorManager
+                , ObjectMapper mapper
+                , String eventNamePrefix) {
+            Assert.notNull(commandManager , "commandManager must not be null");
+            Assert.notNull(validatorManager, "validatorManager must not be null");
+            Assert.notNull(mapper, "mapper must not be null");
+
+            this.commandManager = commandManager;
+            this.validatorManager = validatorManager;
+            this.mapper = mapper;
+            this.eventNamePrefix = eventNamePrefix;
+        }
     }
 }

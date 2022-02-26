@@ -8,16 +8,32 @@ import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage.Ne
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+
+import lombok.Builder;
 
 public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> extends AbstractEventCommand<TEvent> {
 
-    private final Config config;
+    private String publishToExchangeName;
+    private @Autowired EventSourceStorage eventStorage;
+    private @Autowired AmqpTemplate amqpTemplate;
+    private @Autowired ObjectMapper mapper;
+
+    public MokaEventReceivedCommand(String publishToExchangeName, Class<TEvent> eventCls) {
+        super(eventCls);
+        Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
+        Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
+        this.publishToExchangeName = publishToExchangeName;
+    }
 
     public MokaEventReceivedCommand(Config config, Class<TEvent> eventCls) {
         super(eventCls);
         Assert.notNull(config, "config must not be null");
-        this.config = config;
+        this.publishToExchangeName = config.publishToExchangeName;
+        this.eventStorage = config.eventStorage;
+        this.amqpTemplate = config.amqpTemplate;
+        this.mapper = config.mapper;
     }
 
     @Override
@@ -33,19 +49,19 @@ public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> exten
         logger.info("insert event into even_store eventId:%s-eventName:%s-dataId:%s with updatedAt:%s",
                 header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString());
 
-        config.eventStorage
-                .insert(NewItem
-                        .builder()
-                        .dataId(data.getId())
-                        .eventDate(event.getDate())
-                        .eventName(header.getEventName())
-                        .payload(config.mapper.writeValueAsString(event))
-                        .eventId(header.getEventId())
-                        .outletId(header.getOutletId())
-                        .version(header.getVersion())
-                        .timestamp(header.getTimestamp())
-                        .createdAt(DateUtil.now())
-                        .build());
+        eventStorage
+            .insert(NewItem
+                    .builder()
+                    .dataId(data.getId())
+                    .eventDate(event.getDate())
+                    .eventName(header.getEventName())
+                    .payload(mapper.writeValueAsString(event))
+                    .eventId(header.getEventId())
+                    .outletId(header.getOutletId())
+                    .version(header.getVersion())
+                    .timestamp(header.getTimestamp())
+                    .createdAt(DateUtil.now())
+                    .build());
     }
 
     protected void publishEvent(TEvent event) {
@@ -55,26 +71,29 @@ public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> exten
         logger.info(
                 "publish webHookEventReceived eventId:%s-eventName:%s-dataId:%s with eventDate:%s into Queue:%sQueue",
                 header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString(),
-                config.exchangeName);
+                publishToExchangeName);
 
-        config.amqpTemplate.convertAndSend(config.exchangeName, null, event);
+        amqpTemplate.convertAndSend(publishToExchangeName, null, event);
     }
 
+    @Builder
     public static class Config {
-        public final String exchangeName;
-        public final ObjectMapper mapper;
+        public final String publishToExchangeName;
         public final EventSourceStorage eventStorage;
         public final AmqpTemplate amqpTemplate;
+        public final ObjectMapper mapper;
 
-        public Config(String exchangeName, EventSourceStorage eventStorage, AmqpTemplate amqpTemplate,
-                ObjectMapper mapper) {
-            Assert.notNull(exchangeName, "exchangeName must not be null");
-            Assert.isTrue(exchangeName.trim().length() != 0, "exchangeName must not be empty");
+        public Config(String publishToExchangeName
+                , EventSourceStorage eventStorage
+                , AmqpTemplate amqpTemplate
+                , ObjectMapper mapper) {
+            Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
+            Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
             Assert.notNull(eventStorage, "eventStorage must not be null");
             Assert.notNull(amqpTemplate, "amqpTemplate must not be null");
             Assert.notNull(mapper, "mapper must not be null");
 
-            this.exchangeName = exchangeName.trim();
+            this.publishToExchangeName = publishToExchangeName.trim();
             this.eventStorage = eventStorage;
             this.amqpTemplate = amqpTemplate;
             this.mapper = mapper;
