@@ -18,7 +18,11 @@ import lombok.Builder;
 
 public class AbstractDeadLetterConsumer {
 
-    private @Autowired Config config;
+    private @Autowired ObjectMapper mapper;
+    private @Autowired AmqpTemplate amqpTemplate;
+    private @Autowired DeadLetterStorage deadLetterStorage;
+    private @Autowired(required = false) ExchangeRoutingStrategy exchangeRoutingStrategy;
+    private int maxRetriesCount = 4;
     private String sourceName;
     private Logger logger;
 
@@ -34,13 +38,25 @@ public class AbstractDeadLetterConsumer {
         init();
     }
 
+    protected AbstractDeadLetterConsumer(int maxRetriesCount) {
+        this.maxRetriesCount = maxRetriesCount;
+        init();
+    }
+
     protected AbstractDeadLetterConsumer(Config config) {
         Assert.notNull(config, "config must not be null");
-        this.config = config;
+
+        this.deadLetterStorage = config.deadLetterStorage;
+        this.amqpTemplate = config.amqpTemplate;
+        this.mapper = config.mapper;
+        this.maxRetriesCount = config.maxRetriesCount;
+        this.exchangeRoutingStrategy = config.exchangeRoutingStrategy;
         init();
     }
 
     protected void init() {
+        if(exchangeRoutingStrategy == null) 
+            this.exchangeRoutingStrategy =  AbstractDeadLetterConsumer::getExchangeRoutingKey;
         sourceName = this.getClass().getName();
         logger = LogManager.getFormatterLogger(this.getClass());
     }
@@ -60,15 +76,15 @@ public class AbstractDeadLetterConsumer {
 
             if (attempt == null)
                 attempt = 1;
-            if (attempt > config.maxRetriesCount) {
+            if (attempt > maxRetriesCount) {
                 logger.info("Discarding message and save %s into dead_letter storage", new String(message.getBody()));
                 saveDeadLetter(message, /* temporary */ "rejected");
                 return;
             }
 
-            var exchangeRoutingKey = config.exchangeRoutingStrategy.get(message);
+            var exchangeRoutingKey = exchangeRoutingStrategy.get(message);
             header.put(HEADER_X_RETRIES_COUNT, ++attempt);
-            config.amqpTemplate.send(exchangeRoutingKey.exchangeName, exchangeRoutingKey.routingKey, message);
+            amqpTemplate.send(exchangeRoutingKey.exchangeName, exchangeRoutingKey.routingKey, message);
         } catch (Exception ex) {
             logger.error(ex.toString());
             saveDeadLetter(message, ex.toString());
@@ -87,7 +103,7 @@ public class AbstractDeadLetterConsumer {
         var msg = new String(message.getBody());
         JsonNode msgNode = null;
         try {
-            msgNode = config.mapper.readTree(msg);
+            msgNode = mapper.readTree(msg);
         } catch (Exception ex) {
             logger.error(ex.toString());
         }
@@ -99,7 +115,7 @@ public class AbstractDeadLetterConsumer {
                     .properties(message.getMessageProperties().toString())
                     .reason(reason)
                     .createdAt(DateUtil.now());
-                config.deadLetterStorage.insert(builder.build());
+                deadLetterStorage.insert(builder.build());
             }
             catch(Exception ex){
                 logger.error(ex.toString());
@@ -126,10 +142,7 @@ public class AbstractDeadLetterConsumer {
             this.amqpTemplate = amqpTemplate;
             this.mapper = mapper;
             this.maxRetriesCount = maxRetriesCount;
-
-            if(exchangeRoutingStrategy != null) 
-                this.exchangeRoutingStrategy = exchangeRoutingStrategy;
-            else this.exchangeRoutingStrategy =  AbstractDeadLetterConsumer::getExchangeRoutingKey;
+            this.exchangeRoutingStrategy = exchangeRoutingStrategy;
         }
     }
 

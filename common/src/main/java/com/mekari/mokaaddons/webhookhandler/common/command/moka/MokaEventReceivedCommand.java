@@ -15,10 +15,11 @@ import lombok.Builder;
 
 public class MokaEventReceivedCommand<TEvent extends AbstractMokaEvent<?>> extends AbstractEventCommand<TEvent> {
 
-    private String publishToExchangeName;
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;
     private @Autowired ObjectMapper mapper;
+
+    private String publishToExchangeName;
 
     public MokaEventReceivedCommand(String publishToExchangeName, Class<TEvent> eventCls) {
         super(eventCls);
