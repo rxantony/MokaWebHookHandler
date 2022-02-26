@@ -61,10 +61,6 @@ public class AbstractDeadLetterConsumer {
         logger = LogManager.getFormatterLogger(this.getClass());
     }
 
-    protected final String getSourceName() {
-        return sourceName;
-    }
-
     protected final Logger getLogger() {
         return logger;
     }
