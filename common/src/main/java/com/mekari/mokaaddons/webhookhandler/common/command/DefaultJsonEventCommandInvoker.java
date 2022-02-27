@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 import lombok.Builder;
 
 @Component
-public class DefaultJsonEventCommandInvoker implements EventCommandInvoker {
+public class DefaultJsonEventCommandInvoker implements CommandInvoker {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired EventCommandManager commandManager;

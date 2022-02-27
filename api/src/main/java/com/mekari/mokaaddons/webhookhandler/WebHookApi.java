@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mekari.mokaaddons.webhookhandler.common.command.EventCommandInvoker;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandInvoker;
 import com.mekari.mokaaddons.webhookhandler.common.command.JsonEventCommandInvokerException;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WebHookApi {
-    private @Autowired EventCommandInvoker invoker;
+    private @Autowired CommandInvoker invoker;
     private @Autowired DeadLetterStorage deadLetterStorage;
     private static final String SOURCE_NAME = WebHookApi.class.getName();
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebHookApi.class);
