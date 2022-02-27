@@ -2,7 +2,6 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
