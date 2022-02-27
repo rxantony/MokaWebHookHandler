@@ -67,8 +67,8 @@ public class AbstractDeadLetterConsumer {
 
     public void consume(Message message, Channel channel) {
         try {
-            var header = message.getMessageProperties().getHeaders();
-            var attempt = (Integer) header.get(HEADER_X_RETRIES_COUNT);
+            var headers = message.getMessageProperties().getHeaders();
+            var attempt = (Integer) headers.get(HEADER_X_RETRIES_COUNT);
 
             if (attempt == null)
                 attempt = 1;
@@ -79,7 +79,7 @@ public class AbstractDeadLetterConsumer {
             }
 
             var exchangeRoutingKey = exchangeRoutingStrategy.get(message);
-            header.put(HEADER_X_RETRIES_COUNT, ++attempt);
+            headers.put(HEADER_X_RETRIES_COUNT, ++attempt);
             amqpTemplate.send(exchangeRoutingKey.exchangeName, exchangeRoutingKey.routingKey, message);
         } catch (Exception ex) {
             logger.error(ex.toString());
