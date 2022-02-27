@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.DBEventLockCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.LockEventCommand;
 import com.mekari.mokaaddons.webhookhandler.common.command.EventCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.EventDateCompareCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.CompareEventDateCommand;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
@@ -25,9 +25,9 @@ public class CommandConfig {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new EventDateCompareCommand<>(eventSourceStorage,
-                new DBEventLockCommand<>(dataSource, lockTrackerStorage,
-                    new EventDateCompareCommand<>(eventSourceStorage, command)));
+        return new CompareEventDateCommand<>(eventSourceStorage,
+                new LockEventCommand<>(dataSource, lockTrackerStorage,
+                    new CompareEventDateCommand<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })
@@ -38,8 +38,8 @@ public class CommandConfig {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new EventDateCompareCommand<>(eventSourceStorage,
-                new DBEventLockCommand<>(dataSource, lockTrackerStorage,
-                        new EventDateCompareCommand<>(eventSourceStorage, command)));
+        return new CompareEventDateCommand<>(eventSourceStorage,
+                new LockEventCommand<>(dataSource, lockTrackerStorage,
+                        new CompareEventDateCommand<>(eventSourceStorage, command)));
     }
 }

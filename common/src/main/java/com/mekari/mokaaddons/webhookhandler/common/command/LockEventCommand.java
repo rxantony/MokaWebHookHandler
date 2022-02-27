@@ -13,7 +13,7 @@ import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.util.Assert;
 
-public class DBEventLockCommand<TEvent extends Event> extends AbstractEventCommand<TEvent> {
+public class LockEventCommand<TEvent extends Event> extends AbstractEventCommand<TEvent> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
@@ -22,7 +22,7 @@ public class DBEventLockCommand<TEvent extends Event> extends AbstractEventComma
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
 
-    public DBEventLockCommand(DataSource dataSource, LockTrackerStorage lockTracker, EventCommand<TEvent> inner) {
+    public LockEventCommand(DataSource dataSource, LockTrackerStorage lockTracker, EventCommand<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(dataSource, "dataSource must not be null");
