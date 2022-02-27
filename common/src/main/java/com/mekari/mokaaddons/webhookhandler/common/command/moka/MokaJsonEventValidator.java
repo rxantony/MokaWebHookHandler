@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.event.moka;
+package com.mekari.mokaaddons.webhookhandler.common.command.moka;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mekari.mokaaddons.webhookhandler.common.command.DefaultJsonEventValidator;

@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaJsonEventValidator;
+import com.mekari.mokaaddons.webhookhandler.common.command.moka.MokaJsonEventValidator;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
