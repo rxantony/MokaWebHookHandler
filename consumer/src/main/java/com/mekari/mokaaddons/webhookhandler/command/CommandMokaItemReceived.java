@@ -49,6 +49,7 @@ public class CommandMokaItemReceived extends AbstractEventCommand<MokaItemReceiv
         var header = event.getHeader();
         var data = event.getBody().getData();
         var rs = jdbcTemplate.queryForRowSet(IS_ITEM_EXISTS_SQL, data.getId());
+        
         if (!rs.next()) {
             logger.info("eventId:%s-eventName:%s-dataId:%s inserts a new moka item",
                     header.getEventId(), header.getEventName(), data.getId());
