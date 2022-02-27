@@ -2,6 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,7 @@ public final class SpringbootEventCommandManager implements EventCommandManager 
 
     @Override
     @SuppressWarnings("unchecked")
-    public <TEvent extends Event> EventCommand<TEvent> createCommand(String eventName)
-            throws ClassNotFoundException {
+    public <TEvent extends Event> EventCommand<TEvent> createCommand(String eventName) throws Exception {
         return (EventCommand<TEvent>) appContext.getBean(eventName, EventCommand.class);
     }
 }
