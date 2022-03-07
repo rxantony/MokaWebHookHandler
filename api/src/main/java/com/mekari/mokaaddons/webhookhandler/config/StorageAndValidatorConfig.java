@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.event.moka.validator.MokaJsonValidator;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.validator.JsonValidator;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
@@ -17,8 +17,8 @@ public class StorageAndValidatorConfig {
 
     @Bean
     @Primary
-    public MokaJsonValidator mokaEventValidator(){
-        return new MokaJsonValidator();
+    public JsonValidator mokaEventValidator(){
+        return new JsonValidator();
     }
 
     @Bean

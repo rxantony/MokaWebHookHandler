@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.mekari.mokaaddons.webhookhandler.common.command.UnknownEventFormatException;
 import com.mekari.mokaaddons.webhookhandler.common.event.validator.JsonEventValidatorDefault;
 
-public class MokaJsonValidator extends JsonEventValidatorDefault{
+public class JsonValidator extends JsonEventValidatorDefault{
 
     public void validate(JsonNode eventNode) throws UnknownEventFormatException {
         super.validate(eventNode);
