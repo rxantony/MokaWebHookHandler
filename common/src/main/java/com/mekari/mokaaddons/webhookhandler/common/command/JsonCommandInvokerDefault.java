@@ -3,6 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.common.command;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.webhookhandler.common.event.Event;
+import com.mekari.mokaaddons.webhookhandler.common.event.validator.JsonEventValidatorManager;
 import com.mekari.mokaaddons.webhookhandler.common.util.SingletonUtil;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,28 +16,28 @@ import org.springframework.util.Assert;
 import lombok.Builder;
 
 @Component
-public class DefaultJsonEventCommandInvoker implements CommandInvoker {
+public class JsonCommandInvokerDefault implements CommandInvoker {
 
     private @Autowired ObjectMapper mapper;
-    private @Autowired EventCommandManager commandManager;
+    private @Autowired CommandManager commandManager;
     private @Autowired JsonEventValidatorManager validatorManager;
     private String eventNamePrefix;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(DefaultJsonEventCommandInvoker.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(JsonCommandInvokerDefault.class);
 
     /**
      * do not use this default constructor, using another parameterized constructors
      * for manual instantiation instead.
      * this constuctor is neccessary by springboot to instantiate this class.
      */
-    public DefaultJsonEventCommandInvoker() {
+    public JsonCommandInvokerDefault() {
     }
 
-    public DefaultJsonEventCommandInvoker(String eventNamePrefix) {
+    public JsonCommandInvokerDefault(String eventNamePrefix) {
         this.eventNamePrefix = eventNamePrefix;
         init();
     }
 
-    public DefaultJsonEventCommandInvoker(Config config) {
+    public JsonCommandInvokerDefault(Config config) {
         Assert.notNull(config, "config must not be null");
 
         this.commandManager = config.commandManager;
@@ -51,7 +52,7 @@ public class DefaultJsonEventCommandInvoker implements CommandInvoker {
     }
 
     @Override
-    public final void invoke(String jsonEvent) throws JsonEventCommandInvokerException {
+    public final void invoke(String jsonEvent) throws JsonCommandInvokerException {
         Event eventObj = null;
         JsonNode eventNode = null;
         try {
@@ -61,7 +62,7 @@ public class DefaultJsonEventCommandInvoker implements CommandInvoker {
             eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
             eventCmd.execute(eventObj);
         } catch (Exception ex) {
-            throw new JsonEventCommandInvokerException (jsonEvent, eventNode, eventObj, ex);
+            throw new JsonCommandInvokerException (jsonEvent, eventNode, ex);
         }
     }
     
@@ -87,12 +88,12 @@ public class DefaultJsonEventCommandInvoker implements CommandInvoker {
 
     @Builder
     public static class Config {
-        private EventCommandManager commandManager;
+        private CommandManager commandManager;
         private JsonEventValidatorManager validatorManager;
         private ObjectMapper mapper;
         private String eventNamePrefix;
 
-        public Config(EventCommandManager commandManager
+        public Config(CommandManager commandManager
                 , JsonEventValidatorManager validatorManager
                 , ObjectMapper mapper
                 , String eventNamePrefix) {

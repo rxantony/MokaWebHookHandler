@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public final class SpringbootEventCommandManager implements EventCommandManager {
+public final class SpringbootCommandManager implements CommandManager {
     private @Autowired ApplicationContext appContext;
 
     /**
@@ -16,17 +16,17 @@ public final class SpringbootEventCommandManager implements EventCommandManager 
      * for manual instantiation instead.
      * this constuctor is neccessary by springboot to instantiate this class.
      */
-    public SpringbootEventCommandManager() {
+    public SpringbootCommandManager() {
     }
 
-    public SpringbootEventCommandManager(ApplicationContext appContext) {
+    public SpringbootCommandManager(ApplicationContext appContext) {
         Assert.notNull(appContext, "appContext");
         this.appContext = appContext;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <TEvent extends Event> EventCommand<TEvent> createCommand(String eventName) throws Exception {
-        return (EventCommand<TEvent>) appContext.getBean(eventName, EventCommand.class);
+    public <TEvent extends Event> AbstractCommand<TEvent> createCommand(String eventName) throws Exception {
+        return (AbstractCommand<TEvent>) appContext.getBean(eventName, AbstractCommand.class);
     }
 }

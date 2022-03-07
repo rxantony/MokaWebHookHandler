@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookhandler.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.LockEventCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.EventCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.CompareEventDateCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.Command;
+import com.mekari.mokaaddons.webhookhandler.common.command.CompareDateCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.LockCommand;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
@@ -18,28 +18,28 @@ import org.springframework.context.annotation.Configuration;
 public class CommandConfig {
 
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
-    public EventCommand<MokaItemReceived> commandMokaItemEventReceived(@Qualifier("eventstore") DataSource dataSource
-        , EventCommand<MokaItemReceived> command
+    public Command<MokaItemReceived> commandMokaItemEventReceived(@Qualifier("eventstore") DataSource dataSource
+        , Command<MokaItemReceived> command
         , EventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new CompareEventDateCommand<>(eventSourceStorage,
-                new LockEventCommand<>(dataSource, lockTrackerStorage,
-                    new CompareEventDateCommand<>(eventSourceStorage, command)));
+        return new CompareDateCommand<>(eventSourceStorage,
+                new LockCommand<>(dataSource, lockTrackerStorage,
+                    new CompareDateCommand<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })
-    public EventCommand<MokaItemProcessed> commandMokaItemEventProcessed(@Qualifier("eventstore") DataSource dataSource
-        , EventCommand<MokaItemProcessed> command
+    public Command<MokaItemProcessed> commandMokaItemEventProcessed(@Qualifier("eventstore") DataSource dataSource
+        , Command<MokaItemProcessed> command
         , EventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new CompareEventDateCommand<>(eventSourceStorage,
-                new LockEventCommand<>(dataSource, lockTrackerStorage,
-                        new CompareEventDateCommand<>(eventSourceStorage, command)));
+        return new CompareDateCommand<>(eventSourceStorage,
+                new LockCommand<>(dataSource, lockTrackerStorage,
+                        new CompareDateCommand<>(eventSourceStorage, command)));
     }
 }

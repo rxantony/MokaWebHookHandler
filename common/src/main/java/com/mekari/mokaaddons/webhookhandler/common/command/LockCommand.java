@@ -13,16 +13,16 @@ import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 
 import org.springframework.util.Assert;
 
-public class LockEventCommand<TEvent extends Event> extends AbstractEventCommand<TEvent> {
+public class LockCommand<TEvent extends Event> extends AbstractCommand<TEvent> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
-    private final EventCommand<TEvent> inner;
+    private final AbstractCommand<TEvent> inner;
 
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
 
-    public LockEventCommand(DataSource dataSource, LockTrackerStorage lockTracker, EventCommand<TEvent> inner) {
+    public LockCommand(DataSource dataSource, LockTrackerStorage lockTracker, AbstractCommand<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(dataSource, "dataSource must not be null");
@@ -56,7 +56,7 @@ public class LockEventCommand<TEvent extends Event> extends AbstractEventCommand
                 rs.next();
                 var connId = rs.getInt(1);
                 if (!rs.next())
-                    throw new EventSourceDataNotFoundException(event);
+                    throw new DataNotFoundException(event);
                 var evsId = rs.getString(1);
                 return new Object[] { connId, evsId };
             }
@@ -76,7 +76,7 @@ public class LockEventCommand<TEvent extends Event> extends AbstractEventCommand
             stmt.setPoolable(false);
             try (var rs = stmt.executeQuery(query)) {
                 if (!rs.next())
-                    throw new EventSourceDataNotFoundException(
+                    throw new DataNotFoundException(
                             String.format("eventId:%s-eventName:%s-bodyId:%s no event_source with id:%s",
                                     event.geId(), event.getName(), event.getBody().getId(), evsId),
                             event);

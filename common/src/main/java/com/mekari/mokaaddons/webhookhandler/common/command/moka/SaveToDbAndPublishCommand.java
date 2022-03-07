@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler.common.command.moka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.command.AbstractEventCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage.NewItem;
@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent<?>> extends AbstractEventCommand<TEvent> {
+public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent<?>> extends AbstractCommand<TEvent> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;

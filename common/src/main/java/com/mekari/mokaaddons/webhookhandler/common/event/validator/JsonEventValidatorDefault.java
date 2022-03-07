@@ -1,11 +1,12 @@
-package com.mekari.mokaaddons.webhookhandler.common.command;
+package com.mekari.mokaaddons.webhookhandler.common.event.validator;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.mekari.mokaaddons.webhookhandler.common.command.UnknownEventFormatException;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultJsonEventValidator implements JsonEventValidator {
+public class JsonEventValidatorDefault implements JsonEventValidator {
 
     @Override
     public void validate(JsonNode eventNode) throws UnknownEventFormatException {

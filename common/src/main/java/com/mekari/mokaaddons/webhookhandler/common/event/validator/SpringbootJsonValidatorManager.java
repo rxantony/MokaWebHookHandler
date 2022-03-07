@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.command;
+package com.mekari.mokaaddons.webhookhandler.common.event.validator;
 
 import com.mekari.mokaaddons.webhookhandler.common.util.SingletonUtil;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class SpringbootJsonEventValidatorManager implements JsonEventValidatorManager {
+public class SpringbootJsonValidatorManager implements JsonEventValidatorManager {
     private @Autowired ApplicationContext appContext;
     private @Autowired JsonEventValidator defaultValidator;
     /**
@@ -17,10 +17,10 @@ public class SpringbootJsonEventValidatorManager implements JsonEventValidatorMa
      * for manual instantiation instead.
      * this constuctor is neccessary by springboot to instantiate this class.
      */
-    public SpringbootJsonEventValidatorManager() {
+    public SpringbootJsonValidatorManager() {
     }
 
-    public SpringbootJsonEventValidatorManager(ApplicationContext appContext, JsonEventValidator defaultValidator) {
+    public SpringbootJsonValidatorManager(ApplicationContext appContext, JsonEventValidator defaultValidator) {
         Assert.notNull(appContext, "appContext");
         this.appContext = appContext;
         this.defaultValidator = defaultValidator;

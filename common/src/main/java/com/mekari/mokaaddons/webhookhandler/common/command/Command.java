@@ -1,5 +1,8 @@
 package com.mekari.mokaaddons.webhookhandler.common.command;
 
-public interface Command<TCommand> {
-    void execute(TCommand cmd)throws Exception;
+import com.mekari.mokaaddons.webhookhandler.common.event.Event;
+
+public interface Command<TEvent extends Event> {
+    Class<TEvent> eventClass();
+    void execute(TEvent param)throws Exception;
 }

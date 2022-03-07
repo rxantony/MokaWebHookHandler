@@ -5,12 +5,12 @@ import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 
 import org.springframework.util.Assert;
 
-public class CompareEventDateCommand<TEvent extends Event> extends AbstractEventCommand<TEvent> {
+public class CompareDateCommand<TEvent extends Event> extends AbstractCommand<TEvent> {
 
     private final EventSourceStorage storage;
-    private final EventCommand<TEvent> inner;
+    private final Command<TEvent> inner;
 
-    public CompareEventDateCommand(EventSourceStorage storage, EventCommand<TEvent> inner) {
+    public CompareDateCommand(EventSourceStorage storage, Command<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(storage, "storage must not be null");
@@ -26,7 +26,7 @@ public class CompareEventDateCommand<TEvent extends Event> extends AbstractEvent
         
         var eventDate = storage.getEventDate(event);
         if(eventDate.isEmpty())
-            throw new EventSourceDataNotFoundException(event);
+            throw new DataNotFoundException(event);
 
         var isDateEquals = event.getDate().equals(eventDate.get());
         logger.info( "eventId:%s-eventName:%s-bodyId:%s compares updatedAt:%s to eventsource eventDate:%s, result:%b",

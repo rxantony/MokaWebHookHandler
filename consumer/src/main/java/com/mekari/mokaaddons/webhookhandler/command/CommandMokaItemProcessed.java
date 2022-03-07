@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.command.AbstractEventCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.EventCommandException;
+import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandException;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class CommandMokaItemProcessed extends AbstractEventCommand<MokaItemProcessed> {
+public class CommandMokaItemProcessed extends AbstractCommand<MokaItemProcessed> {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_ITEM_SQL = "SELECT jurnal_id FROM item WHERE id=?";
@@ -32,7 +32,7 @@ public class CommandMokaItemProcessed extends AbstractEventCommand<MokaItemProce
         var data = event.getBody().getData();
         var rs = jdbcTemplate.queryForRowSet(SELECT_ITEM_SQL, data.getId());
         if (!rs.next())
-            throw new EventCommandException(String.format("item with id%s is not exists", data.getId()), event);
+            throw new CommandException(String.format("item with id%s is not exists", data.getId()), event);
 
         var jurnalId = rs.getString("jurnal_id");
         callJurnalApiForCRUD(event, jurnalId);

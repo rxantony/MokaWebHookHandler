@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.command;
+package com.mekari.mokaaddons.webhookhandler.common.event.validator;
 
 public interface JsonEventValidatorManager {
     JsonEventValidator getDeafultValidator();
