@@ -35,7 +35,7 @@ This projects just reached 60% from it's completion and has a goal to handle uno
     * Open this solution using VSCode IDE.
     * Install the Coding Pack for Java - (Windows/MacOS) extension.
     * Go to "explorer" left menu panel, find Maven menu section and expand webhookhandler-common lifecycle than run install.
-    * Go to "open and debug" menu on left panel, chose "Debug-Webhookhandler-consumer-api" to run all projects at the same time.
+    * Go to "open and debug" menu on left panel, chose "Debug-Webhookhandler-consumer-api" to run the whole projects at the same time.
     
 * **Running the app**
     * .
