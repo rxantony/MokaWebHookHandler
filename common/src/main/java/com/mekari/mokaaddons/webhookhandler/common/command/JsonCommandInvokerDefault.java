@@ -57,7 +57,7 @@ public class JsonCommandInvokerDefault implements CommandInvoker {
         JsonNode eventNode = null;
         try {
             eventNode = mapper.readTree(jsonEvent);
-            var eventName = getEventNameAndValidateNode(eventNode);
+            var eventName = validateJsonAndGetEventName(eventNode);
             var eventCmd = commandManager.createCommand(eventName);
             eventObj = mapper.readValue(eventNode.traverse(), eventCmd.eventClass());
             eventCmd.execute(eventObj);
@@ -65,8 +65,9 @@ public class JsonCommandInvokerDefault implements CommandInvoker {
             throw new JsonCommandInvokerException (jsonEvent, eventNode, ex);
         }
     }
-    
-    private String getEventNameAndValidateNode(JsonNode eventNode) throws UnknownEventFormatException{
+     
+
+    private String validateJsonAndGetEventName(JsonNode eventNode) throws UnknownEventFormatException{
         var defaultValidator = validatorManager.getDeafultValidator();
         if(defaultValidator == null)
             defaultValidator = SingletonUtil.DEFAULT_JSONEVENT_VALIDATOR;
