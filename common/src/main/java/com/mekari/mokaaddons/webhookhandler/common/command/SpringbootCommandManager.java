@@ -26,7 +26,7 @@ public final class SpringbootCommandManager implements CommandManager {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <TEvent extends Event> AbstractCommand<TEvent> createCommand(String eventName) throws Exception {
-        return (AbstractCommand<TEvent>) appContext.getBean(eventName, AbstractCommand.class);
+    public <TEvent extends Event> Command<TEvent> createCommand(String eventName) throws Exception {
+        return (Command<TEvent>) appContext.getBean(eventName, Command.class);
     }
 }
