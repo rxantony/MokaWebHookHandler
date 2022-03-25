@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractMokaEvent<TData extends MokaEventData> extends AbstractEvent<TData> {
+public abstract class AbstractMokaEvent extends AbstractEvent {
     private MokaEventHeader header;
 
     @Override
@@ -18,4 +18,6 @@ public abstract class AbstractMokaEvent<TData extends MokaEventData> extends Abs
     public OffsetDateTime getDate() {
         return getBody().getData().getDate();
     }
+    
+    public abstract MokaAbstractEventBody<?> getBody();
 }

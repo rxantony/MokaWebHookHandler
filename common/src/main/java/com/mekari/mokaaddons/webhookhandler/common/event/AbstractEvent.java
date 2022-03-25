@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class AbstractEvent<TData extends EventData> implements Event {
+public abstract class AbstractEvent implements Event {
     
     @Override
     @JsonIgnore()
@@ -25,5 +25,5 @@ public abstract class AbstractEvent<TData extends EventData> implements Event {
     }
 
     public abstract EventHeader getHeader();
-    public abstract AbstractEventBody<TData> getBody();
+    public abstract AbstractEventBody<?> getBody();
 }

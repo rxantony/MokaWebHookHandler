@@ -3,7 +3,7 @@ package com.mekari.mokaaddons.webhookhandler.command;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
-import com.mekari.mokaaddons.webhookhandler.common.event.EventHeader;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaEventHeader;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
@@ -63,7 +63,7 @@ public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
         }
     }
 
-    private void publishEvent(MokaItemReceived event) {
+    private void publishEvent(MokaItemReceived event) throws CloneNotSupportedException{
         var header = event.getHeader();
         var data = event.getBody().getData();
         
@@ -72,10 +72,12 @@ public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
                 header.getEventId(), header.getEventName(), data.getId(),
                 AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
 
-        var nextEventHeader = new EventHeader(header.getEventId(), "moka.item.processed", header.getTimestamp());
-        var nextEventBody = new Body(new Item(event.getBody().getData().getId(), event.getBody().getData().getDate()));
-        var nextEvent = new MokaItemProcessed(nextEventHeader,nextEventBody);
+        var eventHeader = (MokaEventHeader) event.getHeader().clone();
+        eventHeader.setEventName("moka.item.processed");
+        
+        var eventBody = new Body(new Item(event.getBody().getData().getId(), event.getBody().getData().getDate()));
+        var itemProcessed = new MokaItemProcessed(eventHeader,eventBody);
 
-        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, nextEvent);
+        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, itemProcessed);
     }
 }

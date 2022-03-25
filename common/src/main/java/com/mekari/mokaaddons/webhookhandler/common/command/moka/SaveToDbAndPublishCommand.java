@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent<?>> extends AbstractCommand<TEvent> {
+public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;
