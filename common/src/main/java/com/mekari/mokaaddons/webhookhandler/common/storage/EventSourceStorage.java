@@ -3,8 +3,6 @@ package com.mekari.mokaaddons.webhookhandler.common.storage;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import com.mekari.mokaaddons.webhookhandler.common.event.Event;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +10,7 @@ import lombok.Setter;
 
 public interface EventSourceStorage {
 
-    Optional<OffsetDateTime> getEventDate(Event event) throws Exception;
+    Optional<OffsetDateTime> getEventDate(String dataId) throws Exception;
     void insert(NewItem item) throws Exception;
 
     @Getter

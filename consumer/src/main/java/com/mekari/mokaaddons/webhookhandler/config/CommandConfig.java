@@ -3,8 +3,8 @@ package com.mekari.mokaaddons.webhookhandler.config;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.Command;
-import com.mekari.mokaaddons.webhookhandler.common.command.CompareDateCommand;
-import com.mekari.mokaaddons.webhookhandler.common.command.LockCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.MokaCompareEventDateCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.MokaEventLockCommand;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.LockTrackerStorage;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
@@ -25,9 +25,9 @@ public class CommandConfig {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new CompareDateCommand<>(eventSourceStorage,
-                new LockCommand<>(dataSource, lockTrackerStorage,
-                    new CompareDateCommand<>(eventSourceStorage, command)));
+        return new MokaCompareEventDateCommand<>(eventSourceStorage,
+                new MokaEventLockCommand<>(dataSource, lockTrackerStorage,
+                    new MokaCompareEventDateCommand<>(eventSourceStorage, command)));
     }
 
     @Bean({ "moka.item.processed" })
@@ -38,8 +38,8 @@ public class CommandConfig {
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new CompareDateCommand<>(eventSourceStorage,
-                new LockCommand<>(dataSource, lockTrackerStorage,
-                        new CompareDateCommand<>(eventSourceStorage, command)));
+        return new MokaCompareEventDateCommand<>(eventSourceStorage,
+                new MokaEventLockCommand<>(dataSource, lockTrackerStorage,
+                        new MokaCompareEventDateCommand<>(eventSourceStorage, command)));
     }
 }

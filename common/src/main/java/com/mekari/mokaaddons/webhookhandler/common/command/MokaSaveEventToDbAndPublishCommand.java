@@ -1,7 +1,6 @@
-package com.mekari.mokaaddons.webhookhandler.common.command.moka;
+package com.mekari.mokaaddons.webhookhandler.common.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage.NewItem;
@@ -13,7 +12,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
+public class MokaSaveEventToDbAndPublishCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;
@@ -21,14 +20,14 @@ public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent> extends
 
     private final String publishToExchangeName;
 
-    public SaveToDbAndPublishCommand(String publishToExchangeName, Class<TEvent> eventCls) {
+    public MokaSaveEventToDbAndPublishCommand(String publishToExchangeName, Class<TEvent> eventCls) {
         super(eventCls);
         Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
         Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
         this.publishToExchangeName = publishToExchangeName;
     }
 
-    public SaveToDbAndPublishCommand(Config config, Class<TEvent> eventCls) {
+    public MokaSaveEventToDbAndPublishCommand(Config config, Class<TEvent> eventCls) {
         super(eventCls);
         Assert.notNull(config, "config must not be null");
         this.publishToExchangeName = config.publishToExchangeName;
@@ -53,8 +52,8 @@ public class SaveToDbAndPublishCommand<TEvent extends AbstractMokaEvent> extends
         eventStorage
             .insert(NewItem
                     .builder()
-                    .dataId(data.getId())
-                    .eventDate(event.getDate())
+                    .dataId(data.getId().toString())
+                    .eventDate(header.getTimestamp())
                     .eventName(header.getEventName())
                     .payload(mapper.writeValueAsString(event))
                     .eventId(header.getEventId())

@@ -5,10 +5,6 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.event.Event;
-
-import org.springframework.util.Assert;
-
 public class DbEventSourceStorage implements EventSourceStorage {
     private final DataSource dataSource;
     private static final String GET_EVENTDATE_SQL = "SELECT event_date FROM event_source WHERE data_id = ? LIMIT 1";
@@ -19,14 +15,11 @@ public class DbEventSourceStorage implements EventSourceStorage {
     }
 
     @Override
-    public Optional<OffsetDateTime> getEventDate(Event event) throws Exception {
-        Assert.notNull(event, "event must not be null");
-        Assert.notNull(event.getBody(), "event.body must not be null");
-        
+    public Optional<OffsetDateTime> getEventDate(String dataId) throws Exception {
         try (var conn = dataSource.getConnection()) {
             conn.setAutoCommit(true);
             try (var stmt = conn.prepareStatement(GET_EVENTDATE_SQL)) {
-                stmt.setString(1, event.getBody().getId());
+                stmt.setString(1, dataId);
                 try (var rs = stmt.executeQuery()) {
                     if (!rs.next())
                         return Optional.empty();

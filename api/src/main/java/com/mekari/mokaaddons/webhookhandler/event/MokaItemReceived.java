@@ -3,7 +3,6 @@ package com.mekari.mokaaddons.webhookhandler.event;
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mekari.mokaaddons.webhookhandler.common.event.AbstractEventBody;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaAbstractEventBody;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaEventData;

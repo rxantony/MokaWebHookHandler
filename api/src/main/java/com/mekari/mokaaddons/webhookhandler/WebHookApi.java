@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandInvoker;
-import com.mekari.mokaaddons.webhookhandler.common.command.JsonCommandInvokerException;
+import com.mekari.mokaaddons.webhookhandler.common.command.CommandInvokerException;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
@@ -27,8 +27,8 @@ public class WebHookApi {
         }
         catch(Exception ex){
             JsonNode msgNode = null;
-            if(ex instanceof JsonCommandInvokerException )
-                msgNode = ((JsonCommandInvokerException)ex).eventNode;
+            if(ex instanceof CommandInvokerException )
+                msgNode = ((CommandInvokerException)ex).eventNode;
 
             try{
                 var builder = BuilderUtil.createDeadLetterStorageItemBuilder(msgNode)

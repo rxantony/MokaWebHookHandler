@@ -1,16 +1,16 @@
 package com.mekari.mokaaddons.webhookhandler.common.command;
 
-import com.mekari.mokaaddons.webhookhandler.common.event.Event;
+import com.mekari.mokaaddons.webhookhandler.common.event.moka.AbstractMokaEvent;
 import com.mekari.mokaaddons.webhookhandler.common.storage.EventSourceStorage;
 
 import org.springframework.util.Assert;
 
-public class CompareDateCommand<TEvent extends Event> extends AbstractCommand<TEvent> {
+public class MokaCompareEventDateCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
 
     private final EventSourceStorage storage;
     private final Command<TEvent> inner;
 
-    public CompareDateCommand(EventSourceStorage storage, Command<TEvent> inner) {
+    public MokaCompareEventDateCommand(EventSourceStorage storage, Command<TEvent> inner) {
         super(inner.eventClass());
 
         Assert.notNull(storage, "storage must not be null");
@@ -21,16 +21,19 @@ public class CompareDateCommand<TEvent extends Event> extends AbstractCommand<TE
 
     @Override
     protected void executeInternal(TEvent event) throws Exception {
-        logger.debug("eventId:%s-eventName:%s-bodyId:%s tries to connect to db for updatedAt date comparing ", 
-                event.geId(), event.getName(), event.getBody().getId());
+        var header = event.getHeader();
+        var body = event.getBody();
         
-        var eventDate = storage.getEventDate(event);
+        logger.debug("eventId:%s-eventName:%s-bodyId:%s tries to connect to db for updatedAt date comparing ", 
+                header.getEventId(), header.getEventName(), body.getData().getId());
+        
+        var eventDate = storage.getEventDate(body.getData().getId().toString());
         if(eventDate.isEmpty())
-            throw new DataNotFoundException(event);
+            throw new EventSourceNotFoundException(event);
 
-        var isDateEquals = event.getDate().equals(eventDate.get());
+        var isDateEquals = header.getTimestamp().equals(eventDate.get());
         logger.info( "eventId:%s-eventName:%s-bodyId:%s compares updatedAt:%s to eventsource eventDate:%s, result:%b",
-                event.geId(), event.getName(), event.getBody().getId(), event.getDate().toString(), eventDate.toString(), isDateEquals);
+                header.getEventId(), header.getEventName(), body.getData().getId(), header.getTimestamp().toString(), eventDate.toString(), isDateEquals);
 
         if (isDateEquals)
             inner.execute(event);

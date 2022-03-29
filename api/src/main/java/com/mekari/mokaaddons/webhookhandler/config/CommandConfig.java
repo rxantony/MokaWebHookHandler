@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookhandler.config;
 
 import com.mekari.mokaaddons.webhookhandler.common.command.Command;
-import com.mekari.mokaaddons.webhookhandler.common.command.moka.SaveToDbAndPublishCommand;
+import com.mekari.mokaaddons.webhookhandler.common.command.MokaSaveEventToDbAndPublishCommand;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
 import com.mekari.mokaaddons.webhookhandler.event.MokaTransactionReceived;
 
@@ -13,11 +13,11 @@ public class CommandConfig {
 
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
     public Command<MokaItemReceived> commandItem() {
-        return new SaveToDbAndPublishCommand<MokaItemReceived>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, MokaItemReceived.class);
+        return new MokaSaveEventToDbAndPublishCommand<MokaItemReceived>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, MokaItemReceived.class);
     }
 
     @Bean({ "moka.transaction.added", "moka.transaction.updated", "moka.transaction.deleted" })
     public Command<MokaTransactionReceived> commandTransaction() {
-        return new SaveToDbAndPublishCommand<MokaTransactionReceived>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, MokaTransactionReceived.class);
+        return new MokaSaveEventToDbAndPublishCommand<MokaTransactionReceived>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, MokaTransactionReceived.class);
     }
 }
