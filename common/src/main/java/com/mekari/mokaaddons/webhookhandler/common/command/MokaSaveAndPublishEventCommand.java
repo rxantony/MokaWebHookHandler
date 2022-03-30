@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class MokaSaveEventToDbAndPublishCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
+public class MokaSaveAndPublishEventCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;
@@ -20,14 +20,14 @@ public class MokaSaveEventToDbAndPublishCommand<TEvent extends AbstractMokaEvent
 
     private final String publishToExchangeName;
 
-    public MokaSaveEventToDbAndPublishCommand(String publishToExchangeName, Class<TEvent> eventCls) {
+    public MokaSaveAndPublishEventCommand(String publishToExchangeName, Class<TEvent> eventCls) {
         super(eventCls);
         Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
         Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
         this.publishToExchangeName = publishToExchangeName;
     }
 
-    public MokaSaveEventToDbAndPublishCommand(Config config, Class<TEvent> eventCls) {
+    public MokaSaveAndPublishEventCommand(Config config, Class<TEvent> eventCls) {
         super(eventCls);
         Assert.notNull(config, "config must not be null");
         this.publishToExchangeName = config.publishToExchangeName;
