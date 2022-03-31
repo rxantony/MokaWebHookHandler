@@ -7,7 +7,7 @@ import com.mekari.mokaaddons.webhookhandler.common.handler.RequestHandlerManager
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
-import com.mekari.mokaaddons.webhookhandler.query.getUser.Request;
+import com.mekari.mokaaddons.webhookhandler.query.getUser.GetUserRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +26,7 @@ public class WebHookApi {
     public void handle(String message) throws Exception{
         LOGGER.debug("receice webhook message, with payload:%s", message);
         try{
-            var user = manager.handle(Request.builder().id(1).build());
+            var user = manager.handle(GetUserRequest.builder().id(1).build());
             LOGGER.debug(user);
             invoker.invoke(message);
         }

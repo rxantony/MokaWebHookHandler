@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class Request implements RequestParam<User> {
+public class GetUserRequest implements RequestParam<User> {
     private int id;
 }
