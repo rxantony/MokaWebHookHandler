@@ -5,7 +5,7 @@ import com.mekari.mokaaddons.webhookhandler.common.handler.RequestHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Handler implements RequestHandler<Request, User>{
+public class GetUserHandler implements RequestHandler<Request, User>{
 
     //just for testing
     @Override
