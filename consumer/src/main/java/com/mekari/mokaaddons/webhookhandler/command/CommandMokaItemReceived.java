@@ -9,19 +9,17 @@ import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.Body;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.Item;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
+import com.mekari.mokaaddons.webhookhandler.service.amqp.command.SendEventRequest;
 import com.mekari.mokaaddons.webhookhandler.service.product.command.addProduct.AddProductRequest;
 import com.mekari.mokaaddons.webhookhandler.service.product.command.updateProduct.UpdateProductRequest;
 import com.mekari.mokaaddons.webhookhandler.service.product.query.productExists.ProductExistsRequest;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component()
 public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
-
     private @Autowired RequestHandlerManager manager;
-    private @Autowired AmqpTemplate amqpTemplate;
 
     public CommandMokaItemReceived() {
         super(MokaItemReceived.class);
@@ -61,7 +59,7 @@ public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
         }
     }
 
-    private void publishEvent(MokaItemReceived event) throws CloneNotSupportedException{
+    private void publishEvent(MokaItemReceived event) throws Exception{
         var header = event.getHeader();
         var data = event.getBody().getData();
         
@@ -75,7 +73,12 @@ public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
         
         var eventBody = new Body(new Item(event.getBody().getData().getId(), event.getBody().getData().getDate()));
         var itemProcessed = new MokaItemProcessed(eventHeader,eventBody);
+        var request = SendEventRequest.builder()
+                        .exchange(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE)
+                        .routingKey(null)
+                        .message(itemProcessed)
+                        .build();
 
-        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, itemProcessed);
+        manager.handle(request);
     }
 }

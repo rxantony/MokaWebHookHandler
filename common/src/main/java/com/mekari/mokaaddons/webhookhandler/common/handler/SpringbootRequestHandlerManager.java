@@ -30,21 +30,10 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
     @SuppressWarnings("unchecked") 
     public <TRequest extends Request<TResult>, TResult> TResult handle(TRequest request) throws Exception{
         var requestCls = request.getClass();
-        var resultCls = gertResultClassFromRequest(requestCls);
-        var queryHandlerType = ResolvableType.forClassWithGenerics(RequestHandler.class,  ResolvableType.forClass(requestCls),  ResolvableType.forClass(resultCls));
+        var queryHandlerType = ResolvableType.forClassWithGenerics(RawRequestHandler.class,  ResolvableType.forClass(requestCls));
         var beanName = appContext.getBeanNamesForType(queryHandlerType);
         var queryHandler = (RequestHandler<TRequest, TResult>)appContext.getBean(beanName[0]);
         return queryHandler.handle(request);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <TRequest, TResult> Class<TResult> gertResultClassFromRequest(Class<TRequest> requestCls) {
-        var interfaces = requestCls.getGenericInterfaces();
-        if (interfaces.length > 0) {
-            return (Class<TResult>) ((ParameterizedType) requestCls.getGenericInterfaces()[0])
-                    .getActualTypeArguments()[0];
-        }
-        return (Class<TResult>) ((ParameterizedType) requestCls.getGenericSuperclass()).getActualTypeArguments()[0];
     }
     
 }
