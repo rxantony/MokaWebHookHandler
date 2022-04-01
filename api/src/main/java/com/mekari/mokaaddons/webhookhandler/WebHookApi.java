@@ -3,11 +3,9 @@ package com.mekari.mokaaddons.webhookhandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandInvoker;
 import com.mekari.mokaaddons.webhookhandler.common.command.CommandInvokerException;
-import com.mekari.mokaaddons.webhookhandler.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.webhookhandler.common.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.webhookhandler.common.util.BuilderUtil;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
-import com.mekari.mokaaddons.webhookhandler.query.getUser.GetUserRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class WebHookApi {
     private @Autowired CommandInvoker invoker;
     private @Autowired DeadLetterStorage deadLetterStorage;
-    private @Autowired RequestHandlerManager manager;
     private static final String SOURCE_NAME = WebHookApi.class.getName();
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebHookApi.class);
 
@@ -26,8 +23,6 @@ public class WebHookApi {
     public void handle(String message) throws Exception{
         LOGGER.debug("receice webhook message, with payload:%s", message);
         try{
-            var user = manager.handle(GetUserRequest.builder().id(1).build());
-            LOGGER.debug(user);
             invoker.invoke(message);
         }
         catch(Exception ex){

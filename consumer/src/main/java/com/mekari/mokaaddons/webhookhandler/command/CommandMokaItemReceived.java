@@ -1,42 +1,30 @@
 package com.mekari.mokaaddons.webhookhandler.command;
 
-import javax.sql.DataSource;
-
 import com.mekari.mokaaddons.webhookhandler.common.command.AbstractCommand;
 import com.mekari.mokaaddons.webhookhandler.common.event.moka.MokaEventHeader;
+import com.mekari.mokaaddons.webhookhandler.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.webhookhandler.common.util.DateUtil;
 import com.mekari.mokaaddons.webhookhandler.config.AppConstant;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.Body;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemProcessed.Item;
 import com.mekari.mokaaddons.webhookhandler.event.MokaItemReceived;
+import com.mekari.mokaaddons.webhookhandler.service.product.command.addProduct.AddProductRequest;
+import com.mekari.mokaaddons.webhookhandler.service.product.command.updateProduct.UpdateProductRequest;
+import com.mekari.mokaaddons.webhookhandler.service.product.query.productExists.ProductExistsRequest;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
-@Component
+@Component()
 public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final AmqpTemplate amqpTemplate;
+    private @Autowired RequestHandlerManager manager;
+    private @Autowired AmqpTemplate amqpTemplate;
 
-    private static final String IS_ITEM_EXISTS_SQL = "SELECT id FROM item WHERE id=?";
-    private static final String INSERT_ITEM_SQL = "INSERT INTO item (id, name, description, created_at, updated_at) VALUES (?,?,?,?,?)";
-    private static final String UPDATE_ITEM_SQL = "UPDATE item SET name=?, description=?, updated_at=? WHERE id=?";
-
-    public CommandMokaItemReceived(@Qualifier("mokaaddons") DataSource dataSource,
-            @Autowired AmqpTemplate amqpTemplate) {
+    public CommandMokaItemReceived() {
         super(MokaItemReceived.class);
-
-        Assert.notNull(dataSource, "dataSource must not be null");
-        Assert.notNull(amqpTemplate, "amqpTemplate must not be null");
-
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        this.amqpTemplate = amqpTemplate;
     }
 
     @Override
@@ -45,21 +33,31 @@ public class CommandMokaItemReceived extends AbstractCommand<MokaItemReceived> {
         publishEvent(event);
     }
 
-    private void saveEvent(MokaItemReceived event) {
+    private void saveEvent(MokaItemReceived event) throws Exception {
         var header = event.getHeader();
         var data = event.getBody().getData();
-        var rs = jdbcTemplate.queryForRowSet(IS_ITEM_EXISTS_SQL, data.getId());
+        var productExists = manager.handle(ProductExistsRequest.builder().id(data.getId()).build());
         
-        if (!rs.next()) {
+        if (!productExists) {
             logger.info("eventId:%s-eventName:%s-dataId:%s inserts a new moka item",
-                    header.getEventId(), header.getEventName(), data.getId());
-            jdbcTemplate.update(INSERT_ITEM_SQL, data.getId(), data.getName(), data.getDescription(),
-                    DateUtil.now(), DateUtil.now());
+            header.getEventId(), header.getEventName(), data.getId());
+            var request = AddProductRequest.builder()
+                            .id(data.getId())
+                            .name(data.getName())
+                            .description(data.getDescription())
+                            .createdAt(DateUtil.now())
+                            .build();
+            manager.handle(request);
         } else {
             logger.info("eventId:%s-eventName:%s-dataId:%s updates a moka item",
-                    header.getEventId(), header.getEventName(), data.getId());
-            jdbcTemplate.update(UPDATE_ITEM_SQL, data.getName(), data.getDescription(), DateUtil.now(),
-                    data.getId());
+            header.getEventId(), header.getEventName(), data.getId());
+            var request = UpdateProductRequest.builder()
+                            .id(data.getId())
+                            .name(data.getName())
+                            .description(data.getDescription())
+                            .updatedAt(DateUtil.now())
+                            .build();
+            manager.handle(request);
         }
     }
 

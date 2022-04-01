@@ -28,10 +28,12 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
 
     @Override
     @SuppressWarnings("unchecked") 
-    public <TRequest extends RequestParam<TResult>, TResult> TResult handle(TRequest request) throws Exception{
-        var resultCls = gertResultClassFromRequest(request.getClass());
-        var queryHandlerType = ResolvableType.forClassWithGenerics(RequestHandler.class, request.getClass(), resultCls);
-        var queryHandler = (RequestHandler<TRequest, TResult>)appContext.getBean(queryHandlerType.resolve());
+    public <TRequest extends Request<TResult>, TResult> TResult handle(TRequest request) throws Exception{
+        var requestCls = request.getClass();
+        var resultCls = gertResultClassFromRequest(requestCls);
+        var queryHandlerType = ResolvableType.forClassWithGenerics(RequestHandler.class,  ResolvableType.forClass(requestCls),  ResolvableType.forClass(resultCls));
+        var beanName = appContext.getBeanNamesForType(queryHandlerType);
+        var queryHandler = (RequestHandler<TRequest, TResult>)appContext.getBean(beanName[0]);
         return queryHandler.handle(request);
     }
 

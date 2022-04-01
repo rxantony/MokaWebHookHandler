@@ -22,12 +22,13 @@ public class CommandConfig {
         , Command<MokaItemReceived> command
         , EventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
+        return command;
         // chain of responsibilty here
         //return new CommandEventUpdateAtValidation<>(eventSourceStorage, command);
         //return new DBCommandEventLock<>(dataSource, lockTrackerStorage, command);
-        return new MokaCompareEventDateCommand<>(eventSourceStorage,
+        /*return new MokaCompareEventDateCommand<>(eventSourceStorage,
                 new MokaEventLockCommand<>(dataSource, lockTrackerStorage,
-                    new MokaCompareEventDateCommand<>(eventSourceStorage, command)));
+                    new MokaCompareEventDateCommand<>(eventSourceStorage, command)));*/
     }
 
     @Bean({ "moka.item.processed" })

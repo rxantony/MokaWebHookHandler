@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.query.getUser;
+package com.mekari.mokaaddons.webhookhandler.service.product.query.productExists;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class User {
-    private int id;
+public class ProductResult {
+    private String id;
 }

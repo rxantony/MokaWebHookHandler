@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class StorageAndValidatorConfig {
+public class StorageConfig {
 
     @Bean
     public DeadLetterStorage deadLetterStorage(@Qualifier("eventstore") DataSource dataSource){
