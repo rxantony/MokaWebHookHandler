@@ -1,6 +1,6 @@
 package com.mekari.mokaaddons.webhookhandler.service.amqp.command;
 
-import com.mekari.mokaaddons.webhookhandler.common.handler.AbstractVoidRequest;
+import com.mekari.mokaaddons.webhookhandler.common.service.AbstractVoidRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

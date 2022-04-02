@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.service.product.command.updateProdu
 
 import java.time.OffsetDateTime;
 
-import com.mekari.mokaaddons.webhookhandler.common.handler.Request;
+import com.mekari.mokaaddons.webhookhandler.common.service.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.handler;
-
-import java.lang.reflect.ParameterizedType;
+package com.mekari.mokaaddons.webhookhandler.common.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

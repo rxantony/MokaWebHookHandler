@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookhandler.common.handler;
+package com.mekari.mokaaddons.webhookhandler.common.service;
 
 public abstract class AbstractVoidRequestHandler<TRequest extends AbstractVoidRequest> implements RequestHandler<TRequest, Void> {
 

@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.service.product.command.addProduct;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.handler.RequestHandler;
+import com.mekari.mokaaddons.webhookhandler.common.service.RequestHandler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

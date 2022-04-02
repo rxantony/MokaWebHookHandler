@@ -1,6 +1,6 @@
 package com.mekari.mokaaddons.webhookhandler.service.amqp.command;
 
-import com.mekari.mokaaddons.webhookhandler.common.handler.AbstractVoidRequestHandler;
+import com.mekari.mokaaddons.webhookhandler.common.service.AbstractVoidRequestHandler;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

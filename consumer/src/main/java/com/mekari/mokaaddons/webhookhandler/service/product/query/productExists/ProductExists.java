@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookhandler.service.product.query.productExists
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.webhookhandler.common.handler.RequestHandler;
+import com.mekari.mokaaddons.webhookhandler.common.service.RequestHandler;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
