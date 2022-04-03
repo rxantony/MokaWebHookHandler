@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.common.webhook.AbstractCommand;
 import com.mekari.mokaaddons.common.webhook.CommandException;
-import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived.MokaItemProcessedEvent;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;

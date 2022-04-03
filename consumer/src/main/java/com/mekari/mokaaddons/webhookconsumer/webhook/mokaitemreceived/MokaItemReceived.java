@@ -9,9 +9,9 @@ import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.product.createProduct.CreateProductRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.productExists.ProductExistsRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.updateProduct.UpdateProductRequest;
-import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived.MokaItemProcessedEvent.Body;
-import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived.MokaItemProcessedEvent.Item;
+import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed.MokaItemProcessedEvent.Body;
+import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed.MokaItemProcessedEvent.Item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
