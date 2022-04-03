@@ -7,10 +7,10 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.3</version>
     </parent>
-	<groupId>com.mekari.mokaaddons.webhookhandler</groupId>
-	<artifactId>mokaaddons-webhookhandler-consumer</artifactId>
+	<groupId>com.mekari.mokaaddons</groupId>
+	<artifactId>mokaaddons-webhookconsumer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>webhookhandler-consumer</name>
+	<name>mokaaddons-webhookconsumer</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -98,8 +98,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.mekari.mokaaddons.webhookhandler</groupId>
-			<artifactId>mokaaddons-webhookhandler-common</artifactId>
+			<groupId>com.mekari.mokaaddons</groupId>
+			<artifactId>mokaaddons-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>	
 	</dependencies>

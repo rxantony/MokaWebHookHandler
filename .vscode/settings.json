@@ -3,5 +3,5 @@
         "*.class": true
     },
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.dependency.syncWithFolderExplorer": false
+    "java.dependency.syncWithFolderExplorer": true
 }

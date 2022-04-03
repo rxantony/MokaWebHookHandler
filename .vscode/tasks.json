@@ -2,17 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-webhookhandler-common",
+            "label": "build-mokaaddons-common",
             "type": "shell",
             "command": "cd common;mvn clean install -Dmaven.test.skip"
         },
         {
-            "label": "build-webhookhandler-api",
+            "label": "build-mokaaddons-api",
             "type": "shell",
             "command": "cd api;mvn clean compile -Dmaven.test.skip"
         },
         {
-            "label": "build-webhookhandler-consumer",
+            "label": "build-mokaaddons-webhookconsumer",
             "type": "shell",
             "command": "cd consumer;mvn clean compile -Dmaven.test.skip"
         }

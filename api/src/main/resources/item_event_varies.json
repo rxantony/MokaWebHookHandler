@@ -1,7 +1,7 @@
 [
     {
         "header": {
-            "event_id": "2",
+            "event_id": "1",
             "event_name": "moka.item.added",
             "timestamp": "2021-01-01T02:02:02Z",
             "outlet_id": "G123456",
@@ -35,7 +35,7 @@
     },
     {
         "header": {
-            "event_id": "2",
+            "event_id": "3",
             "event_name": "moka.item.added",
             "timestamp": "2021-01-01T02:02:02Z",
             "outlet_id": "G123456",
@@ -52,7 +52,7 @@
     },
     {
         "header": {
-            "event_id": "2",
+            "event_id": "4",
             "event_name": "moka.item.added",
             "timestamp": "2021-01-01T02:02:02Z",
             "outlet_id": "G123456",

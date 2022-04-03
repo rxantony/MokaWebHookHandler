@@ -2,49 +2,34 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "aws-sam",
-            "request": "direct-invoke",
-            "name": "common:com.mekari.mokaaddons.webhookhandler.common.event.EventValidator::validate (java11)",
-            "invokeTarget": {
-                "target": "code",
-                "projectRoot": "${workspaceFolder}/common",
-                "lambdaHandler": "com.mekari.mokaaddons.webhookhandler.common.event.EventValidator::validate"
-            },
-            "lambda": {
-                "runtime": "java11",
-                "payload": {},
-                "environmentVariables": {}
-            }
-        },
-        {
-            "name": "Debug-Webhookhandler-api",
+            "name": "debug-mokaaddons-api",
             "type": "java",
             "request": "launch",
             "externalConsole": false,
             "stopOnEntry": true,
             "console": "integratedTerminal",
-            "preLaunchTask": "build-webhookhandler-api",
+            "preLaunchTask": "build-mokaaddons-api",
             "cwd": "${workspaceRoot}",
-            "projectName": "mokaaddons-webhookhandler-api",
-            "mainClass": "com.mekari.mokaaddons.webhookhandler.WebHookApiApplication"
+            "projectName": "mokaaddons-api",
+            "mainClass": "com.mekari.mokaaddons.api.WebHookApiApplication"
         },
         {
-            "name": "Debug-Webhookhandler-consumer",
+            "name": "debug-mokaaddons-webhookconsumer",
             "type": "java",
             "request": "launch",
             "externalConsole": false,
             "stopOnEntry": true,
             "console": "integratedTerminal",
-            "preLaunchTask": "build-webhookhandler-consumer",
+            "preLaunchTask": "build-mokaaddons-webhookconsumer",
             "cwd": "${workspaceRoot}",
-            "projectName": "mokaaddons-webhookhandler-consumer",
-            "mainClass": "com.mekari.mokaaddons.webhookhandler.WebHookConsumerApplication"
+            "projectName": "mokaaddons-webhookconsumer",
+            "mainClass": "com.mekari.mokaaddons.webhookconsumer.WebHookConsumerApplication"
         }
     ],
     "compounds": [
         {
-            "name": "Debug-Webhookhandler-consumer-api",
-            "configurations": ["Debug-Webhookhandler-consumer", "Debug-Webhookhandler-api"]
+            "name": "Debug-mokaaddons-api-webhooconsumer",
+            "configurations": ["debug-mokaaddons-api", "debug-mokaaddons-webhookconsumer"]
         }
     ]
 }

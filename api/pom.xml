@@ -7,10 +7,10 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.3</version>
     </parent>
-	<groupId>com.mekari.mokaaddons.webhookhandler</groupId>
-	<artifactId>mokaaddons-webhookhandler-api</artifactId>
+	<groupId>com.mekari.mokaaddons</groupId>
+	<artifactId>mokaaddons-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>webhookhandler-api</name>
+	<name>mokaaddons-api</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -80,7 +80,7 @@
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
 			<version>3.4.4</version>
-		</dependency>		
+		</dependency>	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -92,10 +92,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.mekari.mokaaddons.webhookhandler</groupId>
-			<artifactId>mokaaddons-webhookhandler-common</artifactId>
+			<groupId>com.mekari.mokaaddons</groupId>
+			<artifactId>mokaaddons-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>	
 	</dependencies>
 
