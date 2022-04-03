@@ -1,6 +1,7 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived;
 
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
+import com.mekari.mokaaddons.common.publisher.Publisher;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.AbstractCommand;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventHeader;
@@ -8,7 +9,6 @@ import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.product.command.createProduct.CreateProductRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.command.updateProduct.UpdateProductRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.query.productExists.ProductExistsRequest;
-import com.mekari.mokaaddons.webhookconsumer.service.publisher.PublishEventRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived.MokaItemProcessedEvent.Body;
 import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived.MokaItemProcessedEvent.Item;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component()
 public class MokaItemReceived extends AbstractCommand<MokaItemReceivedEvent> {
+    private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager requestManager;
 
     public MokaItemReceived() {
@@ -72,10 +73,6 @@ public class MokaItemReceived extends AbstractCommand<MokaItemReceivedEvent> {
         
         var eventBody = new Body(new Item(event.getBody().getData().getId(), event.getBody().getData().getDate()));
         var itemProcessed = new MokaItemProcessedEvent(eventHeader,eventBody);
-        var request = PublishEventRequest.builder()
-                        .topic(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE)
-                        .message(itemProcessed)
-                        .build();
-        requestManager.handle(request);
+        publisher.publish(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, itemProcessed);
     }
 }
