@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.command.createProduct;
+package com.mekari.mokaaddons.webhookconsumer.service.product.createProduct;
 
 import javax.sql.DataSource;
 

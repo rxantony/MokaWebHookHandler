@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.command.updateProduct;
+package com.mekari.mokaaddons.webhookconsumer.service.product.updateProduct;
 
 import javax.sql.DataSource;
 

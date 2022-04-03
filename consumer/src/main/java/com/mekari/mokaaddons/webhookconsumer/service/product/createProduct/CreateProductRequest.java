@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.command.updateProduct;
+package com.mekari.mokaaddons.webhookconsumer.service.product.createProduct;
 
 import java.time.OffsetDateTime;
 
@@ -13,9 +13,9 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class UpdateProductRequest implements Request<Boolean> {
+public class CreateProductRequest implements Request<Boolean> {
     private String id;
     private String name;
     private String description;
-    private OffsetDateTime updatedAt;
+    private OffsetDateTime createdAt;
 }
