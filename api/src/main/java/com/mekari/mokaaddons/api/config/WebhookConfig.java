@@ -17,22 +17,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebhookConfig {
     @Bean
-    public EventSourceStorage eventStoreStorage(DataSource dataSource){
+    public EventSourceStorage eventStoreStorage(DataSource dataSource) {
         return new DbEventSourceStorage(dataSource);
     }
 
     @Bean
-    public DeadLetterStorage deadLetterConsumerConfig(DataSource dataSource){
+    public DeadLetterStorage deadLetterConsumerConfig(DataSource dataSource) {
         return new DbDeadLetterStorage(dataSource);
     }
-    
+
     @Bean({ "moka.item.added", "moka.item.updated", "moka.item.deleted" })
     public Command<MokaItemReceived> commandItem() {
-        return new MokaSaveAndPublishEventCommand<MokaItemReceived>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, MokaItemReceived.class);
+        return new MokaSaveAndPublishEventCommand<>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE,
+                MokaItemReceived.class);
     }
 
     @Bean({ "moka.transaction.added", "moka.transaction.updated", "moka.transaction.deleted" })
     public Command<MokaTransactionReceived> commandTransaction() {
-        return new MokaSaveAndPublishEventCommand<MokaTransactionReceived>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, MokaTransactionReceived.class);
+        return new MokaSaveAndPublishEventCommand<>(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE,
+                MokaTransactionReceived.class);
     }
 }
