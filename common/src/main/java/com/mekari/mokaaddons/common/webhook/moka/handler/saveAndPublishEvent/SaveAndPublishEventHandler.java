@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class SaveAndPublishEvent extends AbstractVoidRequestHandler<SaveAndPublishEventRequest> {
+public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveAndPublishEventRequest> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;
@@ -21,13 +21,13 @@ public class SaveAndPublishEvent extends AbstractVoidRequestHandler<SaveAndPubli
 
     private final String publishToExchangeName;
 
-    public SaveAndPublishEvent(String publishToExchangeName) {
+    public SaveAndPublishEventHandler(String publishToExchangeName) {
         Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
         Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
         this.publishToExchangeName = publishToExchangeName;
     }
 
-    public SaveAndPublishEvent(Config config) {
+    public SaveAndPublishEventHandler(Config config) {
         Assert.notNull(config, "config must not be null");
         this.publishToExchangeName = config.publishToExchangeName;
         this.eventStorage = config.eventStorage;

@@ -7,7 +7,7 @@ import com.mekari.mokaaddons.common.webhook.moka.MokaEventSourceNotFoundExceptio
 
 import org.springframework.util.Assert;
 
-public class MokaCompareEventDate<TRequest extends MokaRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
+public class MokaCompareEventDate<TRequest extends MokaEventRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
 
     private final EventSourceStorage storage;
     private final RequestHandler<TRequest, Void> next;

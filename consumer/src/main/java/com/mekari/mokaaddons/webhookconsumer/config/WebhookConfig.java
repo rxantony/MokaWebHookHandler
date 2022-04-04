@@ -2,6 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.config;
 
 import javax.sql.DataSource;
 
+import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
@@ -36,8 +37,8 @@ public class WebhookConfig {
     }
     
     @Bean
-    public RequestHandler<MokaItemReceivedRequest, Void> mokaItemReceivedRequestHandler(@Qualifier("eventstore") DataSource dataSource
-        , RequestHandler<MokaItemReceivedRequest, Void> handler
+    public AbstractVoidRequestHandler<MokaItemReceivedRequest> mokaItemReceivedRequestHandler(@Qualifier("eventstore") DataSource dataSource
+        , AbstractVoidRequestHandler<MokaItemReceivedRequest> handler
         , EventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
 
@@ -46,8 +47,8 @@ public class WebhookConfig {
     }
 
     @Bean
-    public RequestHandler<MokaItemProcessedRequest, Void> mokaItemEventProcessedRequestHandler(@Qualifier("eventstore") DataSource dataSource
-        , RequestHandler<MokaItemProcessedRequest, Void> handler
+    public AbstractVoidRequestHandler<MokaItemProcessedRequest> mokaItemEventProcessedRequestHandler(@Qualifier("eventstore") DataSource dataSource
+        , AbstractVoidRequestHandler<MokaItemProcessedRequest> handler
         , EventSourceStorage eventSourceStorage
         , LockTrackerStorage lockTrackerStorage) {
         return new MokaEventLock<>(dataSource, lockTrackerStorage, 

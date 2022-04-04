@@ -16,7 +16,7 @@ import com.mekari.mokaaddons.common.webhook.moka.MokaEventSourceNotFoundExceptio
 
 import org.springframework.util.Assert;
 
-public class MokaEventLock<TRequest extends MokaRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
+public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
