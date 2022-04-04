@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public interface LockTrackerStorage {
+    
     void insert(NewItem item) throws Exception;
 
     void delete(int connId, OffsetDateTime date) throws Exception;

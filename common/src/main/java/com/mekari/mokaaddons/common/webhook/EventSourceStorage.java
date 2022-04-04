@@ -11,6 +11,7 @@ import lombok.Setter;
 public interface EventSourceStorage {
 
     Optional<OffsetDateTime> getEventDate(String dataId) throws Exception;
+
     void insert(NewItem item) throws Exception;
 
     @Getter
@@ -18,14 +19,14 @@ public interface EventSourceStorage {
     @Builder
     @AllArgsConstructor
     public class NewItem {
-        private String dataId; 
-        private OffsetDateTime eventDate; 
-        private String eventName; 
-        private String payload; 
+        private String dataId;
+        private OffsetDateTime eventDate;
+        private String eventName;
+        private String payload;
         private String eventId;
-        private String outletId; 
-        private int version; 
-        private OffsetDateTime timestamp; 
-        private OffsetDateTime createdAt; 
+        private String outletId;
+        private int version;
+        private OffsetDateTime timestamp;
+        private OffsetDateTime createdAt;
     }
 }
