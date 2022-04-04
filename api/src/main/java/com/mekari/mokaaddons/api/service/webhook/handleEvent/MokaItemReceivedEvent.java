@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.webhook.event;
+package com.mekari.mokaaddons.api.service.webhook.handleEvent;
 
 import java.time.OffsetDateTime;
 
@@ -72,7 +72,7 @@ import lombok.Setter;
 */
 @Getter
 @Setter
-public class MokaItemReceived extends AbstractMokaEvent {
+public class MokaItemReceivedEvent extends AbstractMokaEvent {
 
     private Body body;
 

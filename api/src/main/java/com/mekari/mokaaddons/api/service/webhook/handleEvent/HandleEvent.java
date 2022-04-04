@@ -1,12 +1,15 @@
 package com.mekari.mokaaddons.api.service.webhook.handleEvent;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
+import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.BuilderUtil;
-import com.mekari.mokaaddons.common.webhook.CommandInvoker;
-import com.mekari.mokaaddons.common.webhook.CommandInvokerException;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEvent;
+import com.mekari.mokaaddons.common.webhook.moka.handler.saveAndPublishEvent.SaveAndPublishEventRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,22 +18,28 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HandleEvent extends AbstractVoidRequestHandler<HandleEventRequest> {
-    private @Autowired CommandInvoker invoker;
+    private @Autowired ObjectMapper mapper;
+    private @Autowired EventNameClassMap eventClsMap;
     private @Autowired DeadLetterStorage deadLetterStorage;
+    private @Autowired RequestHandlerManager handleManager;
     private static final Logger LOGGER = LogManager.getFormatterLogger(HandleEvent.class);
 
     @Override
-    protected void handleInternal(HandleEventRequest request) {
+    protected void handleInternal(HandleEventRequest request) throws Exception{
+        String json = null;
+        JsonNode jsonNode = null;
         try{
-            invoker.invoke(request.getJson());
+            json = request.getJson();
+            jsonNode = mapper.readTree(json);
+            var eventName = jsonNode.get("header").get("event_name").asText();
+            var eventCls = eventClsMap.gerEventClass(eventName);
+            var event = (AbstractMokaEvent)mapper.readValue(jsonNode.traverse(), eventCls);
+            var savePublishRequest = new SaveAndPublishEventRequest(event);
+            handleManager.handle(savePublishRequest);
         }
         catch(Exception ex){
-            JsonNode msgNode = null;
-            if(ex instanceof CommandInvokerException )
-                msgNode = ((CommandInvokerException)ex).eventNode;
-
             try{
-                var builder = BuilderUtil.createDeadLetterStorageItemBuilder(msgNode)
+                var builder = BuilderUtil.createDeadLetterStorageItemBuilder(jsonNode)
                     .payload(request.getJson())
                     .source(request.getSourceName())
                     .reason(ex.toString())
@@ -43,5 +52,4 @@ public class HandleEvent extends AbstractVoidRequestHandler<HandleEventRequest> 
             }           
         }
     }
-    
 }

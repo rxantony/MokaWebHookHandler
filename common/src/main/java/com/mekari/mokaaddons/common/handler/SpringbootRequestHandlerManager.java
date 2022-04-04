@@ -30,7 +30,7 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
         var requestCls = request.getClass();
         var queryHandlerType = ResolvableType.forClassWithGenerics(RawRequestHandler.class,  ResolvableType.forClass(requestCls));
         var beanName = appContext.getBeanNamesForType(queryHandlerType);
-        var queryHandler = (RequestHandler<TRequest, TResult>)appContext.getBean(beanName[0]);
+        var queryHandler = (RequestHandler<TRequest, TResult>)appContext.getBean(beanName[beanName.length-1]);
         return queryHandler.handle(request);
     }
     

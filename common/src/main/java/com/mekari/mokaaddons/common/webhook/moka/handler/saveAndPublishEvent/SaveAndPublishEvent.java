@@ -1,10 +1,11 @@
-package com.mekari.mokaaddons.common.webhook.moka;
+package com.mekari.mokaaddons.common.webhook.moka.handler.saveAndPublishEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.AbstractCommand;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage.NewItem;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEvent;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class MokaSaveAndPublishEventCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
+public class SaveAndPublishEvent extends AbstractVoidRequestHandler<SaveAndPublishEventRequest> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired AmqpTemplate amqpTemplate;
@@ -20,15 +21,13 @@ public class MokaSaveAndPublishEventCommand<TEvent extends AbstractMokaEvent> ex
 
     private final String publishToExchangeName;
 
-    public MokaSaveAndPublishEventCommand(String publishToExchangeName, Class<TEvent> eventCls) {
-        super(eventCls);
+    public SaveAndPublishEvent(String publishToExchangeName) {
         Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
         Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
         this.publishToExchangeName = publishToExchangeName;
     }
 
-    public MokaSaveAndPublishEventCommand(Config config, Class<TEvent> eventCls) {
-        super(eventCls);
+    public SaveAndPublishEvent(Config config) {
         Assert.notNull(config, "config must not be null");
         this.publishToExchangeName = config.publishToExchangeName;
         this.eventStorage = config.eventStorage;
@@ -37,12 +36,13 @@ public class MokaSaveAndPublishEventCommand<TEvent extends AbstractMokaEvent> ex
     }
 
     @Override
-    protected void executeInternal(TEvent event) throws Exception {
+    protected void handleInternal(SaveAndPublishEventRequest request) throws Exception {
+        var event = request.getEvent();
         saveEvent(event);
         publishEvent(event);
     }
 
-    protected void saveEvent(TEvent event) throws Exception {
+    protected void saveEvent(AbstractMokaEvent event) throws Exception {
         var header = event.getHeader();
         var data = event.getBody().getData();
 
@@ -64,7 +64,7 @@ public class MokaSaveAndPublishEventCommand<TEvent extends AbstractMokaEvent> ex
                     .build());
     }
 
-    protected void publishEvent(TEvent event) {
+    protected void publishEvent(AbstractMokaEvent event) {
         var header = event.getHeader();
         var data = event.getBody().getData();
 

@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka;
+package com.mekari.mokaaddons.common.webhook.moka.handler;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,66 +6,65 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
+import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.AbstractCommand;
-import com.mekari.mokaaddons.common.webhook.Command;
-import com.mekari.mokaaddons.common.webhook.EventSourceNotFoundException;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEvent;
+import com.mekari.mokaaddons.common.webhook.moka.MokaEventSourceNotFoundException;
 
 import org.springframework.util.Assert;
 
-public class MokaEventLockCommand<TEvent extends AbstractMokaEvent> extends AbstractCommand<TEvent> {
+public class MokaEventLock<TRequest extends MokaRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
-    private final Command<TEvent> inner;
+    private final RequestHandler<TRequest, Void> next;
 
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
 
-    public MokaEventLockCommand(DataSource dataSource, LockTrackerStorage lockTracker, Command<TEvent> inner) {
-        super(inner.eventClass());
-
+    public MokaEventLock(DataSource dataSource, LockTrackerStorage lockTracker, RequestHandler<TRequest, Void> next) {
         Assert.notNull(dataSource, "dataSource must not be null");
         Assert.notNull(lockTracker, "lockTracker must not be null");
-        Assert.notNull(inner, "inner must not be null");
+        Assert.notNull(next, "next must not be null");
 
         this.dataSource = dataSource;
         this.lockTracker = lockTracker;
-        this.inner = inner;
+        this.next = next;
     }
 
     @Override
-    protected void executeInternal(TEvent event) throws Exception {
+    protected void handleInternal(TRequest request) throws Exception {
+        var event = request.getEvent();
         try (var conn = createConnection(event)) {
             // we can track a rowlock created by this connection through:
             // select * from INFORMATION_SCHEMA.INNODB_TRX where trx_mysql_thread_id =
             // connId
             var lockItem = lock(conn, event);
             try {
-                inner.execute(event);
+                next.handle(request);
             } finally {
                 releaseLock(lockItem, conn, event);
             }
         }
     }
-
-    private Object[] getConnIdAndEventSourceId(Connection conn, TEvent event) throws Exception {
+    private Object[] getConnIdAndEventSourceId(Connection conn, AbstractMokaEvent event) throws Exception {
         try (var stmt = conn.prepareStatement(GET_CONNID_EVID_SQL)) {
             stmt.setString(1, event.getBody().getData().getId().toString());
             try (var rs = stmt.executeQuery()) {
                 rs.next();
                 var connId = rs.getInt(1);
                 if (!rs.next())
-                    throw new EventSourceNotFoundException(event);
+                    throw new MokaEventSourceNotFoundException(event);
                 var evsId = rs.getString(1);
                 return new Object[] { connId, evsId };
             }
         }
     }
 
-    private NewItem lock(Connection conn, TEvent event) throws Exception {
+    private NewItem lock(Connection conn, AbstractMokaEvent event) throws Exception {
         var ctx = getConnIdAndEventSourceId(conn, event);
         var connId = (int) ctx[0];
         var evsId = (String) ctx[1];
@@ -81,7 +80,7 @@ public class MokaEventLockCommand<TEvent extends AbstractMokaEvent> extends Abst
             stmt.setPoolable(false);
             try (var rs = stmt.executeQuery(query)) {
                 if (!rs.next())
-                    throw new EventSourceNotFoundException(
+                    throw new MokaEventSourceNotFoundException(
                             String.format("eventId:%s-eventName:%s-bodyId:%s no event_source with id:%s",
                                     header.getEventId(), header.getEventName(), body.getData().getId(), evsId),
                             event);
@@ -108,7 +107,7 @@ public class MokaEventLockCommand<TEvent extends AbstractMokaEvent> extends Abst
         return lockItem;
     }
 
-    private void releaseLock(NewItem lockItem, Connection conn, TEvent event) throws Exception {
+    private void releaseLock(NewItem lockItem, Connection conn, AbstractMokaEvent event) throws Exception {
         var header = event.getHeader();
         var body = event.getBody();
 
@@ -125,7 +124,7 @@ public class MokaEventLockCommand<TEvent extends AbstractMokaEvent> extends Abst
         }
     }
 
-    private Connection createConnection(TEvent event) throws SQLException {
+    private Connection createConnection(AbstractMokaEvent event) throws SQLException {
         var header = event.getHeader();
         var body = event.getBody();
         

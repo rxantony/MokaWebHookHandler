@@ -9,6 +9,11 @@ public class UnknownEventFormatException extends WebhookHandlingException {
         this.event = event;
     }
 
+    public UnknownEventFormatException(String event, Throwable cause) {
+        super(cause);
+        this.event = event;
+    }
+
     public String Event() {
         return event;
     }

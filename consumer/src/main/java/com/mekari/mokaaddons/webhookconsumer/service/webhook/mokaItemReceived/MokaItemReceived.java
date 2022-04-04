@@ -1,35 +1,31 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.command;
+package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemReceived;
 
+import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.publisher.Publisher;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.AbstractCommand;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventHeader;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.product.createProduct.CreateProductRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.productExists.ProductExistsRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.updateProduct.UpdateProductRequest;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent.Body;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent.Item;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent.Body;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent.Item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component()
-public class MokaItemReceived extends AbstractCommand<MokaItemReceivedEvent> {
+@Component
+public class MokaItemReceived extends AbstractVoidRequestHandler<MokaItemReceivedRequest>{
+
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager requestManager;
 
-    public MokaItemReceived() {
-        super(MokaItemReceivedEvent.class);
-    }
-
     @Override
-    protected void executeInternal(MokaItemReceivedEvent event) throws Exception {
-        saveEvent(event);
-        publishEvent(event);
+    protected void handleInternal(MokaItemReceivedRequest request) throws Exception{
+        saveEvent(request.getEvent());
+        publishEvent(request.getEvent());
     }
 
     private void saveEvent(MokaItemReceivedEvent event) throws Exception {
@@ -63,16 +59,16 @@ public class MokaItemReceived extends AbstractCommand<MokaItemReceivedEvent> {
     private void publishEvent(MokaItemReceivedEvent event) throws Exception{
         var header = event.getHeader();
         var data = event.getBody().getData();
-        
         logger.info(
                 "eventId:%s-eventName:%s-dataId:%s publishes webHookEventProcessedcwith  moka.item.processed into Queue:%sQueue",
                 header.getEventId(), header.getEventName(), data.getId(),
                 AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
 
         var eventHeader = (MokaEventHeader) event.getHeader().clone();
-        eventHeader.setEventName("moka.item.processed");
+        eventHeader.setEventName("moka.item.proc essed");
         
-        var eventBody = new Body(new Item(event.getBody().getData().getId(), event.getBody().getData().getDate()));
+        var item = new Item(data.getId(), data.getDate());
+        var eventBody = new Body(item);
         var itemProcessed = new MokaItemProcessedEvent(eventHeader,eventBody);
         publisher.publish(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, itemProcessed);
     }

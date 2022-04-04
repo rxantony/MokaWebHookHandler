@@ -1,8 +1,6 @@
 package com.mekari.mokaaddons.common.webhook;
 
-import com.mekari.mokaaddons.common.ApplicationException;
-
-public class WebhookHandlingException extends ApplicationException {
+public class WebhookHandlingException extends RuntimeException {
 
     public WebhookHandlingException(String message) {
         super(message);

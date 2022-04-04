@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.webhook.event;
+package com.mekari.mokaaddons.api.service.webhook.handleEvent;
 
 import java.time.OffsetDateTime;
 import java.util.Currency;
@@ -91,7 +91,7 @@ import lombok.Setter;
 */
 @Getter
 @Setter
-public class MokaTransactionReceived extends AbstractMokaEvent {
+public class MokaTransactionReceivedEvent extends AbstractMokaEvent {
 
     private Body body;
 
