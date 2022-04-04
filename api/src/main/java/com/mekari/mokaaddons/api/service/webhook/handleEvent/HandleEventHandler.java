@@ -21,7 +21,7 @@ public class HandleEventHandler extends AbstractVoidRequestHandler<HandleEventRe
     private @Autowired ObjectMapper mapper;
     private @Autowired EventNameClassMap eventClsMap;
     private @Autowired DeadLetterStorage deadLetterStorage;
-    private @Autowired RequestHandlerManager handleManager;
+    private @Autowired RequestHandlerManager handlerManager;
     private static final Logger LOGGER = LogManager.getFormatterLogger(HandleEventHandler.class);
 
     @Override
@@ -35,7 +35,7 @@ public class HandleEventHandler extends AbstractVoidRequestHandler<HandleEventRe
             var eventCls = eventClsMap.gerEventClass(eventName);
             var event = (AbstractMokaEvent)mapper.readValue(jsonNode.traverse(), eventCls);
             var savePublishRequest = new SaveAndPublishEventRequest(event);
-            handleManager.handle(savePublishRequest);
+            handlerManager.handle(savePublishRequest);
         }
         catch(Exception ex){
             try{
