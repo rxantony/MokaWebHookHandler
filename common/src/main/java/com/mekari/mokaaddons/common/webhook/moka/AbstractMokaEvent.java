@@ -10,5 +10,5 @@ import lombok.Setter;
 public abstract class AbstractMokaEvent implements Event {
     private MokaEventHeader header;
     
-    public abstract MokaAbstractEventBody<?> getBody();
+    public abstract AbstractMokaEventBody<?> getBody();
 }

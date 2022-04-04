@@ -5,7 +5,7 @@ import java.util.Currency;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEvent;
-import com.mekari.mokaaddons.common.webhook.moka.MokaAbstractEventBody;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEventBody;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventData;
 
 import lombok.Getter;
@@ -229,7 +229,7 @@ public class MokaTransactionReceived extends AbstractMokaEvent {
 
     @Getter
     @Setter
-    public static class Body extends MokaAbstractEventBody<Transaction> {
+    public static class Body extends AbstractMokaEventBody<Transaction> {
         @JsonProperty("transaction")
         private Transaction data;
     }
