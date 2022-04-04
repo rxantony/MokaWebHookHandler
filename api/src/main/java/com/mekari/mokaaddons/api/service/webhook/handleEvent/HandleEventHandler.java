@@ -17,12 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HandleEvent extends AbstractVoidRequestHandler<HandleEventRequest> {
+public class HandleEventHandler extends AbstractVoidRequestHandler<HandleEventRequest> {
     private @Autowired ObjectMapper mapper;
     private @Autowired EventNameClassMap eventClsMap;
     private @Autowired DeadLetterStorage deadLetterStorage;
     private @Autowired RequestHandlerManager handleManager;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(HandleEvent.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(HandleEventHandler.class);
 
     @Override
     protected void handleInternal(HandleEventRequest request) throws Exception{

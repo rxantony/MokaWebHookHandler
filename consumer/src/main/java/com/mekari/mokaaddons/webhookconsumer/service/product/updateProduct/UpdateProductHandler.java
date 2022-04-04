@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class UpdateProduct implements RequestHandler<UpdateProductRequest, Boolean>{
+public class UpdateProductHandler implements RequestHandler<UpdateProductRequest, Boolean>{
 
     private final JdbcTemplate jdbcTemplate;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(UpdateProduct.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(UpdateProductHandler.class);
     private static final String UPDATE_ITEM_SQL = "UPDATE item SET name=?, description=?, updated_at=? WHERE id=?";
 
-    public UpdateProduct(@Qualifier("mokaaddons") DataSource dataSource) {
+    public UpdateProductHandler(@Qualifier("mokaaddons") DataSource dataSource) {
         Assert.notNull(dataSource, "dataSource must not be null");
         jdbcTemplate = new JdbcTemplate(dataSource);
     }

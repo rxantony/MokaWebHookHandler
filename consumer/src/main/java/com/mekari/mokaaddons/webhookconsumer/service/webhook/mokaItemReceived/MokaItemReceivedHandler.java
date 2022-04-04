@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MokaItemReceived extends AbstractVoidRequestHandler<MokaItemReceivedRequest>{
+public class MokaItemReceivedHandler extends AbstractVoidRequestHandler<MokaItemReceivedRequest>{
 
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager requestManager;
