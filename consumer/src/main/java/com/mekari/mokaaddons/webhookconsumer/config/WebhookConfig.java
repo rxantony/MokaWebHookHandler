@@ -9,8 +9,8 @@ import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.moka.MokaCompareEventDateCommand;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventLockCommand;
 import com.mekari.mokaaddons.common.webhook.storage.*;
-import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed.MokaItemProcessedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemreceived.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

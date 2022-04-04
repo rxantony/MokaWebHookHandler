@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed;
+package com.mekari.mokaaddons.webhookconsumer.consumer;
 
 import com.mekari.mokaaddons.common.consumer.AbstractConsumer;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;

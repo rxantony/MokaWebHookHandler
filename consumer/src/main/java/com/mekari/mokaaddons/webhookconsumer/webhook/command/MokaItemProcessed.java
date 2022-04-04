@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.mokaitemprocessed;
+package com.mekari.mokaaddons.webhookconsumer.webhook.command;
 
 import java.util.UUID;
 
@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.common.webhook.AbstractCommand;
 import com.mekari.mokaaddons.common.webhook.CommandException;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
