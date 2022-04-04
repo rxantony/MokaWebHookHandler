@@ -3,6 +3,7 @@ package com.mekari.mokaaddons.api.config;
 import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.api.service.webhook.handleEvent.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.api.service.webhook.handleEvent.MokaTransactionReceivedEvent;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
@@ -40,6 +41,9 @@ public class WebhookConfig {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class)
                 .add("moka.item.updated", MokaItemReceivedEvent.class)
-                .add("moka.item.deleted", MokaItemReceivedEvent.class);
+                .add("moka.item.deleted", MokaItemReceivedEvent.class)
+                .add("moka.transaction.created", MokaTransactionReceivedEvent.class)
+                .add("moka.transaction.updated", MokaTransactionReceivedEvent.class)
+                .add("moka.transaction.refunded", MokaTransactionReceivedEvent.class);
     }
 }
