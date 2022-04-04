@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MokaItemProcessedRequestHandler extends AbstractVoidRequestHandler<MokaItemProcessedRequest>{
+public class MokaItemProcessedRequestHandler extends AbstractVoidRequestHandler<MokaItemProcessedRequest> {
 
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager requestManager;
+
     @Override
-    protected void handleInternal(MokaItemProcessedRequest request) throws Exception{
+    protected void handleInternal(MokaItemProcessedRequest request) throws Exception {
         logger.debug("create your logic requirements here");
     }
 

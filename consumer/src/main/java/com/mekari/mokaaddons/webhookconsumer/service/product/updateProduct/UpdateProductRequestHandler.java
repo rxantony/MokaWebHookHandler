@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class UpdateProductRequestHandler implements RequestHandler<UpdateProductRequest, Boolean>{
+public class UpdateProductRequestHandler implements RequestHandler<UpdateProductRequest, Boolean> {
 
     private final JdbcTemplate jdbcTemplate;
     private static final Logger LOGGER = LogManager.getFormatterLogger(UpdateProductRequestHandler.class);
@@ -23,12 +23,13 @@ public class UpdateProductRequestHandler implements RequestHandler<UpdateProduct
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    //just for testing
+    // just for testing
     @Override
     public Boolean handle(UpdateProductRequest request) {
         LOGGER.info("update new product id:%s, name:%s", request.getId(), request.getName());
-        var result = jdbcTemplate.update(UPDATE_ITEM_SQL, request.getName(), request.getDescription(), request.getUpdatedAt(), request.getId());
+        var result = jdbcTemplate.update(UPDATE_ITEM_SQL, request.getName(), request.getDescription(),
+                request.getUpdatedAt(), request.getId());
         return result == 0 ? false : true;
     }
-    
+
 }

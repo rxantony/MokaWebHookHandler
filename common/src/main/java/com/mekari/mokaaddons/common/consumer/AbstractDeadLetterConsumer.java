@@ -55,8 +55,8 @@ public class AbstractDeadLetterConsumer {
     }
 
     protected void init() {
-        if(exchangeRoutingStrategy == null) 
-            this.exchangeRoutingStrategy =  AbstractDeadLetterConsumer::getExchangeRoutingKey;
+        if (exchangeRoutingStrategy == null)
+            this.exchangeRoutingStrategy = AbstractDeadLetterConsumer::getExchangeRoutingKey;
         sourceName = this.getClass().getName();
         logger = LogManager.getFormatterLogger(this.getClass());
     }
@@ -102,18 +102,16 @@ public class AbstractDeadLetterConsumer {
             msgNode = mapper.readTree(msg);
         } catch (Exception ex) {
             logger.error(ex.toString());
-        }
-        finally{
-            try{
+        } finally {
+            try {
                 var builder = BuilderUtil.createDeadLetterStorageItemBuilder(msgNode)
-                    .source(sourceName)
-                    .payload(msg)
-                    .properties(message.getMessageProperties().toString())
-                    .reason(reason)
-                    .createdAt(DateUtil.now());
+                        .source(sourceName)
+                        .payload(msg)
+                        .properties(message.getMessageProperties().toString())
+                        .reason(reason)
+                        .createdAt(DateUtil.now());
                 deadLetterStorage.insert(builder.build());
-            }
-            catch(Exception ex){
+            } catch (Exception ex) {
                 logger.error(ex.toString());
             }
         }
@@ -128,7 +126,7 @@ public class AbstractDeadLetterConsumer {
         public final ExchangeRoutingStrategy exchangeRoutingStrategy;
 
         public Config(DeadLetterStorage deadLetterStorage, AmqpTemplate amqpTemplate, ObjectMapper mapper,
-            int maxRetriesCount, ExchangeRoutingStrategy exchangeRoutingStrategy) {
+                int maxRetriesCount, ExchangeRoutingStrategy exchangeRoutingStrategy) {
             Assert.notNull(deadLetterStorage, "deadLetterStorage must not be null");
             Assert.notNull(amqpTemplate, "amqpTemplate must not be null");
             Assert.notNull(mapper, "mapper must not be null");
@@ -142,14 +140,14 @@ public class AbstractDeadLetterConsumer {
         }
     }
 
-    public static interface ExchangeRoutingStrategy{
+    public static interface ExchangeRoutingStrategy {
         Result get(Message message);
 
-        public static class Result{
+        public static class Result {
             public final String exchangeName;
             public final String routingKey;
-    
-            public Result(String exchangeName, String routingKey){
+
+            public Result(String exchangeName, String routingKey) {
                 this.exchangeName = exchangeName;
                 this.routingKey = routingKey;
             }

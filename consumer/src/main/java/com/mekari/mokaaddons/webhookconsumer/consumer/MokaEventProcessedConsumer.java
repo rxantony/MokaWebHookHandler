@@ -22,12 +22,12 @@ public class MokaEventProcessedConsumer {
     private final static Logger LOGGER = LogManager.getFormatterLogger(MokaEventProcessedConsumer.class);
 
     @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE)
-    public void consume(Message message, Channel channel) throws Exception{
+    public void consume(Message message, Channel channel) throws Exception {
         var json = new String(message.getBody());
         var event = mapper.readValue(json, MokaItemProcessedEvent.class);
         var request = MokaItemProcessedRequest.builder()
-                        .event(event)
-                        .build();
+                .event(event)
+                .build();
         requestManager.handle(request);
     }
 }

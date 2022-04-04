@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebhookConfig {
     @Bean
-    public DeadLetterStorage deadLetterStorage(@Qualifier("eventstore") DataSource dataSource){
+    public DeadLetterStorage deadLetterStorage(@Qualifier("eventstore") DataSource dataSource) {
         return new DbDeadLetterStorage(dataSource);
     }
 
@@ -35,23 +35,23 @@ public class WebhookConfig {
     public LockTrackerStorage lockTrackerStorage(@Qualifier("eventstore") DataSource dataSource) {
         return new DbLockTrackerStorage(dataSource);
     }
-    
+
     @Bean
-    public AbstractVoidRequestHandler<MokaItemReceivedRequest> mokaItemReceivedRequestHandler(@Qualifier("eventstore") DataSource dataSource
-        , AbstractVoidRequestHandler<MokaItemReceivedRequest> handler
-        , EventSourceStorage eventSourceStorage
-        , LockTrackerStorage lockTrackerStorage) {
+    public AbstractVoidRequestHandler<MokaItemReceivedRequest> mokaItemReceivedHandler(
+            @Qualifier("eventstore") DataSource dataSource, AbstractVoidRequestHandler<MokaItemReceivedRequest> handler,
+            EventSourceStorage eventSourceStorage, LockTrackerStorage lockTrackerStorage) {
 
         return new MokaEventLock<>(dataSource, lockTrackerStorage,
-                    new MokaCompareEventDate<>(eventSourceStorage, handler));
+                new MokaCompareEventDate<>(eventSourceStorage, handler));
     }
 
     @Bean
-    public AbstractVoidRequestHandler<MokaItemProcessedRequest> mokaItemEventProcessedRequestHandler(@Qualifier("eventstore") DataSource dataSource
-        , AbstractVoidRequestHandler<MokaItemProcessedRequest> handler
-        , EventSourceStorage eventSourceStorage
-        , LockTrackerStorage lockTrackerStorage) {
-        return new MokaEventLock<>(dataSource, lockTrackerStorage, 
-                        new MokaCompareEventDate<>(eventSourceStorage,handler));
-        }
+    public AbstractVoidRequestHandler<MokaItemProcessedRequest> mokaItemEventProcessedHandler(
+            @Qualifier("eventstore") DataSource dataSource,
+            AbstractVoidRequestHandler<MokaItemProcessedRequest> handler, EventSourceStorage eventSourceStorage,
+            LockTrackerStorage lockTrackerStorage) {
+
+        return new MokaEventLock<>(dataSource, lockTrackerStorage,
+                new MokaCompareEventDate<>(eventSourceStorage, handler));
+    }
 }
