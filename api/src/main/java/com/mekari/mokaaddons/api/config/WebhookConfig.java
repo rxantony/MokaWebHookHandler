@@ -30,7 +30,7 @@ public class WebhookConfig {
     }
 
     @Bean
-    public AbstractVoidRequestHandler<SaveAndPublishEventRequest> saveAndPublishEventRequest() {
+    public AbstractVoidRequestHandler<SaveAndPublishEventRequest> saveAndPublishHandler() {
         return new SaveAndPublishEventHandler(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE);
     }
 
