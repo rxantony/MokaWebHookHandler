@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class AbstractDeadLetterConsumer {
+public class AbstractRabbitMQDeadLetterConsumer {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired AmqpTemplate amqpTemplate;
@@ -34,16 +34,16 @@ public class AbstractDeadLetterConsumer {
      * for manual instantiation instead.
      * this constuctor is neccessary for springboot to instantiate this class.
      */
-    protected AbstractDeadLetterConsumer() {
+    protected AbstractRabbitMQDeadLetterConsumer() {
         init();
     }
 
-    protected AbstractDeadLetterConsumer(int maxRetriesCount) {
+    protected AbstractRabbitMQDeadLetterConsumer(int maxRetriesCount) {
         this.maxRetriesCount = maxRetriesCount;
         init();
     }
 
-    protected AbstractDeadLetterConsumer(Config config) {
+    protected AbstractRabbitMQDeadLetterConsumer(Config config) {
         Assert.notNull(config, "config must not be null");
 
         this.deadLetterStorage = config.deadLetterStorage;
@@ -56,7 +56,7 @@ public class AbstractDeadLetterConsumer {
 
     protected void init() {
         if (exchangeRoutingStrategy == null)
-            this.exchangeRoutingStrategy = AbstractDeadLetterConsumer::getExchangeRoutingKey;
+            this.exchangeRoutingStrategy = AbstractRabbitMQDeadLetterConsumer::getExchangeRoutingKey;
         sourceName = this.getClass().getName();
         logger = LogManager.getFormatterLogger(this.getClass());
     }
