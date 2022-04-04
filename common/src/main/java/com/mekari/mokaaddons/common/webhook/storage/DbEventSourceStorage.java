@@ -8,10 +8,11 @@ import javax.sql.DataSource;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 
 public class DbEventSourceStorage implements EventSourceStorage {
+
     private final DataSource dataSource;
     private static final String GET_EVENTDATE_SQL = "SELECT event_date FROM event_source WHERE data_id = ? LIMIT 1";
     private static final String INSERT_NEW_ITEM_SQL = "INSERT INTO event_source (data_id, event_date, event_name, payload, event_id, outlet_id, version, timestamp, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    
+
     public DbEventSourceStorage(DataSource dataSource) {
         this.dataSource = dataSource;
     }

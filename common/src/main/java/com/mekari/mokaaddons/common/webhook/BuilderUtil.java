@@ -3,6 +3,7 @@ package com.mekari.mokaaddons.common.webhook;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class BuilderUtil {
+    
     private BuilderUtil(){}
 
     public static DeadLetterStorage.NewItem.NewItemBuilder createDeadLetterStorageItemBuilder(JsonNode eventNode){

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.springframework.util.Assert;
 
 public class EventNameClassMap {
+    
     private final HashMap<String, Type> eventClassMaps = new HashMap<>();
 
     public <TEvent extends Event> EventNameClassMap add(String eventName, Class<TEvent> eventClass){

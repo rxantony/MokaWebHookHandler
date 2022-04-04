@@ -10,7 +10,7 @@ import com.mekari.mokaaddons.common.webhook.moka.MokaEventData;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter 
+@Getter
 @Setter
 public class MokaItemReceivedEvent extends AbstractMokaEvent {
 
@@ -28,6 +28,7 @@ public class MokaItemReceivedEvent extends AbstractMokaEvent {
     @Getter
     @Setter
     public static class Body extends AbstractMokaEventBody<Item> {
+
         @JsonProperty("item")
         private Item data;
     }
