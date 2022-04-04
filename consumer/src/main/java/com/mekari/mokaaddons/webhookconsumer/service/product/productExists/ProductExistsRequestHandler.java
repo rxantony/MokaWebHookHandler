@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-public class ProductExistsHandler implements RequestHandler<ProductExistsRequest, Boolean>{
+public class ProductExistsRequestHandler implements RequestHandler<ProductExistsRequest, Boolean>{
 
     private final JdbcTemplate jdbcTemplate;
     private static final String IS_ITEM_EXISTS_SQL = "SELECT id FROM item WHERE id=?";
     
-    public ProductExistsHandler(@Qualifier("mokaaddons") DataSource dataSource) {
+    public ProductExistsRequestHandler(@Qualifier("mokaaddons") DataSource dataSource) {
         Assert.notNull(dataSource, "dataSource must not be null");
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
