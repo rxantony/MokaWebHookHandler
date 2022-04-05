@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka.handler.saveAndPublishEvent;
+package com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
