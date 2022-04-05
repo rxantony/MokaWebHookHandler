@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent;
+package com.mekari.mokaaddons.common.webhook.moka.service.savethenpublishevent;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka.handler;
+package com.mekari.mokaaddons.common.webhook.moka.service;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandler;

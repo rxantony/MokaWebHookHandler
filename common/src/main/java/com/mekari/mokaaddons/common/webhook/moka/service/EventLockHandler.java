@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka.handler;
+package com.mekari.mokaaddons.common.webhook.moka.service;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
