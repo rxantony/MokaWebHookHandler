@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemreceived;
+package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapositem.received;
 
 import java.time.OffsetDateTime;
 

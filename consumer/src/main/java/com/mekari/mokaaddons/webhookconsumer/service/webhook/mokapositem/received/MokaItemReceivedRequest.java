@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemprocessed;
+package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapositem.received;
 
 import com.mekari.mokaaddons.common.webhook.moka.handler.EventRequest;
 
@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class MokaItemProcessedRequest implements EventRequest<MokaItemProcessedEvent> {
-    private MokaItemProcessedEvent event;
+public class MokaItemReceivedRequest implements EventRequest<MokaItemReceivedEvent> {
+    private MokaItemReceivedEvent event;
 }

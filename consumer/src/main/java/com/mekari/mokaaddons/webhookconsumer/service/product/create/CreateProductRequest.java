@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.createproduct;
+package com.mekari.mokaaddons.webhookconsumer.service.product.create;
 
 import java.time.OffsetDateTime;
 

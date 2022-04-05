@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.productexists;
+package com.mekari.mokaaddons.webhookconsumer.service.product.exists;
 
 import javax.sql.DataSource;
 
