@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemReceived;
+package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemreceived;
 
 import com.mekari.mokaaddons.common.webhook.moka.handler.EventRequest;
 

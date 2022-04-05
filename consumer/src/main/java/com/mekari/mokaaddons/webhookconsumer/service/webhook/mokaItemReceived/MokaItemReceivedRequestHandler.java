@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemReceived;
+package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemreceived;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
@@ -6,12 +6,12 @@ import com.mekari.mokaaddons.common.publisher.Publisher;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventHeader;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
-import com.mekari.mokaaddons.webhookconsumer.service.product.createProduct.CreateProductRequest;
-import com.mekari.mokaaddons.webhookconsumer.service.product.productExists.ProductExistsRequest;
-import com.mekari.mokaaddons.webhookconsumer.service.product.updateProduct.UpdateProductRequest;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent.Body;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent.Item;
+import com.mekari.mokaaddons.webhookconsumer.service.product.createproduct.CreateProductRequest;
+import com.mekari.mokaaddons.webhookconsumer.service.product.productexists.ProductExistsRequest;
+import com.mekari.mokaaddons.webhookconsumer.service.product.updateroduct.UpdateProductRequest;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemprocessed.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemprocessed.MokaItemProcessedEvent.Body;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemprocessed.MokaItemProcessedEvent.Item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

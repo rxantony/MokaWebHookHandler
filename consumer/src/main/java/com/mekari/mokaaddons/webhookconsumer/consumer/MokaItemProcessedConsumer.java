@@ -3,8 +3,8 @@ package com.mekari.mokaaddons.webhookconsumer.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedEvent;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemProcessed.MokaItemProcessedRequest;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemprocessed.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokaItemprocessed.MokaItemProcessedRequest;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
