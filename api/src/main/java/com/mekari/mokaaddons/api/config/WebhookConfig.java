@@ -36,7 +36,6 @@ public class WebhookConfig {
     }
 
     @Bean
-    @Scope("singleton")
     public EventNameClassMap eventClassMap() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class)

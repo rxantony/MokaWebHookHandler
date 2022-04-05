@@ -2,6 +2,7 @@ package com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
+import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage.NewItem;
@@ -16,7 +17,7 @@ import lombok.Builder;
 public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveAndPublishEventRequest> {
 
     private @Autowired EventSourceStorage eventStorage;
-    private @Autowired AmqpTemplate amqpTemplate;
+    private @Autowired Publisher publisher;
     private @Autowired ObjectMapper mapper;
 
     private final String publishToExchangeName;
@@ -31,7 +32,7 @@ public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveA
         Assert.notNull(config, "config must not be null");
         this.publishToExchangeName = config.publishToExchangeName;
         this.eventStorage = config.eventStorage;
-        this.amqpTemplate = config.amqpTemplate;
+        this.publisher = config.publisher;
         this.mapper = config.mapper;
     }
 
@@ -73,29 +74,29 @@ public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveA
                 header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString(),
                 publishToExchangeName);
 
-        amqpTemplate.convertAndSend(publishToExchangeName, null, event);
+        publisher.publish(publishToExchangeName, event);
     }
 
     @Builder
     public static class Config {
         public final String publishToExchangeName;
         public final EventSourceStorage eventStorage;
-        public final AmqpTemplate amqpTemplate;
+        public final Publisher publisher;
         public final ObjectMapper mapper;
 
         public Config(String publishToExchangeName
                 , EventSourceStorage eventStorage
-                , AmqpTemplate amqpTemplate
+                , Publisher publisher
                 , ObjectMapper mapper) {
             Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
             Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
             Assert.notNull(eventStorage, "eventStorage must not be null");
-            Assert.notNull(amqpTemplate, "amqpTemplate must not be null");
+            Assert.notNull(publisher, "publisher must not be null");
             Assert.notNull(mapper, "mapper must not be null");
 
             this.publishToExchangeName = publishToExchangeName.trim();
             this.eventStorage = eventStorage;
-            this.amqpTemplate = amqpTemplate;
+            this.publisher = publisher;
             this.mapper = mapper;
         }
     }

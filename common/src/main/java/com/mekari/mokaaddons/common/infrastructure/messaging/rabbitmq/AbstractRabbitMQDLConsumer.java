@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.consumer;
+package com.mekari.mokaaddons.common.infrastructure.messaging.rabbitmq;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class AbstractRabbitMQDeadLetterConsumer {
+public class AbstractRabbitMQDLConsumer {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired AmqpTemplate amqpTemplate;
@@ -34,16 +34,16 @@ public class AbstractRabbitMQDeadLetterConsumer {
      * for manual instantiation instead.
      * this constuctor is neccessary for springboot to instantiate this class.
      */
-    protected AbstractRabbitMQDeadLetterConsumer() {
+    protected AbstractRabbitMQDLConsumer() {
         init();
     }
 
-    protected AbstractRabbitMQDeadLetterConsumer(int maxRetriesCount) {
+    protected AbstractRabbitMQDLConsumer(int maxRetriesCount) {
         this.maxRetriesCount = maxRetriesCount;
         init();
     }
 
-    protected AbstractRabbitMQDeadLetterConsumer(Config config) {
+    protected AbstractRabbitMQDLConsumer(Config config) {
         Assert.notNull(config, "config must not be null");
 
         this.deadLetterStorage = config.deadLetterStorage;
@@ -56,7 +56,7 @@ public class AbstractRabbitMQDeadLetterConsumer {
 
     protected void init() {
         if (exchangeRoutingStrategy == null)
-            this.exchangeRoutingStrategy = AbstractRabbitMQDeadLetterConsumer::getExchangeRoutingKey;
+            this.exchangeRoutingStrategy = AbstractRabbitMQDLConsumer::getExchangeRoutingKey;
         sourceName = this.getClass().getName();
         logger = LogManager.getFormatterLogger(this.getClass());
     }

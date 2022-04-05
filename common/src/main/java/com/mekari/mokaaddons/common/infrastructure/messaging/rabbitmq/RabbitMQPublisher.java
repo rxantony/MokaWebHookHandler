@@ -1,15 +1,15 @@
-package com.mekari.mokaaddons.webhookconsumer.publisher;
+package com.mekari.mokaaddons.common.infrastructure.messaging.rabbitmq;
 
 import java.util.Map;
 
-import com.mekari.mokaaddons.common.publisher.Publisher;
+import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RabbitMqPublisher implements Publisher {
+public class RabbitMQPublisher implements Publisher {
     private @Autowired AmqpTemplate amqpTemplate;
     
     @Override

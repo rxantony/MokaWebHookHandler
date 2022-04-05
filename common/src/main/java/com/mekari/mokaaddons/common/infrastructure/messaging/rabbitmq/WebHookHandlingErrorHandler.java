@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.consumer;
+package com.mekari.mokaaddons.common.infrastructure.messaging.rabbitmq;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
