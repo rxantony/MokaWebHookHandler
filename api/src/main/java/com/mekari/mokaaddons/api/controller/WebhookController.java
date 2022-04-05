@@ -1,6 +1,6 @@
 package com.mekari.mokaaddons.api.controller;
 
-import com.mekari.mokaaddons.api.service.webhook.handleEvent.HandleEventRequest;
+import com.mekari.mokaaddons.api.service.webhook.handleevent.HandleEventRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
 import org.apache.logging.log4j.LogManager;
