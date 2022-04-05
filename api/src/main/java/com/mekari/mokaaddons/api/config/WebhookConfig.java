@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 import com.mekari.mokaaddons.api.service.webhook.handleevent.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.api.service.webhook.handleevent.MokaTransactionReceivedEvent;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
-import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent.EventNameClassMap;
@@ -16,7 +15,6 @@ import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class WebhookConfig {
