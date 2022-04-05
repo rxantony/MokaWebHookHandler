@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent;
+package com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent;
 
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 import com.mekari.mokaaddons.common.webhook.moka.handler.EventRequest;
@@ -12,6 +12,6 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class SaveAndPublishEventRequest implements EventRequest<AbstractEvent>{
+public class SaveThenPublishEventRequest implements EventRequest<AbstractEvent>{
     private AbstractEvent event;
 }

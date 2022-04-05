@@ -7,9 +7,9 @@ import com.mekari.mokaaddons.api.service.webhook.handleevent.MokaTransactionRece
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent.SaveAndPublishEventHandler;
-import com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent.SaveAndPublishEventRequest;
+import com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent.EventNameClassMap;
+import com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent.SaveThenPublishEventHandler;
+import com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent.SaveThenPublishEventRequest;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 
@@ -29,8 +29,8 @@ public class WebhookConfig {
     }
 
     @Bean
-    public AbstractVoidRequestHandler<SaveAndPublishEventRequest> saveAndPublishHandler() {
-        return new SaveAndPublishEventHandler(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE);
+    public AbstractVoidRequestHandler<SaveThenPublishEventRequest> saveAndPublishHandler() {
+        return new SaveThenPublishEventHandler(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE);
     }
 
     @Bean

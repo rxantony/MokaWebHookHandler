@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent;
+package com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
@@ -8,13 +8,12 @@ import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage.NewItem;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import lombok.Builder;
 
-public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveAndPublishEventRequest> {
+public class SaveThenPublishEventHandler extends AbstractVoidRequestHandler<SaveThenPublishEventRequest> {
 
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired Publisher publisher;
@@ -22,13 +21,13 @@ public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveA
 
     private final String publishToExchangeName;
 
-    public SaveAndPublishEventHandler(String publishToExchangeName) {
+    public SaveThenPublishEventHandler(String publishToExchangeName) {
         Assert.notNull(publishToExchangeName, "publishToExchangeName must not be null");
         Assert.isTrue(publishToExchangeName.trim().length() != 0, "publishToExchangeName must not be empty");
         this.publishToExchangeName = publishToExchangeName;
     }
 
-    public SaveAndPublishEventHandler(Config config) {
+    public SaveThenPublishEventHandler(Config config) {
         Assert.notNull(config, "config must not be null");
         this.publishToExchangeName = config.publishToExchangeName;
         this.eventStorage = config.eventStorage;
@@ -37,7 +36,7 @@ public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveA
     }
 
     @Override
-    protected void handleInternal(SaveAndPublishEventRequest request) throws Exception {
+    protected void handleInternal(SaveThenPublishEventRequest request) throws Exception {
         var event = request.getEvent();
         saveEvent(event);
         publishEvent(event);

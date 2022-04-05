@@ -8,8 +8,8 @@ import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.BuilderUtil;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.moka.handler.saveandpublishevent.SaveAndPublishEventRequest;
+import com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent.EventNameClassMap;
+import com.mekari.mokaaddons.common.webhook.moka.handler.savethenpublishevent.SaveThenPublishEventRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,7 @@ public class HandleEventRequestHandler extends AbstractVoidRequestHandler<Handle
             var eventName = jsonNode.get("header").get("event_name").asText();
             var eventCls = eventClsMap.gerEventClass(eventName);
             var event = (AbstractEvent)mapper.readValue(jsonNode.traverse(), eventCls);
-            var savePublishRequest = new SaveAndPublishEventRequest(event);
+            var savePublishRequest = new SaveThenPublishEventRequest(event);
             handlerManager.handle(savePublishRequest);
         }
         catch(Exception ex){

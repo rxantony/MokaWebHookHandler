@@ -1,5 +1,5 @@
 CREATE TABLE `event_source` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `data_id` varchar(45) NOT NULL,
   `event_date` timestamp(6) NOT NULL,
   `event_name` varchar(45) NOT NULL,

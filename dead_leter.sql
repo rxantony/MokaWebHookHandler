@@ -1,5 +1,5 @@
 CREATE TABLE `dead_letter` (
-  `Id` bigint NOT NULL AUTO_INCREMENT,
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
   `source` varchar(125) NOT NULL,
   `event_id` varchar(45) DEFAULT NULL,
   `payload` text,
