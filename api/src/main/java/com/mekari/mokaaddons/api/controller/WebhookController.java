@@ -1,6 +1,6 @@
 package com.mekari.mokaaddons.api.controller;
 
-import com.mekari.mokaaddons.api.service.webhook.handleevent.HandleEventRequest;
+import com.mekari.mokaaddons.api.service.webhook.savepublishevent.SavePublishEventRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +17,7 @@ public class WebhookController {
     // it respresents the api endpoint which will be called by partner.
     public void handle(String message) throws Exception{
         LOGGER.debug("receice webhook message, with payload:%s", message);
-        var request = HandleEventRequest.builder()
+        var request = SavePublishEventRequest.builder()
                         .json(message)
                         .sourceName(SOURCE_NAME)
                         .build();

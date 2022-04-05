@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.webhook.handleevent;
+package com.mekari.mokaaddons.api.service.webhook.savepublishevent;
 
 import java.time.OffsetDateTime;
 import java.util.Currency;

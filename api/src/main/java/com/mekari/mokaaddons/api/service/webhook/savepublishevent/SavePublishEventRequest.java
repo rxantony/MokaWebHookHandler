@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.webhook.handleevent;
+package com.mekari.mokaaddons.api.service.webhook.savepublishevent;
 
 import com.mekari.mokaaddons.common.handler.VoidRequest;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class HandleEventRequest implements VoidRequest{
+public class SavePublishEventRequest implements VoidRequest{
     private String json;
     private String sourceName;
 }

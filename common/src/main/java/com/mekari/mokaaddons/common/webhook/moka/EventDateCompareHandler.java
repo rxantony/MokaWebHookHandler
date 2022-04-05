@@ -1,9 +1,8 @@
-package com.mekari.mokaaddons.common.webhook.moka.service;
+package com.mekari.mokaaddons.common.webhook.moka;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
 
 import org.springframework.util.Assert;
 
