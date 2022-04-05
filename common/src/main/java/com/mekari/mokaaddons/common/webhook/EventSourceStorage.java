@@ -10,7 +10,7 @@ import lombok.Setter;
 
 public interface EventSourceStorage {
 
-    Optional<OffsetDateTime> getEventDate(String dataId) throws Exception;
+    Optional<OffsetDateTime> getLastEventDate(String dataId) throws Exception;
 
     void insert(NewItem item) throws Exception;
 

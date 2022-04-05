@@ -28,7 +28,7 @@ public class EventDateCompareHandler<TRequest extends EventRequest<?>> extends A
         logger.debug("eventId:%s-eventName:%s-bodyId:%s tries to connect to db for updatedAt date comparing ", 
                 header.getEventId(), header.getEventName(), body.getData().getId());
         
-        var eventDate = storage.getEventDate(body.getData().getId().toString());
+        var eventDate = storage.getLastEventDate(body.getData().getId().toString());
         if(eventDate.isEmpty())
             throw new EventSourceNotFoundException(request.getEvent());
 

@@ -18,7 +18,7 @@ public class DbEventSourceStorage implements EventSourceStorage {
     }
 
     @Override
-    public Optional<OffsetDateTime> getEventDate(String dataId) throws Exception {
+    public Optional<OffsetDateTime> getLastEventDate(String dataId) throws Exception {
         try (var conn = dataSource.getConnection()) {
             conn.setAutoCommit(true);
             try (var stmt = conn.prepareStatement(GET_EVENTDATE_SQL)) {
