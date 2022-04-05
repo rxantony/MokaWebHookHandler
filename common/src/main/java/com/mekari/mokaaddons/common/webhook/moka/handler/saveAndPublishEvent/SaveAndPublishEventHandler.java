@@ -5,7 +5,7 @@ import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage.NewItem;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEvent;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveA
         publishEvent(event);
     }
 
-    protected void saveEvent(AbstractMokaEvent event) throws Exception {
+    protected void saveEvent(AbstractEvent event) throws Exception {
         var header = event.getHeader();
         var data = event.getBody().getData();
 
@@ -64,7 +64,7 @@ public class SaveAndPublishEventHandler extends AbstractVoidRequestHandler<SaveA
                     .build());
     }
 
-    protected void publishEvent(AbstractMokaEvent event) {
+    protected void publishEvent(AbstractEvent event) {
         var header = event.getHeader();
         var data = event.getBody().getData();
 

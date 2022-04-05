@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MokaEventProcessedConsumer {
+public class MokaItemProcessedConsumer {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired RequestHandlerManager requestManager;
-    private final static Logger LOGGER = LogManager.getFormatterLogger(MokaEventProcessedConsumer.class);
+    private final static Logger LOGGER = LogManager.getFormatterLogger(MokaItemProcessedConsumer.class);
 
     @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_PROCESSED_QUEUE)
     public void consume(Message message, Channel channel) throws Exception {

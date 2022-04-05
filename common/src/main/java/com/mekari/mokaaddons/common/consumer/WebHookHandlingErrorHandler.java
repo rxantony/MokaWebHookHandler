@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.common.consumer;
 
 import com.fasterxml.jackson.core.JacksonException;
-import com.mekari.mokaaddons.common.webhook.moka.MokaEventSourceNotFoundException;
+import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
 
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.util.ErrorHandler;
@@ -16,7 +16,7 @@ public class WebHookHandlingErrorHandler implements ErrorHandler{
              */
             if(t.getCause() instanceof JacksonException)
                 return;
-            if(t.getCause() instanceof MokaEventSourceNotFoundException)
+            if(t.getCause() instanceof EventSourceNotFoundException)
                 return;
 
         throw new AmqpRejectAndDontRequeueException(t.getMessage());  

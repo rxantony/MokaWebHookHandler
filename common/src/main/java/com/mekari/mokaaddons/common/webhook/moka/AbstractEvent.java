@@ -7,8 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractMokaEvent implements Event {
+public abstract class AbstractEvent implements Event {
     private MokaEventHeader header;
     
-    public abstract AbstractMokaEventBody<?> getBody();
+    public abstract AbstractEventBody<?> getBody();
 }

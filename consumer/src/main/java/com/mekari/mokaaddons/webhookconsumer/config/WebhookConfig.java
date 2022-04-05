@@ -7,8 +7,8 @@ import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
-import com.mekari.mokaaddons.common.webhook.moka.handler.MokaCompareEventDate;
-import com.mekari.mokaaddons.common.webhook.moka.handler.MokaEventLock;
+import com.mekari.mokaaddons.common.webhook.moka.handler.EventDateCompareHandler;
+import com.mekari.mokaaddons.common.webhook.moka.handler.EventLockHandler;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
@@ -41,8 +41,8 @@ public class WebhookConfig {
             @Qualifier("eventstore") DataSource dataSource, AbstractVoidRequestHandler<MokaItemReceivedRequest> handler,
             EventSourceStorage eventSourceStorage, LockTrackerStorage lockTrackerStorage) {
 
-        return new MokaEventLock<>(dataSource, lockTrackerStorage,
-                new MokaCompareEventDate<>(eventSourceStorage, handler));
+        return new EventLockHandler<>(dataSource, lockTrackerStorage,
+                new EventDateCompareHandler<>(eventSourceStorage, handler));
     }
 
     @Bean
@@ -51,7 +51,7 @@ public class WebhookConfig {
             AbstractVoidRequestHandler<MokaItemProcessedRequest> handler, EventSourceStorage eventSourceStorage,
             LockTrackerStorage lockTrackerStorage) {
 
-        return new MokaEventLock<>(dataSource, lockTrackerStorage,
-                new MokaCompareEventDate<>(eventSourceStorage, handler));
+        return new EventLockHandler<>(dataSource, lockTrackerStorage,
+                new EventDateCompareHandler<>(eventSourceStorage, handler));
     }
 }

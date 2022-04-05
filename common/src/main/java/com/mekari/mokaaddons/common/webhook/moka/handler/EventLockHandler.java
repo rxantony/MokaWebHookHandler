@@ -11,12 +11,12 @@ import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractMokaEvent;
-import com.mekari.mokaaddons.common.webhook.moka.MokaEventSourceNotFoundException;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
 
 import org.springframework.util.Assert;
 
-public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
+public class EventLockHandler<TRequest extends EventRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
@@ -25,7 +25,7 @@ public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends Abstrac
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
 
-    public MokaEventLock(DataSource dataSource, LockTrackerStorage lockTracker, RequestHandler<TRequest, Void> next) {
+    public EventLockHandler(DataSource dataSource, LockTrackerStorage lockTracker, RequestHandler<TRequest, Void> next) {
         Assert.notNull(dataSource, "dataSource must not be null");
         Assert.notNull(lockTracker, "lockTracker must not be null");
         Assert.notNull(next, "next must not be null");
@@ -50,21 +50,21 @@ public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends Abstrac
             }
         }
     }
-    private Object[] getConnIdAndEventSourceId(Connection conn, AbstractMokaEvent event) throws Exception {
+    private Object[] getConnIdAndEventSourceId(Connection conn, AbstractEvent event) throws Exception {
         try (var stmt = conn.prepareStatement(GET_CONNID_EVID_SQL)) {
             stmt.setString(1, event.getBody().getData().getId().toString());
             try (var rs = stmt.executeQuery()) {
                 rs.next();
                 var connId = rs.getInt(1);
                 if (!rs.next())
-                    throw new MokaEventSourceNotFoundException(event);
+                    throw new EventSourceNotFoundException(event);
                 var evsId = rs.getString(1);
                 return new Object[] { connId, evsId };
             }
         }
     }
 
-    private NewItem lock(Connection conn, AbstractMokaEvent event) throws Exception {
+    private NewItem lock(Connection conn, AbstractEvent event) throws Exception {
         var ctx = getConnIdAndEventSourceId(conn, event);
         var connId = (int) ctx[0];
         var evsId = (String) ctx[1];
@@ -80,7 +80,7 @@ public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends Abstrac
             stmt.setPoolable(false);
             try (var rs = stmt.executeQuery(query)) {
                 if (!rs.next())
-                    throw new MokaEventSourceNotFoundException(
+                    throw new EventSourceNotFoundException(
                             String.format("eventId:%s-eventName:%s-bodyId:%s no event_source with id:%s",
                                     header.getEventId(), header.getEventName(), body.getData().getId(), evsId),
                             event);
@@ -107,7 +107,7 @@ public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends Abstrac
         return lockItem;
     }
 
-    private void releaseLock(NewItem lockItem, Connection conn, AbstractMokaEvent event) throws Exception {
+    private void releaseLock(NewItem lockItem, Connection conn, AbstractEvent event) throws Exception {
         var header = event.getHeader();
         var body = event.getBody();
 
@@ -124,7 +124,7 @@ public class MokaEventLock<TRequest extends MokaEventRequest<?>> extends Abstrac
         }
     }
 
-    private Connection createConnection(AbstractMokaEvent event) throws SQLException {
+    private Connection createConnection(AbstractEvent event) throws SQLException {
         var header = event.getHeader();
         var body = event.getBody();
         
