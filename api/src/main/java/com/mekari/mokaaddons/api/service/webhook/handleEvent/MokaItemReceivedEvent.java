@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEventBody;
+import com.mekari.mokaaddons.common.webhook.moka.EventBody;
 import com.mekari.mokaaddons.common.webhook.moka.EventData;
 
 import lombok.Getter;
@@ -87,7 +87,7 @@ public class MokaItemReceivedEvent extends AbstractEvent {
 
     @Getter
     @Setter
-    public static class Body extends AbstractEventBody<Item> {
+    public static class Body implements EventBody<Item> {
         @JsonProperty("item")
         private Item data;
     }
