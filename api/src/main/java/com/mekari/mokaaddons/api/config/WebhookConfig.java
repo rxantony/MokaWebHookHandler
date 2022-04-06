@@ -6,8 +6,8 @@ import com.mekari.mokaaddons.api.service.outlet.checkoutlet.v2.CheckOutletReques
 import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.api.webhook.event.MokaTransactionReceivedEvent;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.moka.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 
@@ -30,12 +30,12 @@ public class WebhookConfig {
     @Bean
     public EventNameClassMap eventClassMap() {
         return new EventNameClassMap()
-                .add("moka.item.added", MokaItemReceivedEvent.class, null)
-                .add("moka.item.updated", MokaItemReceivedEvent.class, null)
-                .add("moka.item.deleted", MokaItemReceivedEvent.class, null)
-                .add("moka.transaction.created", MokaTransactionReceivedEvent.class, null)
-                .add("moka.transaction.updated", MokaTransactionReceivedEvent.class, null)
-                .add("moka.transaction.refunded", MokaTransactionReceivedEvent.class, null);
+                .add("moka.item.added", MokaItemReceivedEvent.class)
+                .add("moka.item.updated", MokaItemReceivedEvent.class)
+                .add("moka.item.deleted", MokaItemReceivedEvent.class)
+                .add("moka.transaction.created", MokaTransactionReceivedEvent.class)
+                .add("moka.transaction.updated", MokaTransactionReceivedEvent.class)
+                .add("moka.transaction.refunded", MokaTransactionReceivedEvent.class);
     }
 
     @Bean

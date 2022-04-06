@@ -2,9 +2,8 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
+import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.MokaItemReceivedRequest;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,10 +13,16 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Sample consumer which handles all events by leveraging configured event name class and request mapping through EventNameClassMap
+ * see EventNameClassMap class which serves as mapper.
+ * see WebhookConfig to know how to map them using EventNameClassMap. 
+ */
 @Component
 public class MokaItemReceivedConsumer {
 
     private @Autowired ObjectMapper mapper;
+    private @Autowired EventNameClassMap eventClsMap;
     private @Autowired RequestHandlerManager requestManager;
     private final static Logger LOGGER = LogManager.getFormatterLogger(MokaItemReceivedConsumer.class);
 
@@ -25,61 +30,12 @@ public class MokaItemReceivedConsumer {
     public void consume(Message message, Channel channel) throws Exception {
         var json = new String(message.getBody());
         LOGGER.debug("consume message:%s", json);
-        var event = mapper.readValue(json, MokaItemReceivedEvent.class);
-        var request = MokaItemReceivedRequest.builder()
-                .event(event)
-                .build();
+        
+        var jsonNode = mapper.readTree(json);
+        var eventName = jsonNode.get("header").get("event_name").asText();
+        var mapItem = eventClsMap.get(eventName);
+        var event = mapper.readValue(jsonNode.traverse(), mapItem.eventClass);
+        var request = mapItem.requestFactory.apply(event);
         requestManager.handle(request);
     }
-    /*
-    in kafka case, whether we consume from same topic with different consumer groups.
-    
-    //saving to db
-    @KafkaListener(topic = "MokaIremReceived")
-    public void consume(Message message, Channel channel) throws Exception {
-        var json = new String(message.getBody());
-        var event = mapper.readValue(json, MokaItemReceivedEvent.class);
-        var request = MokaItemReceivedRequest.builder()
-                .event(event)
-                .build();
-        requestManager.handle(request);
-    }
-
-    //sending email
-    @KafkaListener(topic = "MokaIremReceived")
-    public void consume(Message message, Channel channel) throws Exception {
-        var json = new String(message.getBody());
-        var event = mapper.readValue(json, MokaItemReceivedEvent.class);
-        var request = SendEmailRequest.builder()
-                .recipients(recipients)
-                .bcc(bcc)
-                .subject(subject)
-                .body(event)
-                .build();
-        requestManager.handle(request);
-    }
-
-    //sending log
-    @KafkaListener(topic = "MokaIremReceived")
-    public void consume(Message message, Channel channel) throws Exception {
-        var json = new String(message.getBody());
-        var event = mapper.readValue(json, MokaItemReceivedEvent.class);
-        var request = SendLogRequest.builder()
-                .log(event)
-                .build();
-        requestManager.handle(request);
-    }
-
-    //sending event to flock
-    @KafkaListener(topic = "MokaIremReceived")
-    public void consume(Message message, Channel channel) throws Exception {
-        var json = new String(message.getBody());
-        var event = mapper.readValue(json, MokaItemReceivedEvent.class);
-        var request = SendToFlockRequest.builder()
-                .channel(channel)
-                .event(event)
-                .build();
-        requestManager.handle(request);
-    }
-    */
 }
