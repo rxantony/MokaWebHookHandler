@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.EventLoggerHandler;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.moka.EventDateCompareHandler;
@@ -41,7 +42,11 @@ public class WebhookConfig {
             @Qualifier("eventstore") DataSource dataSource, AbstractVoidRequestHandler<MokaItemReceivedRequest> handler,
             EventSourceStorage eventSourceStorage, LockTrackerStorage lockTrackerStorage) {
 
-        return new EventLockHandler<>(dataSource, lockTrackerStorage,
+        //return new EventLockHandler<>(dataSource, lockTrackerStorage,
+        //        new EventDateCompareHandler<>(eventSourceStorage, handler));
+
+
+         return new EventLoggerHandler<>(
                 new EventDateCompareHandler<>(eventSourceStorage, handler));
     }
 

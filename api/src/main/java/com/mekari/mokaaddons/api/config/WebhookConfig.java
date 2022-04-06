@@ -2,6 +2,7 @@ package com.mekari.mokaaddons.api.config;
 
 import javax.sql.DataSource;
 
+import com.mekari.mokaaddons.api.service.outlet.checkoutlet.v2.CheckOutletRequestHandler;
 import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.api.webhook.event.MokaTransactionReceivedEvent;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
@@ -35,5 +36,10 @@ public class WebhookConfig {
                 .add("moka.transaction.created", MokaTransactionReceivedEvent.class, null)
                 .add("moka.transaction.updated", MokaTransactionReceivedEvent.class, null)
                 .add("moka.transaction.refunded", MokaTransactionReceivedEvent.class, null);
+    }
+
+    @Bean
+    public CheckOutletRequestHandler chechOutlet(){
+        return new CheckOutletRequestHandler();
     }
 }

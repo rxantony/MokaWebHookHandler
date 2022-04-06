@@ -46,6 +46,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 				Runnable r = () -> {
 					try {
 						webhookController.handle(event.toString());
+						//webhookController.getOulets(1);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

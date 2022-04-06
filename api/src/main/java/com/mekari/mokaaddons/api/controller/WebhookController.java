@@ -1,5 +1,9 @@
 package com.mekari.mokaaddons.api.controller;
 
+import java.util.List;
+
+import com.mekari.mokaaddons.api.service.outlet.outletlist.GetOutletListRequest;
+import com.mekari.mokaaddons.api.service.outlet.outletlist.OutletResult;
 import com.mekari.mokaaddons.api.webhook.service.event.savepublish.SavePublishEventRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
@@ -23,4 +27,11 @@ public class WebhookController {
                         .build();
         requestManager.handle(request);
     }
+    public List<OutletResult> getOulets(int companyId) throws Exception{
+        var request = GetOutletListRequest.builder()
+                        .companyId(companyId)
+                        .build();
+        return requestManager.handle(request);
+    }
+
 }
