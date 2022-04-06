@@ -27,7 +27,7 @@ public class MokaItemReceivedEvent extends AbstractEvent {
 
     @Getter
     @Setter
-    public static class Body implements EventBody<Item> {
+    public static class Body implements EventBody {
 
         @JsonProperty("item")
         private Item data;

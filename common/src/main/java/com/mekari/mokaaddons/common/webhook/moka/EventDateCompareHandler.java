@@ -6,7 +6,7 @@ import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 
 import org.springframework.util.Assert;
 
-public class EventDateCompareHandler<TRequest extends EventRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
+public class EventDateCompareHandler<TRequest extends EventRequest> extends AbstractVoidRequestHandler<TRequest> {
 
     private final EventSourceStorage storage;
     private final RequestHandler<TRequest, Void> next;

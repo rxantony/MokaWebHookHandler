@@ -229,7 +229,7 @@ public class MokaTransactionReceivedEvent extends AbstractEvent {
 
     @Getter
     @Setter
-    public static class Body implements EventBody<Transaction> {
+    public static class Body implements EventBody {
         @JsonProperty("transaction")
         private Transaction data;
     }

@@ -14,7 +14,7 @@ import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
 
 import org.springframework.util.Assert;
 
-public class EventLockHandler<TRequest extends EventRequest<?>> extends AbstractVoidRequestHandler<TRequest> {
+public class EventLockHandler<TRequest extends EventRequest> extends AbstractVoidRequestHandler<TRequest> {
 
     private final DataSource dataSource;
     private final LockTrackerStorage lockTracker;
