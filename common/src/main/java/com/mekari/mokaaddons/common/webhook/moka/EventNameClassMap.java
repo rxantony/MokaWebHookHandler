@@ -1,18 +1,23 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.moka;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import org.springframework.util.Assert;
 
-import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 import lombok.AllArgsConstructor;
 
 public class EventNameClassMap {
 
     private final HashMap<String, Item> eventClassMaps = new HashMap<>();
 
-    public <TEvent extends Event, TRequest extends EventRequest> EventNameClassMap add(String eventName,
+    public <TEvent extends AbstractEvent, TRequest extends EventRequest> EventNameClassMap add(String eventName,
+        Class<TEvent> eventClass) {
+
+        return add(eventName, eventClass, null);
+    }
+
+    public <TEvent extends AbstractEvent, TRequest extends EventRequest> EventNameClassMap add(String eventName,
             Class<TEvent> eventClass, Class<TRequest> requestClass) {
 
         Assert.notNull(eventClass, "eventClass must not be null");
@@ -21,19 +26,19 @@ public class EventNameClassMap {
     }
 
     @SuppressWarnings("unchecked") 
-    public Class<Event> gerEventClass(String eventName) {
+    public Class<AbstractEvent> gerEventClass(String eventName) {
         var item  = eventClassMaps.get(eventName);
         if(item == null) 
             return null;
-        return (Class<Event>) item.eventClass;
+        return (Class<AbstractEvent>) item.eventClass;
     }
 
     @SuppressWarnings("unchecked") 
-    public Class<Event> gerRequestlass(String eventName) {
+    public Class<EventRequest> gerRequestlass(String eventName) {
         var item  = eventClassMaps.get(eventName);
         if(item == null) 
             return null;
-        return (Class<Event>) item.requestClass;
+        return (Class<EventRequest>) item.requestClass;
     }
 
     @AllArgsConstructor
