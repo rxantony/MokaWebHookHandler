@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.api.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.api.service.webhook.savepublishevent.EventNameClassMap;
-import com.mekari.mokaaddons.api.service.webhook.savepublishevent.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.api.service.webhook.savepublishevent.MokaTransactionReceivedEvent;
+import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.api.webhook.event.MokaTransactionReceivedEvent;
+import com.mekari.mokaaddons.api.webhook.service.event.savepublish.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;

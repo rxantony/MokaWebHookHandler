@@ -1,10 +1,10 @@
-package com.mekari.mokaaddons.webhookconsumer.consumer;
+package com.mekari.mokaaddons.webhookconsumer.webhook.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapos.item.received.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapos.item.received.MokaItemReceivedRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.MokaItemReceivedRequest;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +24,7 @@ public class MokaItemReceivedConsumer {
     @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_RECEIVED_QUEUE)
     public void consume(Message message, Channel channel) throws Exception {
         var json = new String(message.getBody());
+        LOGGER.debug("consume message:%s", json);
         var event = mapper.readValue(json, MokaItemReceivedEvent.class);
         var request = MokaItemReceivedRequest.builder()
                 .event(event)

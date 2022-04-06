@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.webhook.savepublishevent;
+package com.mekari.mokaaddons.api.webhook.service.event.savepublish;
 
 import com.mekari.mokaaddons.common.handler.VoidRequest;
 

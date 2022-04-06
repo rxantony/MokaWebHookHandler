@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.webhook.savepublishevent;
+package com.mekari.mokaaddons.api.webhook.service.event.savepublish;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

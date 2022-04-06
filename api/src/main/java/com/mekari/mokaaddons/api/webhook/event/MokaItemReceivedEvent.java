@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.webhook.savepublishevent;
+package com.mekari.mokaaddons.api.webhook.event;
 
 import java.time.OffsetDateTime;
 

@@ -12,8 +12,8 @@ import com.mekari.mokaaddons.common.webhook.moka.EventLockHandler;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapos.item.processed.MokaItemProcessedRequest;
-import com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapos.item.received.MokaItemReceivedRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.MokaItemProcessedRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.MokaItemReceivedRequest;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

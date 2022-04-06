@@ -1,6 +1,7 @@
-package com.mekari.mokaaddons.webhookconsumer.service.webhook.mokapos.item.processed;
+package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed;
 
 import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
