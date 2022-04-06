@@ -30,7 +30,7 @@ public class EventNameClassMap {
         var item  = eventClassMaps.get(eventName);
         if(item == null) 
             return null;
-        return (Class<AbstractEvent>) item.eventClass;
+        return (Class<AbstractEvent>) item.eventType;
     }
 
     @SuppressWarnings("unchecked") 
@@ -38,12 +38,12 @@ public class EventNameClassMap {
         var item  = eventClassMaps.get(eventName);
         if(item == null) 
             return null;
-        return (Class<EventRequest>) item.requestClass;
+        return (Class<EventRequest>) item.requestType;
     }
 
     @AllArgsConstructor
     public static class Item {
-        public final Type eventClass;
-        public final Type requestClass;
+        public final Type eventType;
+        public final Type requestType;
     }
 }
