@@ -40,7 +40,7 @@ public class WebhookConfig {
         return new DbLockTrackerStorage(dataSource);
     }
 
-    @Bean
+    @Bean("default")
     public EventNameClassMap eventClassMap() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class, (e)-> new MokaItemReceivedRequest(e))
@@ -61,7 +61,7 @@ public class WebhookConfig {
                 new EventDateCompareHandler<>(eventSourceStorage, handler));
     }
 
-    @Bean
+    @Bean()
     public AbstractVoidRequestHandler<MokaItemProcessedRequest> mokaItemEventProcessedHandler(
             @Qualifier("eventstore") DataSource dataSource,
             AbstractVoidRequestHandler<MokaItemProcessedRequest> handler, EventSourceStorage eventSourceStorage,
