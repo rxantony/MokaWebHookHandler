@@ -9,13 +9,15 @@ import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.product.create.CreateProductRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.exists.ProductExistsRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.product.update.UpdateProductRequest;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.*;
-import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent.*;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent.Body;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent.Item;
+import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class MokaItemReceivedRequestHandler extends AbstractVoidRequestHandler<MokaItemReceivedRequest> {
 
     private @Autowired Publisher publisher;

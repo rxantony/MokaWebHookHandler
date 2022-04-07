@@ -5,9 +5,9 @@ import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class MokaItemProcessedRequestHandler extends AbstractVoidRequestHandler<MokaItemProcessedRequest> {
 
     private @Autowired Publisher publisher;
