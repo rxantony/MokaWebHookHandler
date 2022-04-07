@@ -28,7 +28,7 @@
     ],
     "compounds": [
         {
-            "name": "Debug-mokaaddons-api-webhooconsumer",
+            "name": "debug-mokaaddons-api-webhooconsumer",
             "configurations": ["debug-mokaaddons-api", "debug-mokaaddons-webhookconsumer"]
         }
     ]
