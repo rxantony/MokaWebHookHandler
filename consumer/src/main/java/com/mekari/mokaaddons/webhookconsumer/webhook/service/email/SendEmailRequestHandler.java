@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.service.email;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class SendEmailRequestHandler extends AbstractVoidRequestHandler<SendEmailRequest> {
 
     @Override
