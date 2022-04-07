@@ -9,13 +9,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-public abstract class AbstractEventMappedConsumer {
+public abstract class AbstractEventMapConsumer {
     private @Autowired ObjectMapper mapper;
     private @Autowired RequestHandlerManager requestManager;
     private final EventNameClassMap eventClassMap;
     protected final Logger logger;
 
-    protected AbstractEventMappedConsumer(EventNameClassMap eventClassMap){
+    protected AbstractEventMapConsumer(EventNameClassMap eventClassMap){
         Assert.notNull(eventClassMap, "eventClassMap must not be null");
         this.eventClassMap = eventClassMap;
         logger = LogManager.getFormatterLogger(this.getClass());

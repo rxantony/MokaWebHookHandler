@@ -1,13 +1,13 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.consumer;
 
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.consumer.AbstractEventMappedConsumer;
+import com.mekari.mokaaddons.common.webhook.consumer.AbstractEventMapConsumer;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.rabbitmq.client.Channel;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
  * see WebhookConfig to know how to map them using EventNameClassMap. 
  */
 @Component
-public class MokaItemReceivedConsumer extends AbstractEventMappedConsumer {
+public class MokaItemReceivedConsumer extends AbstractEventMapConsumer {
 
-    public MokaItemReceivedConsumer(@Qualifier("default") EventNameClassMap eventClassMap) {
+    public MokaItemReceivedConsumer(@Autowired EventNameClassMap eventClassMap) {
         super(eventClassMap);
     }
 

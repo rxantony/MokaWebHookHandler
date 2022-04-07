@@ -40,7 +40,7 @@ public class WebhookConfig {
         return new DbLockTrackerStorage(dataSource);
     }
 
-    @Bean("default")
+    @Bean()
     public EventNameClassMap eventClassMap() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class, (e)-> new MokaItemReceivedRequest(e))
