@@ -16,6 +16,7 @@ import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.email.SendEmailRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.MokaItemProcessedRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.MokaItemReceivedRequest;
 
@@ -40,13 +41,22 @@ public class WebhookConfig {
         return new DbLockTrackerStorage(dataSource);
     }
 
-    @Bean()
-    public EventNameClassMap eventClassMap() {
+    @Bean("save.publish")
+    public EventNameClassMap eventClassMapSavePublish() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class, (e)-> new MokaItemReceivedRequest(e))
                 .add("moka.item.updated", MokaItemReceivedEvent.class, (e)-> new MokaItemReceivedRequest(e))
                 .add("moka.item.deleted", MokaItemReceivedEvent.class, (e)-> new MokaItemReceivedRequest(e))
                 .add("moka.item.processed", MokaItemProcessedEvent.class, (e)-> new MokaItemProcessedRequest(e));
+    }
+
+    @Bean("send.email")
+    public EventNameClassMap eventClassMapSendEmail() {
+        return new EventNameClassMap()
+                .add("moka.item.added", MokaItemReceivedEvent.class, (e)-> new SendEmailRequest(e))
+                .add("moka.item.updated", MokaItemReceivedEvent.class, (e)-> new SendEmailRequest(e))
+                .add("moka.item.deleted", MokaItemReceivedEvent.class, (e)-> new SendEmailRequest(e))
+                .add("moka.item.processed", MokaItemProcessedEvent.class, (e)-> new SendEmailRequest(e));
     }
     
     @Bean

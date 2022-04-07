@@ -7,7 +7,6 @@ import com.rabbitmq.client.Channel;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +16,9 @@ import org.springframework.stereotype.Component;
  * see WebhookConfig to know how to map them using EventNameClassMap. 
  */
 @Component
-public class MokaItemReceivedConsumer extends AbstractEventMapConsumer {
+public class MokaSendEmailEventReceivedConsumer extends AbstractEventMapConsumer {
 
-    public MokaItemReceivedConsumer(@Qualifier("save.publish") EventNameClassMap eventClassMap) {
+    public MokaSendEmailEventReceivedConsumer(@Qualifier("send.email") EventNameClassMap eventClassMap) {
         super(eventClassMap);
     }
 
