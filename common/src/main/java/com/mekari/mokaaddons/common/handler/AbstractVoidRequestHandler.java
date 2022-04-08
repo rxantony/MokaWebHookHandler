@@ -3,7 +3,7 @@ package com.mekari.mokaaddons.common.handler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class AbstractVoidRequestHandler<TRequest extends VoidRequest>
+public abstract class AbstractVoidRequestHandler<TRequest extends Request<Void>>
         implements RequestHandler<TRequest, Void> {
     protected final Logger logger;
 
