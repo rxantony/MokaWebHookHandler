@@ -16,7 +16,7 @@ import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.email.SendEmailRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.email.send.SendEmailRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.MokaItemProcessedRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.MokaItemReceivedRequest;
 
