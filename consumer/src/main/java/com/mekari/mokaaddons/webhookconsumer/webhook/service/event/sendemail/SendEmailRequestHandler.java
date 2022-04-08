@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.service.email.send;
+package com.mekari.mokaaddons.webhookconsumer.webhook.service.event.sendemail;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 
