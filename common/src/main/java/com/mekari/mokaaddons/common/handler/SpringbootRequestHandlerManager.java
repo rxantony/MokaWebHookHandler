@@ -9,17 +9,9 @@ import org.springframework.util.Assert;
 @Component
 public class SpringbootRequestHandlerManager implements RequestHandlerManager {
 
-    private @Autowired ApplicationContext appContext;
-
-    /**
-     * do not use this default constructor, using another parameterized constructors
-     * for manual instantiation instead.
-     * this constuctor is neccessary for springboot to instantiate this class.
-     */
-    public SpringbootRequestHandlerManager() {
-    }
-
-    public SpringbootRequestHandlerManager(ApplicationContext appContext) {
+    private ApplicationContext appContext;
+    
+    public SpringbootRequestHandlerManager(@Autowired ApplicationContext appContext) {
         Assert.notNull(appContext, "appContext");
         this.appContext = appContext;
     }
