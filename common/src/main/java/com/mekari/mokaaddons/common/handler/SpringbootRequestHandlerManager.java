@@ -25,8 +25,8 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
         var beanName = appContext.getBeanNamesForType(requestHandlerType);
         if(beanName.length == 0)
             throw new IllegalArgumentException("No handler for request:" + request.getClass().getName());
-        var queryHandler = (RequestHandler<TRequest, TResult>) appContext.getBean(beanName[beanName.length - 1]);
-        return queryHandler.handle(request);
+        var requestHandler = (RequestHandler<TRequest, TResult>) appContext.getBean(beanName[beanName.length - 1]);
+        return requestHandler.handle(request);
     }
 
 }
