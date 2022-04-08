@@ -20,9 +20,9 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
     @SuppressWarnings("unchecked")
     public <TRequest extends Request<TResult>, TResult> TResult handle(TRequest request) throws Exception {
         var requestCls = request.getClass();
-        var queryHandlerType = ResolvableType.forClassWithGenerics(RawRequestHandler.class,
+        var requestHandlerType = ResolvableType.forClassWithGenerics(RawRequestHandler.class,
                 ResolvableType.forClass(requestCls));
-        var beanName = appContext.getBeanNamesForType(queryHandlerType);
+        var beanName = appContext.getBeanNamesForType(requestHandlerType);
         if(beanName.length == 0)
             throw new IllegalArgumentException("No handler for request:" + request.getClass().getName());
         var queryHandler = (RequestHandler<TRequest, TResult>) appContext.getBean(beanName[beanName.length - 1]);
