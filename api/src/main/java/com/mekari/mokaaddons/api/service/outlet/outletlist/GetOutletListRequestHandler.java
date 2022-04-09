@@ -8,9 +8,12 @@ import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+/**
+ * sample request handler
+ */
+@Service
 public class GetOutletListRequestHandler implements RequestHandler<GetOutletListRequest, List<OutletResult>> {
 
     private @Autowired RequestHandlerManager requestManager;

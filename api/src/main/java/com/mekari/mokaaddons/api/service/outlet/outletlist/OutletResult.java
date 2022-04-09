@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * sample request result
+ */
+
 @Getter
 @Setter
 @Builder

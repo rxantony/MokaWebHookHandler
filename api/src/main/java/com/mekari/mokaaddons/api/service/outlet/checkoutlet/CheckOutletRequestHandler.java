@@ -2,9 +2,12 @@ package com.mekari.mokaaddons.api.service.outlet.checkoutlet;
 
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+/**
+ * sample request handler
+ */
+@Service
 public class CheckOutletRequestHandler implements RequestHandler<CheckOutletRequest, Boolean> {
 
     @Override
