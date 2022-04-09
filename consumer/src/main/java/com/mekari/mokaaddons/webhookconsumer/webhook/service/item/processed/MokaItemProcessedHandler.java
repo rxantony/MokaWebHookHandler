@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MokaItemProcessedRequestHandler extends AbstractVoidRequestHandler<MokaItemProcessedRequest> {
+public class MokaItemProcessedHandler extends AbstractVoidRequestHandler<MokaItemProcessedRequest> {
 
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager requestManager;

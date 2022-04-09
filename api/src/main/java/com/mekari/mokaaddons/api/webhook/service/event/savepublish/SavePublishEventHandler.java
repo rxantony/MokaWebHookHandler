@@ -16,17 +16,18 @@ import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SavePublishEventRequestHandler extends AbstractVoidRequestHandler<SavePublishEventRequest> {
+public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePublishEventRequest> {
     private @Autowired ObjectMapper mapper;
-    private @Autowired EventNameClassMap eventClsMap;
     private @Autowired DeadLetterStorage deadLetterStorage;
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired Publisher publisher;
+    private @Autowired @Qualifier("save.publish.event") EventNameClassMap eventClsMap;
 
-    private static final Logger LOGGER = LogManager.getFormatterLogger(SavePublishEventRequestHandler.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(SavePublishEventHandler.class);
 
     @Override
     protected void handleInternal(SavePublishEventRequest request) throws Exception{

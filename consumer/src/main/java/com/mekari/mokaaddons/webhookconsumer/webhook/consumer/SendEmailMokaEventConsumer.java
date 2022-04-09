@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
  * see WebhookConfig to know how to map them using EventNameClassMap. 
  */
 @Component
-public class MokaSendEmailEventReceivedConsumer extends AbstractEventMapConsumer {
+public class SendEmailMokaEventConsumer extends AbstractEventMapConsumer {
 
-    public MokaSendEmailEventReceivedConsumer(@Qualifier("send.email") EventNameClassMap eventClassMap) {
+    public SendEmailMokaEventConsumer(@Qualifier("send.email.event") EventNameClassMap eventClassMap) {
         super(eventClassMap);
     }
 

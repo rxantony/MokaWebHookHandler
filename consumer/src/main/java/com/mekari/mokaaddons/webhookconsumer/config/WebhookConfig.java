@@ -41,7 +41,7 @@ public class WebhookConfig {
         return new DbLockTrackerStorage(dataSource);
     }
 
-    @Bean("save.publish")
+    @Bean("save.publish.event")
     public EventNameClassMap eventClassMapSavePublish() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class, (e)-> new MokaItemReceivedRequest(e))
@@ -50,7 +50,7 @@ public class WebhookConfig {
                 .add("moka.item.processed", MokaItemProcessedEvent.class, (e)-> new MokaItemProcessedRequest(e));
     }
 
-    @Bean("send.email")
+    @Bean("send.email.event")
     public EventNameClassMap eventClassMapSendEmail() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class, (e)-> new SendEmailRequest(e))

@@ -1,19 +1,17 @@
-package com.mekari.mokaaddons.api.service.outlet.outletlist;
+package com.mekari.mokaaddons.api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * sample request result
- */
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
-public class OutletResult {
+public class ProductMapping {
     private int id;
-    private boolean isActive;
+    private String mokaId;
+    private String jurnalId;
+    private String name;
 }

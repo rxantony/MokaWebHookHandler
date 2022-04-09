@@ -5,7 +5,7 @@ import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SendEmailRequestHandler extends AbstractVoidRequestHandler<SendEmailRequest> {
+public class SendEmailHandler extends AbstractVoidRequestHandler<SendEmailRequest> {
 
     @Override
     protected void handleInternal(SendEmailRequest request) throws Exception {

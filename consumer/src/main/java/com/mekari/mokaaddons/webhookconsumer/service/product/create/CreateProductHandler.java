@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 @Service
-public class CreateProductRequestHandler implements RequestHandler<CreateProductRequest, Boolean> {
+public class CreateProductHandler implements RequestHandler<CreateProductRequest, Boolean> {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(CreateProductRequestHandler.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(CreateProductHandler.class);
     private static final String INSERT_ITEM_SQL = "INSERT INTO item (id, name, description, created_at, updated_at) VALUES (?,?,?,?,?)";
 
-    public CreateProductRequestHandler(@Qualifier("mokaaddons") DataSource dataSource) {
+    public CreateProductHandler(@Qualifier("mokaaddons") DataSource dataSource) {
         Assert.notNull(dataSource, "dataSource must not be null");
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
