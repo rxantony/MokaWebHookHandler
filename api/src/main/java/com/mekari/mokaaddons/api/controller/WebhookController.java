@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebhookController {
     private @Autowired  RequestHandlerManager requestManager;
-    private static final String SOURCE_NAME = WebhookController.class.getName();
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebhookController.class);
 
     // it respresents the api endpoint which will be called by partner.
@@ -20,10 +19,12 @@ public class WebhookController {
         LOGGER.debug("receice webhook message, with payload:%s", message);
         var request = SavePublishEventRequest.builder()
                         .json(message)
-                        .sourceName(SOURCE_NAME)
+                        .sourceName(WebhookController.class.getName())
                         .build();
         requestManager.handle(request);
     }
+
+    //sampe of omm Koji case.
     public void feedProduct(String message) throws Exception{
         var request = SaveItemRequest.builder()
                         .json(message)
