@@ -4,7 +4,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.mekari.mokaaddons.webhookconsumer.entity.ProductMapping;
-import com.mekari.mokaaddons.webhookconsumer.repository.productmapping.ProductMappingRepository;
+import com.mekari.mokaaddons.webhookconsumer.repository.ProductMappingRepository;
 import com.mekari.mokaaddons.webhookconsumer.service.product.posttojurnal.PostProductToJurnalRequest;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;

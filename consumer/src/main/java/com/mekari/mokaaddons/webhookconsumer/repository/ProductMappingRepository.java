@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.repository.productmapping;
+package com.mekari.mokaaddons.webhookconsumer.repository;
 
 import com.mekari.mokaaddons.webhookconsumer.entity.ProductMapping;
 
@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductMappingRepository extends JpaRepository<ProductMapping, String> {
-    @Query(value="SELECT CASE count(*)  WHEN 0 THEN true ELSE false END FROM product_mapping WHERE moka_item_id=?", nativeQuery=true)
+
+    @Query(value = "SELECT CASE count(*)  WHEN 0 THEN true ELSE false END FROM product_mapping WHERE moka_item_id=?", nativeQuery = true)
     boolean isExistsByMokaItemId(String id);
 
     ProductMapping findByMokaItemId(String mokaItemId);
