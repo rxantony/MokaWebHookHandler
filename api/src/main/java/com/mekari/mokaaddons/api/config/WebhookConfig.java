@@ -10,18 +10,21 @@ import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WebhookConfig {
+    private @Autowired @Qualifier("eventstore") DataSource dataSource;
     @Bean
-    public EventSourceStorage eventStoreStorage(DataSource dataSource) {
+    public EventSourceStorage eventStoreStorage() {
         return new DbEventSourceStorage(dataSource);
     }
 
     @Bean
-    public DeadLetterStorage deadLetterConsumerConfig(DataSource dataSource) {
+    public DeadLetterStorage deadLetterConsumerConfig() {
         return new DbDeadLetterStorage(dataSource);
     }
 
