@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebhookConfig {
     private @Autowired @Qualifier("eventstore") DataSource dataSource;
+
     @Bean
     public EventSourceStorage eventStoreStorage() {
         return new DbEventSourceStorage(dataSource);
@@ -27,7 +28,6 @@ public class WebhookConfig {
     public DeadLetterStorage deadLetterConsumerConfig() {
         return new DbDeadLetterStorage(dataSource);
     }
-
 
     @Bean("save.publish.event")
     public EventNameClassMap eventClassMap() {
