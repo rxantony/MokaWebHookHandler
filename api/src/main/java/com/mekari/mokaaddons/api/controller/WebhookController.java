@@ -17,10 +17,12 @@ public class WebhookController {
     // it respresents the api endpoint which will be called by partner.
     public void handle(String message) throws Exception{
         LOGGER.debug("receice webhook message, with payload:%s", message);
+        
         var request = SavePublishEventRequest.builder()
                         .json(message)
                         .sourceName(WebhookController.class.getName())
                         .build();
+
         handlerManager.handle(request);
     }
 
