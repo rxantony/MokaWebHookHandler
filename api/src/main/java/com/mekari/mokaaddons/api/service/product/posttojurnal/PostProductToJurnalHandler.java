@@ -14,9 +14,6 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * sample request handler
- */
 @Service
 public class PostProductToJurnalHandler implements RequestHandler<PostProductToJurnalRequest, List<JurnalProduct>> {
 

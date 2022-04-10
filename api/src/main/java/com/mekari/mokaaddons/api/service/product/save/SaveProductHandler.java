@@ -14,9 +14,6 @@ import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * sample request handler
- */
 @Service
 public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRequest> {
 
