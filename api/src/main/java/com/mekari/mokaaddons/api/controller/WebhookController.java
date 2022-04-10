@@ -1,5 +1,8 @@
 package com.mekari.mokaaddons.api.controller;
 
+import java.util.Date;
+
+import com.mekari.mokaaddons.api.service.product.manualysync.ManualProductSyncRequest;
 import com.mekari.mokaaddons.api.webhook.service.event.savepublish.SavePublishEventRequest;
 import com.mekari.mokaaddons.api.webhook.service.item.save.SaveItemRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
@@ -30,6 +33,15 @@ public class WebhookController {
     public void feedProduct(String message) throws Exception{
         var request = SaveItemRequest.builder()
                         .json(message)
+                        .build();
+
+        handlerManager.handle(request);
+    }
+
+    public void manualProductSync(Date from, Date to) throws Exception{
+        var request = ManualProductSyncRequest.builder()
+                        .from(from)
+                        .to(to)
                         .build();
 
         handlerManager.handle(request);

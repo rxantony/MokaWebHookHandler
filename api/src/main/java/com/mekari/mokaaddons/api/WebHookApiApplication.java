@@ -3,6 +3,7 @@ package com.mekari.mokaaddons.api;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
@@ -29,6 +30,15 @@ public class WebHookApiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... arg0) throws Exception {
+		//testManualProductSync(arg0);
+		testUsingDataFromJsonFile(arg0);
+	}
+
+	private void testManualProductSync(String... arg0) throws Exception{
+		webhookController.manualProductSync(new Date(), new Date());
+	}
+
+	private void testUsingDataFromJsonFile(String... arg0) throws Exception{
 		var maxTrhread = 20;
 		if (arg0.length > 0)
 			maxTrhread = Integer.parseInt(arg0[0]);
