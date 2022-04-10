@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MokaItemReceivedConsumer extends AbstractEventMapConsumer {
 
-    public MokaItemReceivedConsumer(@Qualifier("save.publish") EventNameClassMap eventClassMap) {
+    public MokaItemReceivedConsumer(@Qualifier("save.publish.event") EventNameClassMap eventClassMap) {
         super(eventClassMap);
     }
 

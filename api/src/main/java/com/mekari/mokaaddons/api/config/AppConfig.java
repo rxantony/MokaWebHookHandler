@@ -2,6 +2,8 @@ package com.mekari.mokaaddons.api.config;
 
 import java.util.TimeZone;
 
+import javax.sql.DataSource;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -11,11 +13,27 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class AppConfig {
+    @Bean
+    @Primary
+    @ConfigurationProperties("spring.mokaadons-datasource")
+    public DataSource mokaAddOnsDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "eventstore")
+    @ConfigurationProperties("spring.eventstore-datasource")
+    public DataSource eventStoreDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+    
     @Bean
     public ConnectionFactory connectionFactory() {
         return new CachingConnectionFactory("localhost");

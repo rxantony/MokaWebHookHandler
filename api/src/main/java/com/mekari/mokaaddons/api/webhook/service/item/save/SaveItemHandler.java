@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.api.webhook.service.item.save;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.api.service.product.checkcreate.CheckCreateProductRequest;
+import com.mekari.mokaaddons.api.service.product.checkcreateupdate.CreateUpdateProductRequest;
 import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
@@ -19,9 +19,9 @@ public class SaveItemHandler extends AbstractVoidRequestHandler<SaveItemRequest>
     protected void handleInternal(SaveItemRequest request) throws Exception {
         var event = mapper.readValue(request.getJson(), MokaItemReceivedEvent.class);
         var data = event.getBody().getData();
-        var checkCreateProductRequest = CheckCreateProductRequest.builder()
-                                    .product(CheckCreateProductRequest.Product.builder()
-                                                .mokaId(data.getId())
+        var checkCreateProductRequest = CreateUpdateProductRequest.builder()
+                                    .product(CreateUpdateProductRequest.Product.builder()
+                                                .mokaItemId(data.getId())
                                                 .name(data.getName())
                                                 .build())
                                     .build();

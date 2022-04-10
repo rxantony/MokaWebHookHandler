@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.entity;
+package com.mekari.mokaaddons.webhookconsumer.entity;
 
 import java.time.OffsetDateTime;
 
@@ -11,13 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
 @Data
 @Builder
 @NoArgsConstructor
