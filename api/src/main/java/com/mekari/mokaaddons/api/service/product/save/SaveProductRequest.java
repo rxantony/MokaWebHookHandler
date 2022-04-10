@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.checkcreateupdate;
+package com.mekari.mokaaddons.api.service.product.save;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import lombok.Singular;
 @Setter
 @Builder
 @AllArgsConstructor
-public class CreateUpdateProductRequest implements VoidRequest{
+public class SaveProductRequest implements VoidRequest{
     private @Singular final List<Product> products;
 
     @Getter

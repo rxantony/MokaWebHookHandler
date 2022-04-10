@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WebhookController {
-    private @Autowired  RequestHandlerManager requestManager;
+    private @Autowired  RequestHandlerManager handlerManager;
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebhookController.class);
 
     // it respresents the api endpoint which will be called by partner.
@@ -21,7 +21,7 @@ public class WebhookController {
                         .json(message)
                         .sourceName(WebhookController.class.getName())
                         .build();
-        requestManager.handle(request);
+        handlerManager.handle(request);
     }
 
     //sampe of omm Koji case.
@@ -30,7 +30,7 @@ public class WebhookController {
                         .json(message)
                         .build();
 
-        requestManager.handle(request);
+        handlerManager.handle(request);
     }
 
 }

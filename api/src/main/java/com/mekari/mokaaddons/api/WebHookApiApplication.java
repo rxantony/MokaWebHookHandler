@@ -45,6 +45,10 @@ public class WebHookApiApplication implements CommandLineRunner {
 				var event = events[i + x];
 				Runnable r = () -> {
 					try {
+						/**
+						 * swith to handle if you want to save events into datastore and publish it.
+						 * or to feedProduct only to save the events onto datasource.
+						 */
 						//webhookController.handle(event.toString());
 						webhookController.feedProduct(event.toString());
 					} catch (Exception ex) {

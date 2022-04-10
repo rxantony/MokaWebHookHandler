@@ -1,11 +1,11 @@
-package com.mekari.mokaaddons.api.service.product.checkcreateupdate;
+package com.mekari.mokaaddons.webhookconsumer.service.product.save;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.mekari.mokaaddons.api.entity.ProductMapping;
-import com.mekari.mokaaddons.api.repository.productmapping.ProductMappingRepository;
-import com.mekari.mokaaddons.api.service.product.posttojurnal.PostProductToJurnalRequest;
+import com.mekari.mokaaddons.webhookconsumer.entity.ProductMapping;
+import com.mekari.mokaaddons.webhookconsumer.repository.productmapping.ProductMappingRepository;
+import com.mekari.mokaaddons.webhookconsumer.service.product.posttojurnal.PostProductToJurnalRequest;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.util.DateUtil;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
  * sample request handler
  */
 @Service
-public class CreateUpdateProductHandler extends AbstractVoidRequestHandler<CreateUpdateProductRequest> {
+public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRequest> {
 
     private @Autowired ProductMappingRepository productRepository;
-    private @Autowired RequestHandlerManager requestManager;
+    private @Autowired RequestHandlerManager handlerManager;
 
     @Override
-    protected void handleInternal(CreateUpdateProductRequest request) throws Exception {
+    protected void handleInternal(SaveProductRequest request) throws Exception {
         if(request.getProducts().size() == 0) 
             return;
 
@@ -48,7 +48,7 @@ public class CreateUpdateProductHandler extends AbstractVoidRequestHandler<Creat
         });
 
         //send request to handler manager for handler routing and handling. 
-        var jurnalProducts = requestManager.handle(postToJurnalRequest.build());
+        var jurnalProducts = handlerManager.handle(postToJurnalRequest.build());
 
         //classify jurnalProducts for ProductMapping creating and updating 
         var productMappings = jurnalProducts.stream().map(jp->{
