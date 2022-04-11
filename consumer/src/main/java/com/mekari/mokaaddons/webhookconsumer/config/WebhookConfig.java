@@ -16,8 +16,8 @@ import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.event.sendemail.SendEmailRequest;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.MokaItemProcessedRequest;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.MokaItemReceivedRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.ProcessMokaItemProcessedRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received.ProcessMokaItemReceivedRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,10 +47,10 @@ public class WebhookConfig {
     @Bean("save.publish.event")
     public EventNameClassMap eventClassMapSavePublish() {
         return new EventNameClassMap()
-                .add("moka.item.added", MokaItemReceivedEvent.class, (e) -> new MokaItemReceivedRequest(e))
-                .add("moka.item.updated", MokaItemReceivedEvent.class, (e) -> new MokaItemReceivedRequest(e))
-                .add("moka.item.deleted", MokaItemReceivedEvent.class, (e) -> new MokaItemReceivedRequest(e))
-                .add("moka.item.processed", MokaItemProcessedEvent.class, (e) -> new MokaItemProcessedRequest(e));
+                .add("moka.item.added", MokaItemReceivedEvent.class, (e) -> new ProcessMokaItemReceivedRequest(e))
+                .add("moka.item.updated", MokaItemReceivedEvent.class, (e) -> new ProcessMokaItemReceivedRequest(e))
+                .add("moka.item.deleted", MokaItemReceivedEvent.class, (e) -> new ProcessMokaItemReceivedRequest(e))
+                .add("moka.item.processed", MokaItemProcessedEvent.class, (e) -> new ProcessMokaItemProcessedRequest(e));
     }
 
     @Bean("send.email.event")
@@ -63,8 +63,8 @@ public class WebhookConfig {
     }
 
     @Bean
-    public AbstractVoidRequestHandler<MokaItemReceivedRequest> mokaItemReceivedRequestHandler(
-            AbstractVoidRequestHandler<MokaItemReceivedRequest> handler) {
+    public AbstractVoidRequestHandler<ProcessMokaItemReceivedRequest> mokaItemReceivedRequestHandler(
+            AbstractVoidRequestHandler<ProcessMokaItemReceivedRequest> handler) {
         // return new EventLockHandler<>(dataSource, lockTrackerStorage,
         // new EventDateCompareHandler<>(eventSourceStorage, handler));
 
@@ -73,8 +73,8 @@ public class WebhookConfig {
     }
 
     @Bean
-    public AbstractVoidRequestHandler<MokaItemProcessedRequest> mokaItemProcessedRequestHandler(
-            AbstractVoidRequestHandler<MokaItemProcessedRequest> handler) {
+    public AbstractVoidRequestHandler<ProcessMokaItemProcessedRequest> mokaItemProcessedRequestHandler(
+            AbstractVoidRequestHandler<ProcessMokaItemProcessedRequest> handler) {
         return new EventLockHandler<>(dataSource, lockTrackerStorage(),
                 new EventDateCompareHandler<>(eventSourceStorage(), handler));
     }

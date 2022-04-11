@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.webhook.event.MokaItemProcessedEvent;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.MokaItemProcessedRequest;
+import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed.ProcessMokaItemProcessedRequest;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +30,7 @@ public class MokaItemProcessedConsumer {
         LOGGER.debug("consume message:%s", json);
 
         var event = mapper.readValue(json, MokaItemProcessedEvent.class);
-        var request = MokaItemProcessedRequest.builder()
+        var request = ProcessMokaItemProcessedRequest.builder()
                 .event(event)
                 .build();
         requestManager.handle(request);

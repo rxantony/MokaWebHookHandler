@@ -1,7 +1,6 @@
 package com.mekari.mokaaddons.api.webhook.service.item.save;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.api.config.AppConstant;
 import com.mekari.mokaaddons.api.service.product.save.SaveProductRequest;
 import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;

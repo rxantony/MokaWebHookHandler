@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.product.manualysync;
+package com.mekari.mokaaddons.api.service.product.syncmanual;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class ManualProductSyncRequest implements VoidRequest{
+public class SyncProductManualRequest implements VoidRequest{
     private Date from;
     private Date to;
 }

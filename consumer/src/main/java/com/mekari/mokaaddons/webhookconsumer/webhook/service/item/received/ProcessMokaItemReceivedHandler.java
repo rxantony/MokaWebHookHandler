@@ -14,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MokaItemReceivedHandler extends AbstractVoidRequestHandler<MokaItemReceivedRequest> {
+public class ProcessMokaItemReceivedHandler extends AbstractVoidRequestHandler<ProcessMokaItemReceivedRequest> {
 
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager handlerManager;
 
     @Override
-    protected void handleInternal(MokaItemReceivedRequest request) throws Exception {
+    protected void handleInternal(ProcessMokaItemReceivedRequest request) throws Exception {
         saveEvent(request.getEvent());
         publishEvent(request.getEvent());
     }

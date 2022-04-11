@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.service.product.manualysync;
+package com.mekari.mokaaddons.api.service.product.syncmanual;
 
 import java.io.FileInputStream;
 import java.io.StringWriter;
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 @Service
-public class ManualProductSyncHandler extends AbstractVoidRequestHandler<ManualProductSyncRequest> {
+public class SyncProductManualHandler extends AbstractVoidRequestHandler<SyncProductManualRequest> {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired RequestHandlerManager handlerManager;
 
     @Override
-    protected void handleInternal(ManualProductSyncRequest request) throws Exception {
+    protected void handleInternal(SyncProductManualRequest request) throws Exception {
 
         logger.debug("get moka items from moka.api from:%s to:%s", request.getFrom(), request.getTo());
 

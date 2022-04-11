@@ -12,6 +12,6 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class MokaItemReceivedRequest implements EventRequest {
+public class ProcessMokaItemReceivedRequest implements EventRequest {
     private MokaItemReceivedEvent event;
 }
