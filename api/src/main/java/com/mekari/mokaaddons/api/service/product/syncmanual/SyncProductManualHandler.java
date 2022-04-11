@@ -2,6 +2,7 @@ package com.mekari.mokaaddons.api.service.product.syncmanual;
 
 import java.io.FileInputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.api.service.product.save.SaveProductRequest;
@@ -45,7 +46,7 @@ public class SyncProductManualHandler extends AbstractVoidRequestHandler<SyncPro
         var file = ResourceUtils.getFile("classpath:item_event_varies.json");
         try (var in = new FileInputStream(file);) {
             var writer = new StringWriter();
-            IOUtils.copy(in, writer, "UTF-8");
+            IOUtils.copy(in, writer, StandardCharsets.UTF_8);
             return writer.toString();
         }
     }
