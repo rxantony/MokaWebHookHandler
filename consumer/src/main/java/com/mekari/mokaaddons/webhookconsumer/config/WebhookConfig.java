@@ -2,12 +2,10 @@ package com.mekari.mokaaddons.webhookconsumer.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
-import com.mekari.mokaaddons.common.webhook.moka.EventLockHandler;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
@@ -48,17 +46,5 @@ public class WebhookConfig {
                 .add("moka.item.updated", MokaItemReceivedEvent.class, HandleMokaItemReceivedRequest::new)
                 .add("moka.item.deleted", MokaItemReceivedEvent.class, HandleMokaItemReceivedRequest::new)
                 .add("moka.item.processed", MokaItemProcessedEvent.class, HandleMokaItemProcessedRequest::new);
-    }
-
-    @Bean
-    public AbstractVoidRequestHandler<HandleMokaItemReceivedRequest> mokaItemReceivedRequestHandler(
-            AbstractVoidRequestHandler<HandleMokaItemReceivedRequest> handler) {
-        return new EventLockHandler<>(dataSource, lockTrackerStorage(), handler);
-    }
-
-    @Bean
-    public AbstractVoidRequestHandler<HandleMokaItemProcessedRequest> mokaItemProcessedRequestHandler(
-            AbstractVoidRequestHandler<HandleMokaItemProcessedRequest> handler) {
-        return new EventLockHandler<>(dataSource, lockTrackerStorage(), handler);
     }
 }
