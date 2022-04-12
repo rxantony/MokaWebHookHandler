@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MokaDeadLetterConsumer extends AbstractRabbitMQDLConsumer {
+public class DeadLetterConsumer extends AbstractRabbitMQDLConsumer {
 
     @RabbitListener(queues = AppConstant.QueueName.MOKA_DLQ)
     public void consume(Message message, Channel channel) {

@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.received;
+package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.handlereceived;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
@@ -14,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProcessMokaItemReceivedHandler extends AbstractVoidRequestHandler<ProcessMokaItemReceivedRequest> {
+public class MokaItemReceivedHandler extends AbstractVoidRequestHandler<HandleMokaItemReceivedRequest> {
 
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager handlerManager;
 
     @Override
-    protected void handleInternal(ProcessMokaItemReceivedRequest request) throws Exception {
+    protected void handleInternal(HandleMokaItemReceivedRequest request) throws Exception {
         saveEvent(request.getEvent());
         publishEvent(request.getEvent());
     }

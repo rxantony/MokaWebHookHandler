@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processed;
+package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.handleprocessed;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProcessMokaItemProcessedHandler extends AbstractVoidRequestHandler<ProcessMokaItemProcessedRequest> {
+public class MokaItemProcessedHandler extends AbstractVoidRequestHandler<HandleMokaItemProcessedRequest> {
 
     private @Autowired Publisher publisher;
     private @Autowired RequestHandlerManager handlerManager;
 
     @Override
-    protected void handleInternal(ProcessMokaItemProcessedRequest request) throws Exception {
+    protected void handleInternal(HandleMokaItemProcessedRequest request) throws Exception {
         logger.debug("create your logic requirements here");
     }
 
