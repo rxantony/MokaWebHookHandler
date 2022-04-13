@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.handlereceive
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
-import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
+import com.mekari.mokaaddons.common.messaging.Publisher;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventHeader;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.product.save.SaveProductRequest;

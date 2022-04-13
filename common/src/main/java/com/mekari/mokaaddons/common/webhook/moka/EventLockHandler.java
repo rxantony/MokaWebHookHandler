@@ -91,7 +91,7 @@ public class EventLockHandler<TRequest extends EventRequest> extends AbstractVoi
                 .eventName(header.getEventName())
                 .dataId(body.getData().getId().toString())
                 .query(query)
-                .createdAt(DateUtil.now())
+                .createdAt(DateUtil.utcNow())
                 .build();
 
         try {

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.api.config.AppConstant;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
-import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
+import com.mekari.mokaaddons.common.messaging.Publisher;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.BuilderUtil;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
@@ -48,7 +48,7 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
                     .payload(request.getJson())
                     .source(request.getSourceName())
                     .reason(ex.toString())
-                    .createdAt(DateUtil.now());
+                    .createdAt(DateUtil.utcNow());
                 deadLetterStorage.insert(builder.build());
             }
             // basically we can forward this exception into ApiExceptionHandler.
@@ -76,7 +76,7 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
                     .outletId(header.getOutletId())
                     .version(header.getVersion())
                     .timestamp(header.getTimestamp())
-                    .createdAt(DateUtil.now())
+                    .createdAt(DateUtil.utcNow())
                     .build());
     }
 

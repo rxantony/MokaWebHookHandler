@@ -3,8 +3,8 @@ package com.mekari.mokaaddons.webhookconsumer.service.product.save;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.mekari.mokaaddons.webhookconsumer.entity.ProductMapping;
-import com.mekari.mokaaddons.webhookconsumer.repository.ProductMappingRepository;
+import com.mekari.mokaaddons.webhookconsumer.persistence.entity.ProductMapping;
+import com.mekari.mokaaddons.webhookconsumer.persistence.repository.ProductMappingRepository;
 import com.mekari.mokaaddons.webhookconsumer.service.product.posttojurnal.PostProductToJurnalRequest;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
@@ -25,8 +25,9 @@ public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRe
 
     @Override
     protected void handleInternal(SaveProductRequest request) throws Exception {
-        if(request.getProducts().size() == 0) 
+        if(request.getProducts().isEmpty()){
             return;
+        }
 
         //map each request.Products with a match ProductMapping
         var productsMapped = request.getProducts().stream()
@@ -40,12 +41,11 @@ public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRe
          * set id of PostProductToJurnalRequest.JurnalProduct with null if no matched ProductMapping
          * to indicate Insert or Update operation.
          */
-        productsMapped.forEach(p->{
-            postToJurnalRequest.product(PostProductToJurnalRequest.JurnalProduct.builder()
-                                        .id(p.getValue1() == null ? null : p.getValue1().getJurnalId())
-                                        .name(p.getValue0().getName())
-                                        .build());
-        });
+        productsMapped.forEach(p-> postToJurnalRequest.product(PostProductToJurnalRequest.JurnalProduct.builder()
+            .id(p.getValue1() == null ? null : p.getValue1().getJurnalId())
+            .name(p.getValue0().getName())
+            .build())
+        );
 
         //send request to handler manager for handler routing and handling. 
         var jurnalProducts = handlerManager.handle(postToJurnalRequest.build());
@@ -57,9 +57,10 @@ public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRe
                                     .findFirst()
                                     .get();
 
+            var now = DateUtil.utcNow();
+
             //ProductMapping for creating 
             if(productMapped.getValue1() == null){
-                var now = DateUtil.now();
                 return ProductMapping.builder()
                         .id(UUID.randomUUID().toString())
                         .mokaItemId(productMapped.getValue0().getMokaItemId())
@@ -73,7 +74,7 @@ public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRe
             //ProductMapping for updating
             var productMapping = productMapped.getValue1();
             productMapping.setName(productMapped.getValue0().getName());
-            productMapping.setUpdatedAt(DateUtil.now());
+            productMapping.setUpdatedAt(now);
             return productMapping;
 
         }).collect(Collectors.toList());

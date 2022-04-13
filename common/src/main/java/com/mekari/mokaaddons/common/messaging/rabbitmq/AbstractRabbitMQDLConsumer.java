@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.infrastructure.messaging.rabbitmq;
+package com.mekari.mokaaddons.common.messaging.rabbitmq;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -109,7 +109,7 @@ public class AbstractRabbitMQDLConsumer {
                         .payload(msg)
                         .properties(message.getMessageProperties().toString())
                         .reason(reason)
-                        .createdAt(DateUtil.now());
+                        .createdAt(DateUtil.utcNow());
                 deadLetterStorage.insert(builder.build());
             } catch (Exception ex) {
                 logger.error(ex.toString());

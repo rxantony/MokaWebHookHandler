@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.handleprocess
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
-import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
+import com.mekari.mokaaddons.common.messaging.Publisher;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

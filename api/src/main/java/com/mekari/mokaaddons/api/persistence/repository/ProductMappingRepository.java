@@ -1,6 +1,6 @@
-package com.mekari.mokaaddons.api.repository;
+package com.mekari.mokaaddons.api.persistence.repository;
 
-import com.mekari.mokaaddons.api.entity.ProductMapping;
+import com.mekari.mokaaddons.api.persistence.entity.ProductMapping;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

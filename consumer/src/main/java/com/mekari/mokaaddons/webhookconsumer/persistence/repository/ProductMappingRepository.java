@@ -1,6 +1,6 @@
-package com.mekari.mokaaddons.webhookconsumer.repository;
+package com.mekari.mokaaddons.webhookconsumer.persistence.repository;
 
-import com.mekari.mokaaddons.webhookconsumer.entity.ProductMapping;
+import com.mekari.mokaaddons.webhookconsumer.persistence.entity.ProductMapping;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

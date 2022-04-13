@@ -2,7 +2,6 @@ package com.mekari.mokaaddons.api.service.product.posttojurnal;
 
 import java.util.List;
 
-import com.mekari.mokaaddons.api.model.JurnalProduct;
 import com.mekari.mokaaddons.common.handler.Request;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ import lombok.Singular;
 @Setter
 @Builder
 @AllArgsConstructor
-public class PostProductToJurnalRequest implements Request<List<JurnalProduct>>{
+public class PostProductToJurnalRequest implements Request<List<PostProductToJurnalResult>>{
     @Singular private final List<JurnalProduct> products;
 
     @Getter

@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.api.entity;
+package com.mekari.mokaaddons.api.persistence.entity;
 
 import java.time.OffsetDateTime;
 

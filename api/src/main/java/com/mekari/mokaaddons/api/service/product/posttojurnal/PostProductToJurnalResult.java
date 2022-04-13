@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.model;
+package com.mekari.mokaaddons.api.service.product.posttojurnal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class JurnalProduct {
+public class PostProductToJurnalResult {
     private String id;
     private String name;
 }

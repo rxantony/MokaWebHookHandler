@@ -19,7 +19,7 @@ import lombok.Singular;
 @Builder
 @AllArgsConstructor
 public class SaveProductRequest implements VoidRequest{
-    private @Singular final List<Product> products;
+    @Singular private final List<Product> products;
 
     @Getter
     @Setter

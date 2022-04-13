@@ -7,7 +7,7 @@ import java.time.ZoneOffset;
 public class DateUtil {
     private DateUtil() {}
     
-    public static OffsetDateTime now(){
+    public static OffsetDateTime utcNow(){
         return Instant.now().atOffset(ZoneOffset.UTC);
     }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.webhookconsumer.model.JurnalProduct;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,23 +17,23 @@ import org.springframework.stereotype.Service;
  * sample request handler
  */
 @Service
-public class PostProductToJurnalHandler implements RequestHandler<PostProductToJurnalRequest, List<JurnalProduct>> {
+public class PostProductToJurnalHandler implements RequestHandler<PostProductToJurnalRequest, List<PostProductToJurnalResult>> {
 
     private @Autowired ObjectMapper mapper;
-    private final static Logger LOGGER = LogManager.getFormatterLogger(PostProductToJurnalHandler.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(PostProductToJurnalHandler.class);
 
     @Override
-    public List<JurnalProduct> handle(PostProductToJurnalRequest request) throws Exception {
+    public List<PostProductToJurnalResult> handle(PostProductToJurnalRequest request) throws Exception {
 
-        var result = new ArrayList<JurnalProduct>();
+        var result = new ArrayList<PostProductToJurnalResult>();
         for(var product : request.getProducts()){
-
             var op = Strings.isBlank(product.getId()) ? "create" : "update";
 
-            LOGGER.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, mapper.writeValueAsString(product));
+            var json = mapper.writeValueAsString(product);
+            LOGGER.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, json);
             
             var id = Strings.isBlank(product.getId()) ? UUID.randomUUID().toString() : product.getId();
-            var jurnalProduct = JurnalProduct.builder()
+            var jurnalProduct = PostProductToJurnalResult.builder()
                                 .id(id)
                                 .name(product.getName())
                                 .build();

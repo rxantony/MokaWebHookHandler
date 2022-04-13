@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.infrastructure.messaging;
+package com.mekari.mokaaddons.common.messaging;
 
 import java.util.Map;
 

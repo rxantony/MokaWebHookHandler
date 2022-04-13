@@ -88,7 +88,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
                 .eventName(header.getEventName())
                 .dataId(body.getData().getId().toString())
                 .query(query)
-                .createdAt(DateUtil.now())
+                .createdAt(DateUtil.utcNow())
                 .build();
 
         try {

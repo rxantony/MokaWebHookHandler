@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.entity;
+package com.mekari.mokaaddons.webhookconsumer.persistence.entity;
 
 import java.time.OffsetDateTime;
 

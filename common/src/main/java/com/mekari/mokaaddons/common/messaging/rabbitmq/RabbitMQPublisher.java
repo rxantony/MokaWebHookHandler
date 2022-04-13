@@ -1,8 +1,8 @@
-package com.mekari.mokaaddons.common.infrastructure.messaging.rabbitmq;
+package com.mekari.mokaaddons.common.messaging.rabbitmq;
 
 import java.util.Map;
 
-import com.mekari.mokaaddons.common.infrastructure.messaging.Publisher;
+import com.mekari.mokaaddons.common.messaging.Publisher;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
