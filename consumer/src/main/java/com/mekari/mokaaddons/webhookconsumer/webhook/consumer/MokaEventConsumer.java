@@ -1,6 +1,5 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.consumer;
 
-import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.consumer.AbstractEventMapConsumer;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
@@ -10,7 +9,6 @@ import com.rabbitmq.client.Channel;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MokaEventConsumer extends AbstractEventMapConsumer {
 
-    private @Autowired RequestHandlerManager handlerManager;
-
     public MokaEventConsumer(@Qualifier("save.publish.event") EventNameClassMap eventClassMap) {
         super(eventClassMap);
     }
@@ -34,17 +30,17 @@ public class MokaEventConsumer extends AbstractEventMapConsumer {
         consume(json, request->{
                 //event lock here
                 var lockRequest = LockEventRequest.builder().event(request.getEvent()).build();
-                try(var lockResult = handlerManager.handle(lockRequest);){
+                try(var lockResult = getHandlerManager().handle(lockRequest);){
                     //event date compares here
                     var compareDateRequest = CompareEventDateRequest.builder()
                                                 .dataId(request.getEvent().getBody().getData().getId().toString())
                                                 .evenDate(request.getEvent().getHeader().getTimestamp())
                                                 .build();
-                    if(handlerManager.handle(compareDateRequest).isEqualsWithLastEventDate()){
+                    if(getHandlerManager().handle(compareDateRequest).isEqualsWithLastEventDate()){
                         return;
                     }
                     
-                    handlerManager.handle(request);
+                    getHandlerManager().handle(request);
                 }
             });
     }

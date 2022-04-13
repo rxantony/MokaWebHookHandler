@@ -18,7 +18,7 @@ public abstract class AbstractEventMapConsumer {
     }
 
     private @Autowired ObjectMapper mapper;
-    private @Autowired RequestHandlerManager requestManager;
+    private @Autowired RequestHandlerManager handlerManager;
     private final EventNameClassMap eventClassMap;
     protected final Logger logger;
 
@@ -28,9 +28,13 @@ public abstract class AbstractEventMapConsumer {
         logger = LogManager.getFormatterLogger(this.getClass());
     }
 
+    protected RequestHandlerManager getHandlerManager(){
+        return handlerManager;
+    }
+
     protected void consume(String json) throws Exception{
         var request = getRequest(json);
-        requestManager.handle(request);
+        handlerManager.handle(request);
     }
 
     protected void consume(String json, EventHandler handler) throws Exception{
