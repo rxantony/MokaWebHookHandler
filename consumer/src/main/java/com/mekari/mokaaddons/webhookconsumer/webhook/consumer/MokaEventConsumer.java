@@ -27,7 +27,7 @@ public class MokaEventConsumer extends AbstractEventMapConsumer {
     @RabbitListener(queues = AppConstant.QueueName.MOKA_EVENT_RECEIVED_QUEUE)
     public void consume(Message message, Channel channel) throws Exception {
         var json = new String(message.getBody());
-        consume(json, request->{
+        handle(json, request->{
                 //event lock here
                 var lockRequest = LockEventRequest.builder().event(request.getEvent()).build();
                 try(var lockResult = getHandlerManager().handle(lockRequest);){

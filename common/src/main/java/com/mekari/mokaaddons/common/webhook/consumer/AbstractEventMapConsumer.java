@@ -13,7 +13,7 @@ import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 
 public abstract class AbstractEventMapConsumer {
-    public static interface EventHandler{
+    public static interface EventRequestHandler{
         void handle(EventRequest request) throws Exception;
     }
 
@@ -32,12 +32,12 @@ public abstract class AbstractEventMapConsumer {
         return handlerManager;
     }
 
-    protected void consume(String json) throws Exception{
+    protected void handle(String json) throws Exception{
         var request = getRequest(json);
         handlerManager.handle(request);
     }
 
-    protected void consume(String json, EventHandler handler) throws Exception{
+    protected void handle(String json, EventRequestHandler handler) throws Exception{
         var request = getRequest(json);
         handler.handle(request);
     }
