@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeadLetterConsumer extends AbstractRabbitMQDLConsumer {
 
+    @Override
     @RabbitListener(queues = AppConstant.QueueName.MOKA_DLQ)
     public void consume(Message message, Channel channel) {
         super.consume(message, channel);

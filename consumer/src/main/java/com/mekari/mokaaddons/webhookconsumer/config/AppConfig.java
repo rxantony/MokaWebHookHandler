@@ -8,11 +8,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mekari.mokaaddons.common.messaging.rabbitmq.WebHookHandlingErrorHandler;
 
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -40,18 +43,15 @@ public class AppConfig {
         return new CachingConnectionFactory("localhost");
     }
 
-    /*@Bean
+    @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
-        ConnectionFactory connectionFactory,
-        SimpleRabbitListenerContainerFactoryConfigurer configurer) {
-        var factory =  new SimpleRabbitListenerContainerFactory();
+            ConnectionFactory connectionFactory,
+            SimpleRabbitListenerContainerFactoryConfigurer configurer) {
+        var factory = new SimpleRabbitListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
-        factory.setConcurrentConsumers(3);
-        factory.setMaxConcurrentConsumers(10);
-        //factory.setDefaultRequeueRejected(true);
-        //factory.setErrorHandler(new WebHookHandlingErrorHandler());
+        factory.setErrorHandler(new WebHookHandlingErrorHandler());
         return factory;
-    }*/
+    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ObjectMapper mapper, ConnectionFactory connFactory) {
