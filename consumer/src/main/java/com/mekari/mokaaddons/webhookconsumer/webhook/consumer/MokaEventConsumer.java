@@ -36,7 +36,7 @@ public class MokaEventConsumer extends AbstractEventMapConsumer {
                                                 .dataId(request.getEvent().getBody().getData().getId().toString())
                                                 .evenDate(request.getEvent().getHeader().getTimestamp())
                                                 .build();
-                    if(getHandlerManager().handle(compareDateRequest).isEqualsWithLastEventDate()){
+                    if(!getHandlerManager().handle(compareDateRequest).isEqualsWithLastEventDate()){
                         return;
                     }
                     
