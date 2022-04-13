@@ -1,21 +1,18 @@
 package com.mekari.mokaaddons.common.webhook.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mekari.mokaaddons.common.command.Command;
+import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
+import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
-import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
-
 public abstract class AbstractEventMapConsumer {
-    public static interface EventRequestHandler{
-        void handle(EventRequest request) throws Exception;
-    }
 
     private @Autowired ObjectMapper mapper;
     private @Autowired RequestHandlerManager handlerManager;
@@ -37,9 +34,9 @@ public abstract class AbstractEventMapConsumer {
         handlerManager.handle(request);
     }
 
-    protected void handle(String json, EventRequestHandler handler) throws Exception{
+    protected void handle(String json, Command<EventRequest> handler) throws Exception{
         var request = getRequest(json);
-        handler.handle(request);
+        handler.execute(request);
     }
 
     protected EventRequest getRequest(String json) throws Exception{
