@@ -1,5 +1,6 @@
 package com.mekari.mokaaddons.common.command;
 
-public interface Command<T> {
-    void execute(T command) throws Exception;
+public interface Command<TParam> {
+    Class<TParam>  paramClass();
+    void execute(TParam command) throws Exception;
 }
