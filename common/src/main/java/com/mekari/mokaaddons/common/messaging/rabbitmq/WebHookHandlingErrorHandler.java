@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.common.messaging.rabbitmq;
 
 import com.fasterxml.jackson.core.JacksonException;
-import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
+import com.mekari.mokaaddons.common.webhook.moka.EventHandlingException;
 
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.util.ErrorHandler;
@@ -15,7 +15,7 @@ public class WebHookHandlingErrorHandler implements ErrorHandler {
          */
         if (t.getCause() != null &&
                 (t.getCause() instanceof JacksonException ||
-                        t.getCause() instanceof EventSourceNotFoundException)) {
+                        t.getCause() instanceof EventHandlingException)) {
             return;
         }
 

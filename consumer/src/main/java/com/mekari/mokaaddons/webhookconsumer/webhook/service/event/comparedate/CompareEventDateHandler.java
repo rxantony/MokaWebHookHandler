@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.service.event.comparedate;
 
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
+import com.mekari.mokaaddons.common.webhook.moka.EventHandlingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,18 @@ public class CompareEventDateHandler implements RequestHandler<CompareEventDateR
     @Override
     public CompareEventDateResult handle(CompareEventDateRequest request) throws Exception {
 
-        var lastEventDate = storage.getLastEventDate(request.getDataId());
+        var header = request.getEvent().getHeader();
+        var data = request.getEvent().getBody().getData();
+        var lastEventDate = storage.getLastEventDate(data.getId().toString());
+
         if(lastEventDate.isEmpty())
-            throw new EventSourceNotFoundException(String.format("event source with dataId:%s is not found", request.getDataId()), null);
+            throw EventHandlingException.eventNotFoundInEventSource(request.getEvent());
 
         return CompareEventDateResult.builder()
-                .dataId(request.getDataId())
-                .eventDate(request.getEvenDate())
+                .dataId(data.getId().toString())
+                .eventDate(header.getTimestamp())
                 .lastEventDate(lastEventDate.get())
-                .isEqualsWithLastEventDate(request.getEvenDate().equals(lastEventDate.get()))
+                .isEqualsWithLastEventDate(header.getTimestamp().equals(lastEventDate.get()))
                 .build();
     }
     

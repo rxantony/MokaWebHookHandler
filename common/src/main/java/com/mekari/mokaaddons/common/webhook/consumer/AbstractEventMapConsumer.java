@@ -2,10 +2,10 @@ package com.mekari.mokaaddons.common.webhook.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.command.Command;
+import com.mekari.mokaaddons.common.handler.Request;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,17 +34,17 @@ public abstract class AbstractEventMapConsumer {
         handlerManager.handle(request);
     }
 
-    protected void handle(String json, Command<EventRequest> handler) throws Exception{
+    protected void handle(String json, Command<Request<Void>> handler) throws Exception{
         var request = getRequest(json);
         handler.execute(request);
     }
 
-    protected EventRequest getRequest(String json) throws Exception{
+    protected Request<Void> getRequest(String json) throws Exception{
         logger.debug("consume message:%s", json);
         var jsonNode = mapper.readTree(json);
         var eventName = jsonNode.get("header").get("event_name").asText();
         var mapItem = eventClassMap.get(eventName);
         var event = (AbstractEvent) mapper.readValue(jsonNode.traverse(), mapItem.eventClass);
-        return (EventRequest) mapItem.requestFactory.apply(event);
+        return  mapItem.requestFactory.apply(event);
     }
 }

@@ -17,7 +17,7 @@ import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.EventSourceNotFoundException;
+import com.mekari.mokaaddons.common.webhook.moka.EventHandlingException;
 
 @Service
 public class LockEventHandler implements RequestHandler<LockEventRequest, LockEventResult> {
@@ -52,7 +52,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
                 rs.next();
                 var connId = rs.getInt(1);
                 if (!rs.next())
-                    throw new EventSourceNotFoundException(event);
+                    throw EventHandlingException.eventNotFoundInEventSource(event);
                 var evsId = rs.getString(1);
                 return new Object[] { connId, evsId };
             }
@@ -75,7 +75,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
             stmt.setPoolable(false);
             try (var rs = stmt.executeQuery(query)) {
                 if (!rs.next())
-                    throw new EventSourceNotFoundException(
+                    throw new EventHandlingException(
                             String.format("eventId:%s-eventName:%s-bodyId:%s no event_source with id:%s",
                                     header.getEventId(), header.getEventName(), body.getData().getId(), evsId),
                             event);

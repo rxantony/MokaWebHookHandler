@@ -1,8 +1,7 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.service.event.comparedate;
 
-import java.time.OffsetDateTime;
-
 import com.mekari.mokaaddons.common.handler.Request;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +13,5 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor 
 public class CompareEventDateRequest implements Request<CompareEventDateResult> {
-    private String dataId;
-    private OffsetDateTime evenDate;
+    private AbstractEvent event;
 }

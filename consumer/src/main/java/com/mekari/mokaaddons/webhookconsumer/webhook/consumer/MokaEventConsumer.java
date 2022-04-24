@@ -2,6 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.consumer;
 
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.consumer.AbstractEventMapConsumer;
+import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.event.comparedate.CompareEventDateRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.event.lock.LockEventRequest;
@@ -29,12 +30,12 @@ public class MokaEventConsumer extends AbstractEventMapConsumer {
         var json = new String(message.getBody());
         handle(json, request->{
                 //event lock here
-                var lockRequest = LockEventRequest.builder().event(request.getEvent()).build();
+                var evRequest = (EventRequest) request;
+                var lockRequest = LockEventRequest.builder().event(evRequest.getEvent()).build();
                 try(var lockResult = getHandlerManager().handle(lockRequest);){
                     //event date compares here
                     var compareDateRequest = CompareEventDateRequest.builder()
-                                                .dataId(request.getEvent().getBody().getData().getId().toString())
-                                                .evenDate(request.getEvent().getHeader().getTimestamp())
+                                                .event(evRequest.getEvent())
                                                 .build();
                     if(!getHandlerManager().handle(compareDateRequest).isEqualsWithLastEventDate()){
                         return;
