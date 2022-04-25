@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.webhook.service.event.comparedate;
 
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.moka.EventHandlingException;
+import com.mekari.mokaaddons.common.webhook.moka.Util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class CompareEventDateHandler implements RequestHandler<CompareEventDateR
         var lastEventDate = storage.getLastEventDate(data.getId().toString());
 
         if(lastEventDate.isEmpty())
-            throw EventHandlingException.eventNotFoundInEventSource(request.getEvent());
+            throw Util.eventNotFoundInEventSource(request.getEvent());
 
         return CompareEventDateResult.builder()
                 .dataId(data.getId().toString())
