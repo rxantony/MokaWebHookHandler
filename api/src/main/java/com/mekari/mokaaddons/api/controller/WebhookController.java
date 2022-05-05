@@ -29,7 +29,7 @@ public class WebhookController {
         handlerManager.handle(request);
     }
 
-    //omm Koji sample case.
+    //sample case.
     public void feedProduct(String message) throws Exception{
         var request = SaveItemRequest.builder()
                         .json(message)
