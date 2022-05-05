@@ -38,6 +38,7 @@ public class WebhookController {
         handlerManager.handle(request);
     }
 
+    //sample case 2.
     public void manualProductSync(Date from, Date to) throws Exception{
         var request = SyncProductManualRequest.builder()
                         .from(from)
