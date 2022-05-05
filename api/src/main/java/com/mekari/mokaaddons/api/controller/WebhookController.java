@@ -17,7 +17,7 @@ public class WebhookController {
     private @Autowired  RequestHandlerManager handlerManager;
     private static final Logger LOGGER = LogManager.getFormatterLogger(WebhookController.class);
 
-    // it respresents the api endpoint which will be called by partner.
+    // sample, it respresents the api endpoint which will be called by partner.
     public void handle(String message) throws Exception{
         LOGGER.debug("receice webhook message, with payload:%s", message);
         
