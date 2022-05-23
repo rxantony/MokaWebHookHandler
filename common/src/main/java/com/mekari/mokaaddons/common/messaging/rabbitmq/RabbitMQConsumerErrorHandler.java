@@ -25,8 +25,10 @@ public class RabbitMQConsumerErrorHandler implements ErrorHandler {
         if (t.getCause() != null) {
             if(t.getCause() instanceof JacksonException) {
                 logger.error(t.getCause());
+                return;
             } 
-            else if(t.getCause() instanceof EventHandlingException){
+            
+            if(t.getCause() instanceof EventHandlingException){
                 var ex = (EventHandlingException) t.getCause();
                 var ev = (AbstractEvent) ex.getEvent();
                 DeadLetterStorage.NewItem deadLetter = null;
@@ -47,9 +49,8 @@ public class RabbitMQConsumerErrorHandler implements ErrorHandler {
                 catch(Exception iex){
                     logger.error(iex);
                 }
-
+                return;
             }
-            return;
         }
         throw new AmqpRejectAndDontRequeueException(t.getMessage());
     }
