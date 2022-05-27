@@ -16,8 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostProductToJurnalHandler implements RequestHandler<PostProductToJurnalRequest, List<PostProductToJurnalResult>> {
 
-    private @Autowired ObjectMapper mapper;
+    private ObjectMapper mapper;
     private static final Logger LOGGER = LogManager.getFormatterLogger(PostProductToJurnalHandler.class);
+
+    public PostProductToJurnalHandler(@Autowired ObjectMapper mapper){
+        this.mapper = mapper;
+    }
 
     @Override
     public List<PostProductToJurnalResult> handle(PostProductToJurnalRequest request) throws Exception {

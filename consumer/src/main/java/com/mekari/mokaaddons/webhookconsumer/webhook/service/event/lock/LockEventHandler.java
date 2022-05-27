@@ -23,13 +23,17 @@ import com.mekari.mokaaddons.common.webhook.moka.Util;
 @Service
 public class LockEventHandler implements RequestHandler<LockEventRequest, LockEventResult> {
 
-    private @Autowired @Qualifier("eventstore") DataSource dataSource;
-    private @Autowired LockTrackerStorage lockTracker;
+    private DataSource dataSource;
+    private LockTrackerStorage lockTracker;
 
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
     private static final Logger logger = LogManager.getFormatterLogger(LockEventHandler.class);
 
+    public LockEventHandler(@Qualifier("eventstore") DataSource dataSource, @Autowired LockTrackerStorage lockTracker){
+        this.dataSource = dataSource;
+        this.lockTracker = lockTracker;
+    }
     @Override
     public LockEventResult handle(LockEventRequest request) throws Exception {
         var event = request.getEvent();

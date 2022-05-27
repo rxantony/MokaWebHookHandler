@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CompareEventDateHandler implements RequestHandler<CompareEventDateRequest, CompareEventDateResult> {
 
-    private @Autowired EventSourceStorage storage;
+    private EventSourceStorage storage;
     
+    public CompareEventDateHandler(@Autowired EventSourceStorage storage){
+        this.storage = storage;
+    }
+
     @Override
     public CompareEventDateResult handle(CompareEventDateRequest request) throws Exception {
 

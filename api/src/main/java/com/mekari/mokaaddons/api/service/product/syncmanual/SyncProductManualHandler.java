@@ -21,6 +21,11 @@ public class SyncProductManualHandler extends AbstractVoidRequestHandler<SyncPro
     private @Autowired ObjectMapper mapper;
     private @Autowired RequestHandlerManager handlerManager;
 
+    public SyncProductManualHandler(@Autowired RequestHandlerManager handlerManager,
+            @Autowired ObjectMapper mapper){
+        this.handlerManager = handlerManager;
+        this.mapper = mapper;
+    }
     @Override
     protected void handleInternal(SyncProductManualRequest request) throws Exception {
 

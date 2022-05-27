@@ -17,8 +17,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRequest> {
 
-    private @Autowired ProductMappingRepository productRepository;
-    private @Autowired RequestHandlerManager handlerManager;
+    private ProductMappingRepository productRepository;
+    private RequestHandlerManager handlerManager;
+
+    public SaveProductHandler(@Autowired RequestHandlerManager handlerManager, 
+            @Autowired ProductMappingRepository productRepository){
+        this.productRepository = productRepository;
+        this.handlerManager = handlerManager;
+    }
 
     @Override
     protected void handleInternal(SaveProductRequest request) throws Exception {
