@@ -18,8 +18,8 @@ import org.springframework.util.ResourceUtils;
 @Service
 public class SyncProductManualHandler extends AbstractVoidRequestHandler<SyncProductManualRequest> {
 
-    private @Autowired ObjectMapper mapper;
-    private @Autowired RequestHandlerManager handlerManager;
+    private ObjectMapper mapper;
+    private RequestHandlerManager handlerManager;
 
     public SyncProductManualHandler(@Autowired RequestHandlerManager handlerManager,
             @Autowired ObjectMapper mapper){
