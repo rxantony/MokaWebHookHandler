@@ -2,8 +2,8 @@ package com.mekari.mokaaddons.api.config;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.api.webhook.event.MokaTransactionReceivedEvent;
+import com.mekari.mokaaddons.api.webhook.service.item.event.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.api.webhook.service.transaction.event.MokaTransactionReceivedEvent;
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;

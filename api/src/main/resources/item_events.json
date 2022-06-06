@@ -12,7 +12,8 @@
                 "id": "1",
                 "name": "tembakau",
                 "date": "2022-01-01T02:10:02Z",
-                "description": "tembakau asli indonesia"
+                "description": "tembakau asli indonesia",
+                "category": 1
             }
         }
     },

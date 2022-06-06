@@ -46,10 +46,11 @@ public class AppConfig {
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
             ConnectionFactory connectionFactory,
-            SimpleRabbitListenerContainerFactoryConfigurer configurer) {
+            SimpleRabbitListenerContainerFactoryConfigurer configurer,
+            RabbitMQConsumerErrorHandler errorHandler) {
         var factory = new SimpleRabbitListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
-        factory.setErrorHandler(new RabbitMQConsumerErrorHandler());
+        factory.setErrorHandler(errorHandler);
         return factory;
     }
 

@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.api.controller;
 
 import java.util.Date;
 
-import com.mekari.mokaaddons.api.service.product.syncmanual.SyncProductManualRequest;
-import com.mekari.mokaaddons.api.webhook.service.event.savepublish.SavePublishEventRequest;
-import com.mekari.mokaaddons.api.webhook.service.item.save.SaveItemRequest;
+import com.mekari.mokaaddons.api.service.product.command.syncmanual.SyncProductManualRequest;
+import com.mekari.mokaaddons.api.webhook.service.event.command.savepublish.SavePublishEventRequest;
+import com.mekari.mokaaddons.api.webhook.service.item.command.save.SaveItemRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
 import org.apache.logging.log4j.LogManager;

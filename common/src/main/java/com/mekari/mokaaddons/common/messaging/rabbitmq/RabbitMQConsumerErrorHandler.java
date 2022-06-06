@@ -12,13 +12,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ErrorHandler;
 
+@Component
 public class RabbitMQConsumerErrorHandler implements ErrorHandler {
-    private @Autowired ObjectMapper mapper;
-    private @Autowired DeadLetterStorage deadLetterStorage;
+    private  ObjectMapper mapper;
+    private  DeadLetterStorage deadLetterStorage;
     private static final Logger logger = LogManager.getFormatterLogger(RabbitMQConsumerErrorHandler.class);
 
+    public RabbitMQConsumerErrorHandler(@Autowired ObjectMapper mapper, @Autowired DeadLetterStorage deadLetterStorage){
+        this.mapper = mapper;
+        this.deadLetterStorage = deadLetterStorage;
+    }
 
     @Override
     public void handleError(Throwable t) {
