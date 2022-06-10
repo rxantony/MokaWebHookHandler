@@ -1,5 +1,6 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processor.handlereceived;
 
+import com.mekari.mokaaddons.common.handler.Validator;
 import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.event.MokaItemReceivedEvent;
 
@@ -12,6 +13,11 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class HandleMokaItemReceivedRequest implements EventRequest {
+public class HandleMokaItemReceivedRequest implements EventRequest, Validator {
     private MokaItemReceivedEvent event;
+
+    @Override
+    public void validate() throws Exception {
+        if(event == null) throw new IllegalArgumentException("event must not be null");
+    }
 }
