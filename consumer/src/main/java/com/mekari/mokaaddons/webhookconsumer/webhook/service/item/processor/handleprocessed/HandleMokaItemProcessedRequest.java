@@ -1,6 +1,6 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processor.handleprocessed;
 
-import com.mekari.mokaaddons.common.handler.Validator;
+import com.mekari.mokaaddons.common.handler.RequestValidator;
 import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.event.MokaItemProcessedEvent;
 
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class HandleMokaItemProcessedRequest implements EventRequest, Validator {
+public class HandleMokaItemProcessedRequest implements EventRequest, RequestValidator {
     private MokaItemProcessedEvent event;
 
     @Override

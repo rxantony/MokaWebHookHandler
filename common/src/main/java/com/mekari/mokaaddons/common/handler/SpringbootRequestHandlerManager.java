@@ -20,8 +20,8 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
     @SuppressWarnings("unchecked")
     public <TRequest extends Request<TResult>, TResult> TResult handle(TRequest request) throws Exception {
         if(request == null) throw new IllegalArgumentException("request must not be null");
-        if(request instanceof Validator){
-            var requestVaidator = (Validator)request;
+        if(request instanceof RequestValidator){
+            var requestVaidator = (RequestValidator)request;
             requestVaidator.validate();
         }
 
