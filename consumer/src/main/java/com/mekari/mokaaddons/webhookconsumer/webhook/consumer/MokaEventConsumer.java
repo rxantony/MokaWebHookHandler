@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.consumer;
+package com.mekari.mokaaddons.webhookconsumer.webhook.consumer;
 
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.AbstractEventMapConsumer;

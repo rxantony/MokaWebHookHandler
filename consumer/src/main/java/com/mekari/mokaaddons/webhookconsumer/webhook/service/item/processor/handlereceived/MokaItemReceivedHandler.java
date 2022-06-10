@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.command.handlereceived;
+package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processor.handlereceived;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.command.handleprocessed;
+package com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processor.handleprocessed;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
