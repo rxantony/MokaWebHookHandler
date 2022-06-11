@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class PostProductToJurnalHandler implements RequestHandler<PostProductToJurnalRequest, List<PostProductToJurnalResult>> {
 
     private ObjectMapper mapper;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(PostProductToJurnalHandler.class);
+    private static final Logger logger = LogManager.getFormatterLogger(PostProductToJurnalHandler.class);
 
     public PostProductToJurnalHandler(@Autowired ObjectMapper mapper){
         this.mapper = mapper;
@@ -31,7 +31,7 @@ public class PostProductToJurnalHandler implements RequestHandler<PostProductToJ
 
             var op = Strings.isBlank(product.getId()) ? "create" : "update";
 
-            LOGGER.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, mapper.writeValueAsString(product));
+            logger.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, mapper.writeValueAsString(product));
             
             var id = Strings.isBlank(product.getId()) ? UUID.randomUUID().toString() : product.getId();
             var jurnalProduct = PostProductToJurnalResult.builder()
