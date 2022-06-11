@@ -14,7 +14,13 @@ import lombok.With;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventHeader implements Cloneable {
+public class EventHeader {
+
+    public EventHeader(EventHeader from){
+        eventId = from.eventId;
+        eventName = from.eventName;
+        timestamp = from.timestamp;
+    }
 
     @JsonProperty("event_id")
     private String eventId;
@@ -25,8 +31,4 @@ public class EventHeader implements Cloneable {
 
     @JsonProperty("timestamp")
     private OffsetDateTime timestamp;
-
-    public Object clone()throws CloneNotSupportedException{  
-        return super.clone();  
-    }  
 }

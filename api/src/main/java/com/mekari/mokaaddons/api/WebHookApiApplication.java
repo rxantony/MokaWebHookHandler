@@ -41,7 +41,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 	}
 
 	private void testUsingDataFromJsonFile(String... arg0) throws Exception{
-		var maxTrhread = 20;
+		var maxTrhread = 1;
 		if (arg0.length > 0)
 			maxTrhread = Integer.parseInt(arg0[0]);
 

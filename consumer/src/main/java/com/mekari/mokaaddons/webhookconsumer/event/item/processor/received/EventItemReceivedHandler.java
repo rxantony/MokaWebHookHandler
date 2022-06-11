@@ -55,7 +55,7 @@ public class EventItemReceivedHandler extends AbstractVoidRequestHandler<EventIt
                 header.getEventId(), header.getEventName(), data.getId(),
                 AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE);
 
-        var eventHeader = (MokaEventHeader) event.getHeader().clone();
+        var eventHeader = new MokaEventHeader(event.getHeader());
         eventHeader.setEventName("moka.item.processed");
 
         var eventBody = new Body(data.getId(), data.getDate());
