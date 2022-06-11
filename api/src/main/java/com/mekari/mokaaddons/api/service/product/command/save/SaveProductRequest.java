@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.api.service.product.command.save;
 
 import java.util.List;
 
-import com.mekari.mokaaddons.common.handler.RequestValidator;
+import com.mekari.mokaaddons.common.handler.Validateable;
 import com.mekari.mokaaddons.common.handler.VoidRequest;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.Singular;
 @Setter
 @Builder
 @AllArgsConstructor
-public class SaveProductRequest implements VoidRequest, RequestValidator{
+public class SaveProductRequest implements VoidRequest, Validateable{
     @Singular private final List<Product> products;
 
     @Getter

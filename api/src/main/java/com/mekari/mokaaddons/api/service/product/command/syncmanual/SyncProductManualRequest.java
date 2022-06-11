@@ -6,7 +6,7 @@ import java.util.Date;
 
 import javax.persistence.criteria.From;
 
-import com.mekari.mokaaddons.common.handler.RequestValidator;
+import com.mekari.mokaaddons.common.handler.Validateable;
 import com.mekari.mokaaddons.common.handler.VoidRequest;
 import com.mekari.mokaaddons.common.util.DateUtil;
 
@@ -19,7 +19,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class SyncProductManualRequest implements VoidRequest, RequestValidator{
+public class SyncProductManualRequest implements VoidRequest, Validateable{
     private Date from;
     private Date to;
 

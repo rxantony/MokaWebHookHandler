@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookconsumer.webhook.service.event.command.comparedate;
 
 import com.mekari.mokaaddons.common.handler.Request;
-import com.mekari.mokaaddons.common.handler.RequestValidator;
+import com.mekari.mokaaddons.common.handler.Validateable;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor 
-public class CompareEventDateRequest implements Request<CompareEventDateResult>, RequestValidator {
+public class CompareEventDateRequest implements Request<CompareEventDateResult>, Validateable {
     private AbstractEvent event;
 
     @Override
