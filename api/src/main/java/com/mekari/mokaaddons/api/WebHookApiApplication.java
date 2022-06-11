@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mekari.mokaaddons.api.controller.SyncController;
 import com.mekari.mokaaddons.api.controller.WebhookController;
 
 import org.apache.commons.io.IOUtils;
@@ -21,6 +22,7 @@ import org.springframework.util.ResourceUtils;
 @SpringBootApplication(scanBasePackages = {"com.mekari.mokaaddons.*"})
 public class WebHookApiApplication implements CommandLineRunner {
 
+	private @Autowired SyncController syncController;
 	private @Autowired WebhookController webhookController;
 	private @Autowired ObjectMapper mapper;
 
@@ -35,7 +37,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 	}
 
 	private void testManualProductSync(String... arg0) throws Exception{
-		webhookController.manualProductSync(new Date(), new Date());
+		syncController.manualProductSync(new Date(), new Date());
 	}
 
 	private void testUsingDataFromJsonFile(String... arg0) throws Exception{
@@ -55,12 +57,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 				var event = events[i + x];
 				Runnable r = () -> {
 					try {
-						/**
-						 * swith to handle if you want to save events into datastore and publish it.
-						 * or to feedProduct only to save the events onto datasource.
-						 */
 						webhookController.handle(event.toString());
-						//webhookController.feedProduct(event.toString());
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

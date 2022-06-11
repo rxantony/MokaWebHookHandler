@@ -1,5 +1,9 @@
 package com.mekari.mokaaddons.api.webhook.service.event.command.savepublish;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.api.config.AppConstant;
@@ -13,12 +17,6 @@ import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage.NewItem;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 @Service
 public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePublishEventRequest> {
     private @Autowired ObjectMapper mapper;
@@ -26,8 +24,6 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
     private @Autowired EventSourceStorage eventStorage;
     private @Autowired Publisher publisher;
     private @Autowired @Qualifier("save.publish.event") EventNameClassMap eventClsMap;
-
-    private static final Logger LOGGER = LogManager.getFormatterLogger(SavePublishEventHandler.class);
 
     @Override
     protected void handleInternal(SavePublishEventRequest request) throws Exception{
@@ -39,7 +35,7 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
             var eventName = jsonNode.get("header").get("event_name").asText();
             var eventCls = eventClsMap.gerEventClass(eventName);
             var event = (AbstractEvent)mapper.readValue(jsonNode.traverse(), eventCls);
-            saveEvent(event);
+            saveEvent(event, request.getJson());
             publishEvent(event);
         }
         catch(Exception ex){
@@ -53,25 +49,25 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
             }
             // basically we can forward this exception into ApiExceptionHandler.
             catch(Exception iex){
-                LOGGER.error(iex.toString());
+                logger.error(iex.toString());
             }           
         }
     }
 
-    private void saveEvent(AbstractEvent event) throws Exception {
+    private void saveEvent(AbstractEvent event, String json) throws Exception {
         var header = event.getHeader();
-        var data = event.getBody().getData();
+        var body = event.getBody();
 
         logger.info("insert event into even_store eventId:%s-eventName:%s-dataId:%s with updatedAt:%s",
-                header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString());
+                header.getEventId(), header.getEventName(), body.getId(), header.getTimestamp().toString());
 
         eventStorage
             .insert(NewItem
                     .builder()
-                    .dataId(data.getId().toString())
+                    .dataId(body.getId().toString())
                     .eventDate(header.getTimestamp())
                     .eventName(header.getEventName())
-                    .payload(mapper.writeValueAsString(event))
+                    .payload(json)
                     .eventId(header.getEventId())
                     .outletId(header.getOutletId())
                     .version(header.getVersion())
@@ -82,11 +78,11 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
 
     private void publishEvent(AbstractEvent event) {
         var header = event.getHeader();
-        var data = event.getBody().getData();
+        var body = event.getBody();
 
         logger.info(
                 "publish webHookEventReceived eventId:%s-eventName:%s-dataId:%s with eventDate:%s into Queue:%sQueue",
-                header.getEventId(), header.getEventName(), data.getId(), header.getTimestamp().toString(),
+                header.getEventId(), header.getEventName(), body.getId(), header.getTimestamp().toString(),
                 AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE);
 
         publisher.publish(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, event);

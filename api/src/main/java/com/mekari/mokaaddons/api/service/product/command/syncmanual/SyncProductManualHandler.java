@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.api.service.product.command.save.SaveProductRequest;
-import com.mekari.mokaaddons.api.webhook.service.item.event.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
@@ -37,10 +37,10 @@ public class SyncProductManualHandler extends AbstractVoidRequestHandler<SyncPro
 
         var requestBuilder = SaveProductRequest.builder();
         for(var mokaItem : mokaItems){
-            var data  = mokaItem.getBody().getData();
+            var body  = mokaItem.getBody();
             requestBuilder.product(SaveProductRequest.Product.builder()
-                        .mokaItemId(data.getId())
-                        .name(data.getName())
+                        .mokaItemId(body.getId())
+                        .name(body.getName())
                         .build());
         }
 

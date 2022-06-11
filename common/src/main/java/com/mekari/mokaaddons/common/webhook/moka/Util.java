@@ -12,6 +12,6 @@ public class Util {
     }
 
     public static EventHandlingException eventNotFoundInEventSource(AbstractEvent event, String source){
-        return new EventHandlingException(String.format("eventId:%s-bodyId:%s is not found on event_source", event.getHeader().getEventId(), event.getBody().getData().getId()), event, source);
+        return new EventHandlingException(String.format("eventId:%s-bodyId:%s is not found on event_source", event.getHeader().getEventId(), event.getBody().getId()), event, source);
     }
 }

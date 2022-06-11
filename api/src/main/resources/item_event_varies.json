@@ -8,12 +8,10 @@
             "version": 1
         },
         "body": {
-            "item": {
-                "id": "1",
-                "name": "tembakau",
-                "description": "tembakau asli indonesia",
-                "date": "2022-01-01T01:10:02Z"
-            }
+            "id": "1",
+            "name": "tembakau",
+            "description": "tembakau asli indonesia",
+            "date": "2022-01-01T01:10:02Z"
         }
     },
     {
@@ -25,12 +23,10 @@
             "version": 1
         },
         "body": {
-            "item": {
-                "id": "2",
-                "name": "tembakau",
-                "description": "tembakau asli indonesia",
-                "date": "2022-01-01T01:10:02Z"
-            }
+            "id": "2",
+            "name": "tembakau",
+            "description": "tembakau asli indonesia",
+            "date": "2022-01-01T01:10:02Z"
         }
     },
     {
@@ -42,12 +38,10 @@
             "version": 1
         },
         "body": {
-            "item": {
-                "id": "3",
-                "name": "tembakau",
-                "description": "tembakau asli indonesia",
-                "date": "2022-01-01T01:10:02Z"
-            }
+            "id": "3",
+            "name": "tembakau",
+            "description": "tembakau asli indonesia",
+            "date": "2022-01-01T01:10:02Z"
         }
     },
     {
@@ -59,12 +53,10 @@
             "version": 1
         },
         "body": {
-            "item": {
-                "id": "4",
-                "name": "tembakau",
-                "description": "tembakau asli indonesia",
-                "date": "2022-01-01T01:10:02Z"
-            }
+            "id": "4",
+            "name": "tembakau",
+            "description": "tembakau asli indonesia",
+            "date": "2022-01-01T01:10:02Z"
         }
     }
 ]

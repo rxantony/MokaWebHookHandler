@@ -9,9 +9,11 @@ import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.event.*;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processor.handleprocessed.HandleMokaItemProcessedRequest;
-import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.processor.handlereceived.HandleMokaItemReceivedRequest;
+import com.mekari.mokaaddons.webhookconsumer.event.*;
+import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemProcessedEvent;
+import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemReceivedEvent;
+import com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed.EventItemProcessedRequest;
+import com.mekari.mokaaddons.webhookconsumer.event.item.processor.received.EventItemReceivedRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,9 +43,9 @@ public class WebhookConfig {
     @Bean("save.publish.event")
     public EventNameClassMap eventClassMapSavePublish() {
         return new EventNameClassMap()
-                .add("moka.item.added", MokaItemReceivedEvent.class, HandleMokaItemReceivedRequest::new)
-                .add("moka.item.updated", MokaItemReceivedEvent.class, HandleMokaItemReceivedRequest::new)
-                .add("moka.item.deleted", MokaItemReceivedEvent.class, HandleMokaItemReceivedRequest::new)
-                .add("moka.item.processed", MokaItemProcessedEvent.class, HandleMokaItemProcessedRequest::new);
+                .add("moka.item.added", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)
+                .add("moka.item.updated", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)
+                .add("moka.item.deleted", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)
+                .add("moka.item.processed", MokaItemProcessedEvent.class, EventItemProcessedRequest::new);
     }
 }

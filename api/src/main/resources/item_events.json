@@ -8,13 +8,10 @@
             "version": 1
         },
         "body": {
-            "item": {
-                "id": "1",
-                "name": "tembakau",
-                "date": "2022-01-01T02:10:02Z",
-                "description": "tembakau asli indonesia",
-                "category": 1
-            }
+            "id": "1",
+            "name": "tembakau",
+            "date": "2022-01-01T02:10:02Z",
+            "description": "tembakau asli indonesia"
         }
     },
     {
@@ -26,12 +23,10 @@
             "version": 1
         },
         "body": {
-            "item": {
-                "id": "1",
-                "name": "tembakau",
-                "date": "2022-01-01T01:10:02Z",
-                "description": "tembakau asli indonesia"
-            }
+            "id": "1",
+            "name": "tembakau",
+            "date": "2022-01-01T01:10:02Z",
+            "description": "tembakau asli indonesia"
         }
     }
 ]
