@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookconsumer.event.item.consumer;
 
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.AbstractEventMapConsumer;
+import com.mekari.mokaaddons.common.webhook.AbstractEventNameClassMapConsumer;
 import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.event.command.comparedate.CompareEventDateRequest;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * see WebhookConfig to know how to map them using EventNameClassMap.
  */
 @Component
-public class MokaEventItemConsumer extends AbstractEventMapConsumer {
+public class MokaEventItemConsumer extends AbstractEventNameClassMapConsumer {
 
     public MokaEventItemConsumer(@Qualifier("moka.item.event") EventNameClassMap eventClassMap) {
         super(eventClassMap);

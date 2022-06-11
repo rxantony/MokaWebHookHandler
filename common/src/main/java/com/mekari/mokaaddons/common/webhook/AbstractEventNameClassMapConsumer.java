@@ -12,14 +12,14 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-public abstract class AbstractEventMapConsumer {
+public abstract class AbstractEventNameClassMapConsumer {
 
     private @Autowired ObjectMapper mapper;
     private @Autowired RequestHandlerManager handlerManager;
     private final EventNameClassMap eventClassMap;
     protected final Logger logger;
 
-    protected AbstractEventMapConsumer(RequestHandlerManager handlerManager, ObjectMapper mapper, EventNameClassMap eventClassMap){
+    protected AbstractEventNameClassMapConsumer(RequestHandlerManager handlerManager, ObjectMapper mapper, EventNameClassMap eventClassMap){
         this(eventClassMap);
         Assert.notNull(handlerManager, "handlerManager must not be null");
         Assert.notNull(mapper, "mapper must not be null");
@@ -27,7 +27,7 @@ public abstract class AbstractEventMapConsumer {
         this.mapper = mapper;
     }
 
-    protected AbstractEventMapConsumer(EventNameClassMap eventClassMap){
+    protected AbstractEventNameClassMapConsumer(EventNameClassMap eventClassMap){
         Assert.notNull(eventClassMap, "eventClassMap must not be null");
         this.eventClassMap = eventClassMap;
         logger = LogManager.getFormatterLogger(this.getClass());
