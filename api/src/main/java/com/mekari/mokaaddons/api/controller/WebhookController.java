@@ -11,11 +11,11 @@ import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 @Component
 public class WebhookController {
     private @Autowired  RequestHandlerManager handlerManager;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(WebhookController.class);
+    private static final Logger logger = LogManager.getFormatterLogger(WebhookController.class);
 
     // sample, it respresents the api endpoint which will be called by partner.
     public void handle(String message) throws Exception{
-        LOGGER.debug("receice webhook message, with payload:%s", message);
+        logger.debug("receice webhook message, with payload:%s", message);
         
         var request = SavePublishEventRequest.builder()
                         .json(message)
