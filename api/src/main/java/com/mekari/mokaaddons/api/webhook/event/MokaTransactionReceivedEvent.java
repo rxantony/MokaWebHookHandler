@@ -91,6 +91,7 @@ import lombok.Setter;
 public class MokaTransactionReceivedEvent extends AbstractEvent {
 
     private Body body;
+    
     @Getter
     @Setter
     public static class Body implements EventBody {
