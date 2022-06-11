@@ -68,7 +68,7 @@ public abstract class AbstractEventNameClassMapConsumer {
         }
     }
 
-    private Triple<String, Event, Request<Void>> getRequestContext(String json) throws EventHandlingException{
+    private Triple<String, Event, Request<Void>> getRequestContext(String json){
         try{
             logger.debug("consume message:%s", json);
             var jsonNode = mapper.readTree(json);
