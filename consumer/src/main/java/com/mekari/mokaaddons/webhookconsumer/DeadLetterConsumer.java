@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.consumer;
+package com.mekari.mokaaddons.webhookconsumer;
 
 import com.mekari.mokaaddons.common.messaging.rabbitmq.AbstractRabbitMQDLConsumer;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;

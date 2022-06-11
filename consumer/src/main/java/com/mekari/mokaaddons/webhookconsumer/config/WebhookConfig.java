@@ -2,6 +2,11 @@ package com.mekari.mokaaddons.webhookconsumer.config;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
@@ -9,16 +14,10 @@ import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.storage.DbLockTrackerStorage;
-import com.mekari.mokaaddons.webhookconsumer.event.*;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemProcessedEvent;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed.EventItemProcessedRequest;
 import com.mekari.mokaaddons.webhookconsumer.event.item.processor.received.EventItemReceivedRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WebhookConfig {
@@ -40,7 +39,7 @@ public class WebhookConfig {
         return new DbLockTrackerStorage(dataSource);
     }
 
-    @Bean("save.publish.event")
+    @Bean("moka.item.event")
     public EventNameClassMap eventClassMapSavePublish() {
         return new EventNameClassMap()
                 .add("moka.item.added", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)

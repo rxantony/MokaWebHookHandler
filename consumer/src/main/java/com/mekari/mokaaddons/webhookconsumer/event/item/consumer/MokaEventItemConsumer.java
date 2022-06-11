@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.consumer;
+package com.mekari.mokaaddons.webhookconsumer.event.item.consumer;
 
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
 import com.mekari.mokaaddons.common.webhook.AbstractEventMapConsumer;
@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
  * see WebhookConfig to know how to map them using EventNameClassMap. 
  */
 @Component
-public class MokaEventConsumer extends AbstractEventMapConsumer {
+public class MokaEventItemConsumer extends AbstractEventMapConsumer {
 
-    public MokaEventConsumer(@Qualifier("save.publish.event") EventNameClassMap eventClassMap) {
+    public MokaEventItemConsumer(@Qualifier("moka.item.event") EventNameClassMap eventClassMap) {
         super(eventClassMap);
     }
 
