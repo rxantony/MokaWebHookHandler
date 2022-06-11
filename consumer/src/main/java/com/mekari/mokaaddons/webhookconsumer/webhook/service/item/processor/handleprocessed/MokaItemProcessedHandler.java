@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class MokaItemProcessedHandler extends AbstractVoidRequestHandler<HandleMokaItemProcessedRequest> {
 
-    private @Autowired Publisher publisher;
-    private @Autowired RequestHandlerManager handlerManager;
+    private Publisher publisher;
+    private RequestHandlerManager handlerManager;
+
+    public MokaItemProcessedHandler(@Autowired RequestHandlerManager handlerManager, @Autowired Publisher publisher){
+        this.publisher = publisher;
+        this.handlerManager = handlerManager;
+    }
 
     @Override
     protected void handleInternal(HandleMokaItemProcessedRequest request) throws Exception {

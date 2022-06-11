@@ -16,9 +16,14 @@ import com.mekari.mokaaddons.webhookconsumer.webhook.service.item.event.MokaItem
 
 @Service
 public class MokaItemReceivedHandler extends AbstractVoidRequestHandler<HandleMokaItemReceivedRequest> {
+    
+    private Publisher publisher;
+    private RequestHandlerManager handlerManager;
 
-    private @Autowired Publisher publisher;
-    private @Autowired RequestHandlerManager handlerManager;
+    public MokaItemReceivedHandler(@Autowired RequestHandlerManager handlerManager, @Autowired Publisher publisher){
+        this.publisher = publisher;
+        this.handlerManager = handlerManager;
+    }
 
     @Override
     protected void handleInternal(HandleMokaItemReceivedRequest request) throws Exception {
