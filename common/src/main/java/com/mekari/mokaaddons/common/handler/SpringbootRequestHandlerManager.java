@@ -19,20 +19,21 @@ public class SpringbootRequestHandlerManager implements RequestHandlerManager {
     @Override
     @SuppressWarnings("unchecked")
     public <TRequest extends Request<TResult>, TResult> TResult handle(TRequest request) throws Exception {
-        if(request == null) throw new IllegalArgumentException("request must not be null");
-        if(request instanceof Validateable){
-            var validateable = (Validateable)request;
+        if (request == null)
+            throw new IllegalArgumentException("request must not be null");
+        if (request instanceof Validateable) {
+            var validateable = (Validateable) request;
             validateable.validate();
         }
 
         var requestCls = request.getClass();
         var requestHandlerType = ResolvableType.forClassWithGenerics(RequestHandler.getRawClass(),
                 ResolvableType.forClass(requestCls));
-                
+
         var beanNames = appContext.getBeanNamesForType(requestHandlerType);
-        if(beanNames.length == 0)
+        if (beanNames.length == 0)
             throw new IllegalArgumentException("No handler for request:" + request.getClass().getName());
-        
+
         var requestHandler = (RequestHandler<TRequest, TResult>) appContext.getBean(beanNames[beanNames.length - 1]);
         return requestHandler.handle(request);
     }

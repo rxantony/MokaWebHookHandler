@@ -1,13 +1,14 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.DeadLetterStorage;
 
 public class BuilderUtil {
     
     private BuilderUtil(){}
 
-    public static DeadLetterStorage.NewItem.NewItemBuilder createDeadLetterStorageItemBuilder(JsonNode eventNode){
-        var builder = DeadLetterStorage.NewItem.builder();  
+    public static DeadLetterStorage.NewDeadLetter.Builder createDeadLetterStorageItemBuilder(JsonNode eventNode){
+        var builder = DeadLetterStorage.NewDeadLetter.builder();  
         if(eventNode == null)
             return builder;  
 

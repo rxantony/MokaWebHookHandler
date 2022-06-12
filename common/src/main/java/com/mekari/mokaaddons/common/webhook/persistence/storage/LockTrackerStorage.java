@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.persistence.storage;
 
 import java.time.OffsetDateTime;
 
@@ -10,16 +10,16 @@ import lombok.Setter;
 
 public interface LockTrackerStorage {
     
-    void insert(NewItem item) throws Exception;
+    void insert(NewLockTracker item) throws Exception;
 
     void delete(int connId, OffsetDateTime date) throws Exception;
 
     @Getter
     @Setter
-    @Builder
+    @Builder(builderClassName="Builder")
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class NewItem {
+    public static class NewLockTracker {
         private int connId;
         private int trxId;
         private String eventId;

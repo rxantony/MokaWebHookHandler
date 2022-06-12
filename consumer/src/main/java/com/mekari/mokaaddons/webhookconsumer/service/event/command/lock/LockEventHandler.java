@@ -15,30 +15,30 @@ import org.springframework.stereotype.Service;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.util.DateUtil;
 import com.mekari.mokaaddons.common.webhook.EventHandlingException;
-import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
-import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.LockTrackerStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.LockTrackerStorage.NewLockTracker;
 import com.mekari.mokaaddons.common.webhook.util.ExceptionUtil;
 
 @Service
 public class LockEventHandler implements RequestHandler<LockEventRequest, LockEventResult> {
 
     private DataSource dataSource;
-    private LockTrackerStorage lockTracker;
+    private LockTrackerStorage lockTrackerStorage;
 
     private static final String GET_CONNID_EVID_SQL = "SELECT connection_id() id UNION (SELECT id FROM event_source WHERE data_id=? LIMIT 1);";
     private static final String LOCKING_ROW_SQL = "SELECT id FROM event_source WHERE id = %s FOR UPDATE;";
     private static final Logger logger = LogManager.getFormatterLogger(LockEventHandler.class);
 
-    public LockEventHandler(@Qualifier("eventstore") DataSource dataSource, @Autowired LockTrackerStorage lockTracker){
+    public LockEventHandler(@Qualifier("eventstore") DataSource dataSource, @Autowired LockTrackerStorage lockTrackerStorage){
         this.dataSource = dataSource;
-        this.lockTracker = lockTracker;
+        this.lockTrackerStorage = lockTrackerStorage;
     }
     @Override
     public LockEventResult handle(LockEventRequest request) throws Exception {
         var event = request.getEvent();
         var conn = createConnection(event);
-        NewItem lockInfo = null;
+        NewLockTracker lockInfo = null;
         try {
             lockInfo = lock(conn, event);
             final var ilockInfo = lockInfo;
@@ -64,7 +64,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
         }
     }
 
-    private NewItem lock(Connection conn, AbstractEvent event) throws Exception {
+    private NewLockTracker lock(Connection conn, AbstractEvent event) throws Exception {
         var ctx = getConnIdAndEventSourceId(conn, event);
         var connId = (int) ctx[0];
         var evsId = (String) ctx[1];
@@ -87,7 +87,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
             }
         }
 
-        var lockItem = NewItem.builder()
+        var lockItem = NewLockTracker.builder()
                 .connId(connId)
                 .eventId(header.getEventId())
                 .eventName(header.getEventName())
@@ -97,7 +97,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
                 .build();
 
         try {
-            lockTracker.insert(lockItem);
+            lockTrackerStorage.insert(lockItem);
         } catch (Exception ex) {
             logger.error(ex.toString());
         }
@@ -107,7 +107,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
         return lockItem;
     }
 
-    private void releaseLock(NewItem lockItem, Connection conn, AbstractEvent event) throws Exception {
+    private void releaseLock(NewLockTracker lockItem, Connection conn, AbstractEvent event) throws Exception {
         var header = event.getHeader();
         var body = event.getBody();
 
@@ -123,7 +123,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
         }
         finally{
             try {
-                lockTracker.delete(lockItem.getConnId(), lockItem.getCreatedAt());
+                lockTrackerStorage.delete(lockItem.getConnId(), lockItem.getCreatedAt());
             } catch (Exception ex) {
                 logger.error(ex.toString());
             }

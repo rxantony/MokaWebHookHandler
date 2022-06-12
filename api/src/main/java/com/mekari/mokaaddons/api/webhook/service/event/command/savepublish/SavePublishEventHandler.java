@@ -1,5 +1,6 @@
 package com.mekari.mokaaddons.api.webhook.service.event.command.savepublish;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -8,20 +9,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.api.config.AppConstant;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
-import com.mekari.mokaaddons.common.messaging.Publisher;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.BuilderUtil;
-import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.EventSourceStorage.NewItem;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.EventSourceStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.EventSourceStorage.NewEventSource;
+import com.mekari.mokaaddons.common.webhook.util.BuilderUtil;
 
 @Service
 public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePublishEventRequest> {
 
     private ObjectMapper mapper;
-    private Publisher publisher;
+    private AmqpTemplate amqpTemplate;
     private EventSourceStorage eventStorage;
     private DeadLetterStorage deadLetterStorage;
     private EventNameClassMap eventClsMap;
@@ -30,13 +30,13 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
             @Autowired @Qualifier("save.publish.event") EventNameClassMap eventClsMap,
             @Autowired DeadLetterStorage deadLetterStorage,
             @Autowired EventSourceStorage eventStorage,
-            @Autowired Publisher publisher,
+            @Autowired AmqpTemplate amqpTemplate,
             @Autowired ObjectMapper mapper) {
 
         this.eventClsMap = eventClsMap;
         this.deadLetterStorage = deadLetterStorage;
         this.eventStorage = eventStorage;
-        this.publisher = publisher;
+        this.amqpTemplate = amqpTemplate;
         this.mapper = mapper;
     }
 
@@ -76,7 +76,7 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
                 header.getEventId(), header.getEventName(), body.getId(), header.getTimestamp().toString());
 
         eventStorage
-                .insert(NewItem
+                .insert(NewEventSource
                         .builder()
                         .dataId(body.getId().toString())
                         .eventDate(header.getTimestamp())
@@ -99,6 +99,6 @@ public class SavePublishEventHandler extends AbstractVoidRequestHandler<SavePubl
                 header.getEventId(), header.getEventName(), body.getId(), header.getTimestamp().toString(),
                 AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE);
 
-        publisher.publish(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, event);
+        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_RECEIVED_EXCHANGE, null, event);
     }
 }

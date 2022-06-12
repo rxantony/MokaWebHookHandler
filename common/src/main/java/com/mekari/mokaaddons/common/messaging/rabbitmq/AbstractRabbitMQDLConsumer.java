@@ -3,8 +3,8 @@ package com.mekari.mokaaddons.common.messaging.rabbitmq;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.BuilderUtil;
-import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.util.BuilderUtil;
 import com.rabbitmq.client.Channel;
 
 import org.apache.logging.log4j.LogManager;

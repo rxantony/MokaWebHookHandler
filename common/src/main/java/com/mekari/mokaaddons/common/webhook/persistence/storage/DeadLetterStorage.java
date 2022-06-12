@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.persistence.storage;
 
 import java.time.OffsetDateTime;
 
@@ -8,13 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 public interface DeadLetterStorage{
-    void insert(NewItem item) throws Exception;
+    void insert(NewDeadLetter item) throws Exception;
 
     @Getter
     @Setter
-    @Builder
+    @Builder(builderClassName = "Builder")
     @AllArgsConstructor
-    public class NewItem {
+    public class NewDeadLetter {
         private String source;
         private String eventId;
         private String payload;

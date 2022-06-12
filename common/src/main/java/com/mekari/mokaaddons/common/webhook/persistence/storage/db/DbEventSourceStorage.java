@@ -1,11 +1,13 @@
-package com.mekari.mokaaddons.common.webhook.storage;
+package com.mekari.mokaaddons.common.webhook.persistence.storage.db;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
+import org.springframework.util.Assert;
+
+import com.mekari.mokaaddons.common.webhook.persistence.storage.EventSourceStorage;
 
 public class DbEventSourceStorage implements EventSourceStorage {
 
@@ -19,6 +21,7 @@ public class DbEventSourceStorage implements EventSourceStorage {
 
     @Override
     public Optional<OffsetDateTime> getLastEventDate(String dataId) throws Exception {
+        Assert.notNull(dataId, "dataId must not be null");
         try (var conn = dataSource.getConnection()) {
             conn.setAutoCommit(true);
             try (var stmt = conn.prepareStatement(GET_EVENTDATE_SQL)) {
@@ -34,19 +37,20 @@ public class DbEventSourceStorage implements EventSourceStorage {
     }
 
     @Override
-    public void insert(NewItem item) throws Exception {
+    public void insert(NewEventSource eventSource) throws Exception {
+        Assert.notNull(eventSource, "eventSource must not be null");
         try (var conn = dataSource.getConnection()) {
             conn.setAutoCommit(true);
             try (var stmt = conn.prepareStatement(INSERT_NEW_ITEM_SQL)) {
-                stmt.setString(1, item.getDataId());
-                stmt.setObject(2, item.getEventDate());
-                stmt.setString(3, item.getEventName());
-                stmt.setString(4, item.getPayload());
-                stmt.setString(5, item.getEventId());
-                stmt.setString(6, item.getOutletId());
-                stmt.setInt(7, item.getVersion());
-                stmt.setObject(8, item.getTimestamp());
-                stmt.setObject(9, item.getCreatedAt());
+                stmt.setString(1, eventSource.getDataId());
+                stmt.setObject(2, eventSource.getEventDate());
+                stmt.setString(3, eventSource.getEventName());
+                stmt.setString(4, eventSource.getPayload());
+                stmt.setString(5, eventSource.getEventId());
+                stmt.setString(6, eventSource.getOutletId());
+                stmt.setInt(7, eventSource.getVersion());
+                stmt.setObject(8, eventSource.getTimestamp());
+                stmt.setObject(9, eventSource.getCreatedAt());
                 stmt.executeUpdate();
             }
         }

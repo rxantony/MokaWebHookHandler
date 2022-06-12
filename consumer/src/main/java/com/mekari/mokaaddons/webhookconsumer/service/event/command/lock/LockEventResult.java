@@ -1,9 +1,9 @@
 package com.mekari.mokaaddons.webhookconsumer.service.event.command.lock;
 
-import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-
 import org.springframework.util.Assert;
+
+import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.LockTrackerStorage.NewLockTracker;
 
 
 public class LockEventResult implements AutoCloseable {
@@ -11,11 +11,11 @@ public class LockEventResult implements AutoCloseable {
         void execute() throws Exception;
     }
 
-    private final NewItem lockInfo;
+    private final NewLockTracker lockInfo;
     private final AbstractEvent event;
     private final ReleaseLock releaseLock;
     
-    public LockEventResult(AbstractEvent event, NewItem lockInfo, ReleaseLock releaseLock){
+    public LockEventResult(AbstractEvent event, NewLockTracker lockInfo, ReleaseLock releaseLock){
 
         Assert.notNull(event, "event must not be null");
         Assert.notNull(lockInfo, "lockInfo must not be null");
@@ -30,7 +30,7 @@ public class LockEventResult implements AutoCloseable {
         return event;
     }
 
-    public NewItem getInfo(){
+    public NewLockTracker getInfo(){
         return lockInfo;
     }
 

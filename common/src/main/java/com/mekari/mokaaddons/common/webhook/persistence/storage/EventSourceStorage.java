@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.persistence.storage;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -12,13 +12,13 @@ public interface EventSourceStorage {
 
     Optional<OffsetDateTime> getLastEventDate(String dataId) throws Exception;
 
-    void insert(NewItem item) throws Exception;
+    void insert(NewEventSource eventSource) throws Exception;
 
     @Getter
     @Setter
-    @Builder
+    @Builder(builderClassName = "Builder")
     @AllArgsConstructor
-    public class NewItem {
+    public class NewEventSource {
         private String dataId;
         private OffsetDateTime eventDate;
         private String eventName;

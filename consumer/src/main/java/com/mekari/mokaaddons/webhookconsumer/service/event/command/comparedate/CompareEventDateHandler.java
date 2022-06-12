@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookconsumer.service.event.command.comparedate;
 
 import com.mekari.mokaaddons.common.handler.RequestHandler;
-import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.util.ExceptionUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -19,7 +19,7 @@ public class MokaItemProcessedEvent extends AbstractEvent {
 
     private Body body;
 
-    public MokaItemProcessedEvent(MokaEventHeader header, Body body){
+    public MokaItemProcessedEvent(MokaEventHeader header, Body body) {
         this.setHeader(header);
         this.setBody(body);
     }

@@ -1,11 +1,11 @@
 package com.mekari.mokaaddons.webhookconsumer.event.item.processor.received;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
-import com.mekari.mokaaddons.common.messaging.Publisher;
 import com.mekari.mokaaddons.common.webhook.moka.MokaEventHeader;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemProcessedEvent;
@@ -16,12 +16,12 @@ import com.mekari.mokaaddons.webhookconsumer.service.product.command.save.SavePr
 @Service
 public class EventItemReceivedHandler extends AbstractVoidRequestHandler<EventItemReceivedRequest> {
     
-    private Publisher publisher;
+    private AmqpTemplate amqpTemplate;
     private RequestHandlerManager handlerManager;
 
-    public EventItemReceivedHandler(@Autowired RequestHandlerManager handlerManager, @Autowired Publisher publisher){
-        this.publisher = publisher;
+    public EventItemReceivedHandler(@Autowired RequestHandlerManager handlerManager, @Autowired AmqpTemplate amqpTemplate){
         this.handlerManager = handlerManager;
+        this.amqpTemplate = amqpTemplate;
     }
 
     @Override
@@ -60,6 +60,6 @@ public class EventItemReceivedHandler extends AbstractVoidRequestHandler<EventIt
 
         var eventBody = new Body(data.getId(), data.getDate());
         var itemProcessed = new MokaItemProcessedEvent(eventHeader, eventBody);
-        publisher.publish(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, itemProcessed);
+        amqpTemplate.convertAndSend(AppConstant.ExchangeName.MOKA_EVENT_PROCESSED_EXCHANGE, null, itemProcessed);
     }
 }

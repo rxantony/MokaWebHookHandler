@@ -4,11 +4,11 @@ import javax.sql.DataSource;
 
 import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.api.webhook.event.MokaTransactionReceivedEvent;
-import com.mekari.mokaaddons.common.webhook.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.EventSourceStorage;
-import com.mekari.mokaaddons.common.webhook.storage.DbDeadLetterStorage;
-import com.mekari.mokaaddons.common.webhook.storage.DbEventSourceStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.DeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.EventSourceStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.db.DbDeadLetterStorage;
+import com.mekari.mokaaddons.common.webhook.persistence.storage.db.DbEventSourceStorage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
