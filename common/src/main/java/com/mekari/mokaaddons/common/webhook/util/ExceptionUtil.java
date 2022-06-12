@@ -1,10 +1,11 @@
 
-package com.mekari.mokaaddons.common.webhook.moka;
+package com.mekari.mokaaddons.common.webhook.util;
 
 import com.mekari.mokaaddons.common.webhook.EventHandlingException;
+import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
 
-public class Util {
-    private Util(){
+public class ExceptionUtil {
+    private ExceptionUtil(){
     }
 
     public static EventHandlingException eventNotFoundInEventSource(AbstractEvent event){

@@ -18,7 +18,7 @@ import com.mekari.mokaaddons.common.webhook.EventHandlingException;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.LockTrackerStorage.NewItem;
 import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.Util;
+import com.mekari.mokaaddons.common.webhook.util.ExceptionUtil;
 
 @Service
 public class LockEventHandler implements RequestHandler<LockEventRequest, LockEventResult> {
@@ -57,7 +57,7 @@ public class LockEventHandler implements RequestHandler<LockEventRequest, LockEv
                 rs.next();
                 var connId = rs.getInt(1);
                 if (!rs.next())
-                    throw Util.eventNotFoundInEventSource(event);
+                    throw ExceptionUtil.eventNotFoundInEventSource(event);
                 var evsId = rs.getString(1);
                 return new Object[] { connId, evsId };
             }
