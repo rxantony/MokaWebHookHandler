@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mekari.mokaaddons.api.webhook.service.event.command.savepublish.SavePublishEventRequest;
+import com.mekari.mokaaddons.api.webhook.event.processor.savepublish.SavePublishEventRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
 @Component
