@@ -1,8 +1,9 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.command.posttojurnal;
+package com.mekari.mokaaddons.webhookconsumer.service.jurnal.command.saveproduct;
 
 import java.util.List;
 
 import com.mekari.mokaaddons.common.handler.Request;
+import com.mekari.mokaaddons.common.handler.Validateable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import lombok.Singular;
 @Setter
 @Builder
 @AllArgsConstructor
-public class PostProductToJurnalRequest implements Request<List<PostProductToJurnalResult>>{
+public class SaveJurnalProductRequest implements Request<SaveJurnalProductResult>, Validateable{
     @Singular private final List<JurnalProduct> products;
 
     @Getter
@@ -27,5 +28,10 @@ public class PostProductToJurnalRequest implements Request<List<PostProductToJur
     public static class JurnalProduct{
         private String id;
         private String name;
+    }
+
+    @Override
+    public void validate() throws Exception {
+        if(products == null) throw new IllegalArgumentException("products must not be null");
     }
 }

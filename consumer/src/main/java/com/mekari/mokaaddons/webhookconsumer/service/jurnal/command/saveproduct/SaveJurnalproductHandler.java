@@ -1,11 +1,6 @@
-package com.mekari.mokaaddons.webhookconsumer.service.product.command.posttojurnal;
+package com.mekari.mokaaddons.webhookconsumer.service.jurnal.command.saveproduct;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.common.handler.RequestHandler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,19 +8,22 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mekari.mokaaddons.common.handler.RequestHandler;
+
 /**
  * sample request handler
  */
 @Service
-public class PostProductToJurnalHandler implements RequestHandler<PostProductToJurnalRequest, List<PostProductToJurnalResult>> {
+public class SaveJurnalproductHandler implements RequestHandler<SaveJurnalProductRequest, SaveJurnalProductResult> {
 
     private @Autowired ObjectMapper mapper;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(PostProductToJurnalHandler.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(SaveJurnalproductHandler.class);
 
     @Override
-    public List<PostProductToJurnalResult> handle(PostProductToJurnalRequest request) throws Exception {
+    public SaveJurnalProductResult handle(SaveJurnalProductRequest request) throws Exception {
 
-        var result = new ArrayList<PostProductToJurnalResult>();
+        var resultBuilder = SaveJurnalProductResult.builder();
         for(var product : request.getProducts()){
             var op = Strings.isBlank(product.getId()) ? "create" : "update";
 
@@ -33,13 +31,13 @@ public class PostProductToJurnalHandler implements RequestHandler<PostProductToJ
             LOGGER.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, json);
             
             var id = Strings.isBlank(product.getId()) ? UUID.randomUUID().toString() : product.getId();
-            var jurnalProduct = PostProductToJurnalResult.builder()
+            var jurnalProduct = SaveJurnalProductResult.JurnalProduct.builder()
                                 .id(id)
                                 .name(product.getName())
                                 .build();
-            result.add(jurnalProduct);
+            resultBuilder.product(jurnalProduct);
         }
-        return result;
+        return resultBuilder.build();
     }
     
 }
