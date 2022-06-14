@@ -12,7 +12,7 @@ import com.mekari.mokaaddons.common.webhook.persistence.storage.*;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.db.*;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemProcessedEvent;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.event.item.consumer.processed.EventItemProcessedRequest;
+import com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed.EventItemProcessedRequest;
 import com.mekari.mokaaddons.webhookconsumer.event.item.processor.received.EventItemReceivedRequest;
 
 @Configuration

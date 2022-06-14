@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.event.item.consumer.processed;
+package com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed;
 
 import org.springframework.stereotype.Service;
 
