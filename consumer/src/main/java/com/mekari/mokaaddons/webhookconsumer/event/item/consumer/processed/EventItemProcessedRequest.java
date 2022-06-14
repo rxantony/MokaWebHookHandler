@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed;
+package com.mekari.mokaaddons.webhookconsumer.event.item.consumer.processed;
 
 import com.mekari.mokaaddons.common.handler.Validateable;
 import com.mekari.mokaaddons.common.webhook.event.moka.EventRequest;
