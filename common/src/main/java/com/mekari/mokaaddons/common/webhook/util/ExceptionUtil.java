@@ -1,8 +1,8 @@
 
 package com.mekari.mokaaddons.common.webhook.util;
 
-import com.mekari.mokaaddons.common.webhook.EventHandlingException;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.event.EventHandlingException;
+import com.mekari.mokaaddons.common.webhook.event.moka.AbstractEvent;
 
 public class ExceptionUtil {
     private ExceptionUtil(){

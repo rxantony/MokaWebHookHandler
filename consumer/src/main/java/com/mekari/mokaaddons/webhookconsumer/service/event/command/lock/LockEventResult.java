@@ -2,7 +2,7 @@ package com.mekari.mokaaddons.webhookconsumer.service.event.command.lock;
 
 import org.springframework.util.Assert;
 
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.event.moka.AbstractEvent;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.LockTrackerStorage.NewLockTracker;
 
 

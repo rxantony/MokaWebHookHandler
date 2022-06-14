@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook.moka;
+package com.mekari.mokaaddons.common.webhook.event.moka;
 
 import com.mekari.mokaaddons.common.handler.VoidRequest;
 

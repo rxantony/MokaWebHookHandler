@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.event;
 
 import java.time.OffsetDateTime;
 

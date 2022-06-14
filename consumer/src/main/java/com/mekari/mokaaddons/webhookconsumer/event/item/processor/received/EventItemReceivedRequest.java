@@ -1,7 +1,7 @@
 package com.mekari.mokaaddons.webhookconsumer.event.item.processor.received;
 
 import com.mekari.mokaaddons.common.handler.Validateable;
-import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
+import com.mekari.mokaaddons.common.webhook.event.moka.EventRequest;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemReceivedEvent;
 
 import lombok.AllArgsConstructor;

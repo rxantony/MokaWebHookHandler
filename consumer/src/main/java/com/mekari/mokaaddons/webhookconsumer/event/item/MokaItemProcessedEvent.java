@@ -2,9 +2,9 @@ package com.mekari.mokaaddons.webhookconsumer.event.item;
 
 import java.time.OffsetDateTime;
 
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.EventBody;
-import com.mekari.mokaaddons.common.webhook.moka.MokaEventHeader;
+import com.mekari.mokaaddons.common.webhook.event.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.event.moka.EventBody;
+import com.mekari.mokaaddons.common.webhook.event.moka.MokaEventHeader;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

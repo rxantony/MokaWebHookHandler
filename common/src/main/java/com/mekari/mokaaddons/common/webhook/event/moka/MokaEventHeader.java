@@ -1,8 +1,8 @@
 
-package com.mekari.mokaaddons.common.webhook.moka;
+package com.mekari.mokaaddons.common.webhook.event.moka;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mekari.mokaaddons.common.webhook.EventHeader;
+import com.mekari.mokaaddons.common.webhook.event.EventHeader;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

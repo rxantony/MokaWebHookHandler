@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.EventHandlingException;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.event.EventHandlingException;
+import com.mekari.mokaaddons.common.webhook.event.moka.AbstractEvent;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.LockTrackerStorage;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.LockTrackerStorage.NewLockTracker;
 import com.mekari.mokaaddons.common.webhook.util.ExceptionUtil;

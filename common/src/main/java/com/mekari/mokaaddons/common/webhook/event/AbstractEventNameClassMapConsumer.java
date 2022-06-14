@@ -1,4 +1,4 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.command.Command;

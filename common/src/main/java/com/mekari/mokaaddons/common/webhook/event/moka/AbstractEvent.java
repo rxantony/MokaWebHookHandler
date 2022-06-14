@@ -1,6 +1,6 @@
-package com.mekari.mokaaddons.common.webhook.moka;
+package com.mekari.mokaaddons.common.webhook.event.moka;
 
-import com.mekari.mokaaddons.common.webhook.Event;
+import com.mekari.mokaaddons.common.webhook.event.Event;
 
 import lombok.Getter;
 import lombok.Setter;

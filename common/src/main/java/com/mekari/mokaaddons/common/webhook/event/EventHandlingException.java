@@ -1,5 +1,7 @@
-package com.mekari.mokaaddons.common.webhook;
+package com.mekari.mokaaddons.common.webhook.event;
 import org.springframework.util.Assert;
+
+import com.mekari.mokaaddons.common.webhook.WebhookHandlingException;
 
 public class EventHandlingException extends WebhookHandlingException {
     private String payload;

@@ -3,8 +3,8 @@ package com.mekari.mokaaddons.common.messaging.rabbitmq;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.util.DateUtil;
-import com.mekari.mokaaddons.common.webhook.EventHandlingException;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.event.EventHandlingException;
+import com.mekari.mokaaddons.common.webhook.event.moka.AbstractEvent;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.DeadLetterStorage;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.DeadLetterStorage.NewDeadLetter;
 

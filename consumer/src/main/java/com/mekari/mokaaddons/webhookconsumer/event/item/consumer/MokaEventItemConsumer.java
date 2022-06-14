@@ -1,8 +1,8 @@
 package com.mekari.mokaaddons.webhookconsumer.event.item.consumer;
 
-import com.mekari.mokaaddons.common.webhook.EventNameClassMap;
-import com.mekari.mokaaddons.common.webhook.AbstractEventNameClassMapConsumer;
-import com.mekari.mokaaddons.common.webhook.moka.EventRequest;
+import com.mekari.mokaaddons.common.webhook.event.EventNameClassMap;
+import com.mekari.mokaaddons.common.webhook.event.moka.EventRequest;
+import com.mekari.mokaaddons.common.webhook.event.AbstractEventNameClassMapConsumer;
 import com.mekari.mokaaddons.webhookconsumer.config.AppConstant;
 import com.mekari.mokaaddons.webhookconsumer.service.event.command.comparedate.CompareEventDateRequest;
 import com.mekari.mokaaddons.webhookconsumer.service.event.command.lock.LockEventRequest;

@@ -4,8 +4,8 @@ import java.time.OffsetDateTime;
 import java.util.Currency;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mekari.mokaaddons.common.webhook.moka.AbstractEvent;
-import com.mekari.mokaaddons.common.webhook.moka.EventBody;
+import com.mekari.mokaaddons.common.webhook.event.moka.AbstractEvent;
+import com.mekari.mokaaddons.common.webhook.event.moka.EventBody;
 
 import lombok.Getter;
 import lombok.Setter;
