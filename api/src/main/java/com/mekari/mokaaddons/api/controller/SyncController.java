@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mekari.mokaaddons.api.service.product.command.syncmanual.SyncProductManualRequest;
+import com.mekari.mokaaddons.api.service.product.command.sync.SyncProductRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
 @Component
@@ -18,7 +18,7 @@ public class SyncController {
 
     // sample case.
     public void manualProductSync(Date from, Date to) throws Exception {
-        var request = SyncProductManualRequest.builder()
+        var request = SyncProductRequest.builder()
                 .from(from)
                 .to(to)
                 .build();

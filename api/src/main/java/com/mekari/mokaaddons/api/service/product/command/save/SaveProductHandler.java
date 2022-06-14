@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import com.mekari.mokaaddons.api.persistence.entity.ProductMapping;
 import com.mekari.mokaaddons.api.persistence.repository.ProductMappingRepository;
-import com.mekari.mokaaddons.api.service.product.command.posttojurnal.PostProductToJurnalRequest;
+import com.mekari.mokaaddons.api.service.jurnal.command.saveproduct.SaveJurnalProductRequest;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.util.DateUtil;
@@ -37,14 +37,14 @@ public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRe
                                 .map(p-> Pair.with(p, productRepository.findByMokaItemId(p.getMokaItemId())))
                                 .collect(Collectors.toList());
 
-        var postToJurnalRequest = PostProductToJurnalRequest.builder();
+        var postToJurnalRequest = SaveJurnalProductRequest.builder();
 
         /**
          * supply PostProductToJurnalRequest.Products with productsMapped item, 
          * set id of PostProductToJurnalRequest.JurnalProduct with null if no matched ProductMapping
          * to indicate Insert or Update operation.
          */
-        productsMapped.forEach(p-> postToJurnalRequest.product(PostProductToJurnalRequest.JurnalProduct.builder()
+        productsMapped.forEach(p-> postToJurnalRequest.product(SaveJurnalProductRequest.JurnalProduct.builder()
             .id(p.getValue1() == null ? null : p.getValue1().getJurnalId())
             .name(p.getValue0().getName())
             .build())
