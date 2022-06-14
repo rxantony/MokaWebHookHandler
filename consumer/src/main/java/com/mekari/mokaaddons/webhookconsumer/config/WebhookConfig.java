@@ -12,8 +12,8 @@ import com.mekari.mokaaddons.common.webhook.persistence.storage.*;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.db.*;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemProcessedEvent;
 import com.mekari.mokaaddons.webhookconsumer.event.item.MokaItemReceivedEvent;
-import com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed.EventItemProcessedRequest;
-import com.mekari.mokaaddons.webhookconsumer.event.item.processor.received.EventItemReceivedRequest;
+import com.mekari.mokaaddons.webhookconsumer.event.item.processor.processed.HandleItemProcessedEventRequest;
+import com.mekari.mokaaddons.webhookconsumer.event.item.processor.received.HandleItemReceivedEventRequest;
 
 @Configuration
 public class WebhookConfig {
@@ -38,9 +38,9 @@ public class WebhookConfig {
     @Bean("moka.item.event")
     public EventNameClassMap eventClassMapSavePublish() {
         return new EventNameClassMap()
-                .add("moka.item.added", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)
-                .add("moka.item.updated", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)
-                .add("moka.item.deleted", MokaItemReceivedEvent.class, EventItemReceivedRequest::new)
-                .add("moka.item.processed", MokaItemProcessedEvent.class, EventItemProcessedRequest::new);
+                .add("moka.item.added", MokaItemReceivedEvent.class, HandleItemReceivedEventRequest::new)
+                .add("moka.item.updated", MokaItemReceivedEvent.class, HandleItemReceivedEventRequest::new)
+                .add("moka.item.deleted", MokaItemReceivedEvent.class, HandleItemReceivedEventRequest::new)
+                .add("moka.item.processed", MokaItemProcessedEvent.class, HandleItemProcessedEventRequest::new);
     }
 }
