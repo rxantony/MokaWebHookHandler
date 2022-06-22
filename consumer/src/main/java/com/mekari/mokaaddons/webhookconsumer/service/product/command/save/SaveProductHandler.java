@@ -34,21 +34,21 @@ public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRe
                                 .map(p-> Pair.with(p, productRepository.findByMokaItemId(p.getMokaItemId())))
                                 .collect(Collectors.toList());
 
-        var saveJurnalProductRequest = SaveJurnalProductRequest.builder();
+        var saveJurnalProductRequestBuilder = SaveJurnalProductRequest.builder();
 
         /**
          * supply PostProductToJurnalRequest.Products with productsMapped item, 
          * set id of PostProductToJurnalRequest.JurnalProduct with null if no matched ProductMapping
          * to indicate Insert or Update operation.
          */
-        productsMapped.forEach(p-> saveJurnalProductRequest.product(SaveJurnalProductRequest.JurnalProduct.builder()
+        productsMapped.forEach(p-> saveJurnalProductRequestBuilder.product(SaveJurnalProductRequest.JurnalProduct.builder()
             .id(p.getValue1() == null ? null : p.getValue1().getJurnalId())
             .name(p.getValue0().getName())
             .build())
         );
 
         //send request to handler manager for handler routing and handling. 
-        var saveJurnalProductResult = handlerManager.handle(saveJurnalProductRequest.build());
+        var saveJurnalProductResult = handlerManager.handle(saveJurnalProductRequestBuilder.build());
 
         //classify jurnalProducts for ProductMapping creating and updating 
         var productMappings = saveJurnalProductResult.getProducts().stream().map(jp->{
