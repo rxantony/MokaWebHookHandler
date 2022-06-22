@@ -33,6 +33,6 @@ public class SaveProductRequest implements VoidRequest, Validateable{
 
     @Override
     public void validate() throws Exception {
-        if(products == null) throw new IllegalArgumentException("products must not be null");
+        if(products.isEmpty()) throw new IllegalArgumentException("products atleast must contains one item");
     }
 }
