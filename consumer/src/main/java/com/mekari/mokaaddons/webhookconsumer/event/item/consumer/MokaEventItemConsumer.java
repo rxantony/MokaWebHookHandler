@@ -31,14 +31,20 @@ public class MokaEventItemConsumer extends AbstractEventNameClassMapConsumer {
     public void consume(Message message, Channel channel) throws Exception {
         var json = new String(message.getBody());
         handle(json, request -> {
-            // event lock here
+            /*
+                event lock here
+            */
             var evRequest = (EventRequest) request;
             var lockRequest = LockEventRequest.builder().event(evRequest.getEvent()).build();
+            
             try (var lockResult = getHandlerManager().handle(lockRequest);) {
-                // event date compares here
+                /*
+                    event date compares here
+                */
                 var compareDateRequest = CompareEventDateRequest.builder()
                         .event(evRequest.getEvent())
                         .build();
+
                 if (!getHandlerManager().handle(compareDateRequest).isEqualsWithLastEventDate()) {
                     return;
                 }

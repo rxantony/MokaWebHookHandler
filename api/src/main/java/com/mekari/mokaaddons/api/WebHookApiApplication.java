@@ -50,7 +50,7 @@ public class WebHookApiApplication implements CommandLineRunner {
 		var m = events.length % maxTrhread;
 
 		for (var i = 0; i < (d * maxTrhread + m); i += maxTrhread) {
-			var threadCount = i + (maxTrhread) > events.length ? m != 0 ? m : d : maxTrhread;
+			final var threadCount = i + (maxTrhread) > events.length ? m != 0 ? m : d : maxTrhread;
 			var threads = new Thread[threadCount];
 
 			for (var x = 0; x < threadCount; x++) {

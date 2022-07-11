@@ -3,6 +3,9 @@ package com.mekari.mokaaddons.api.service.product.command.save;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.javatuples.Pair;
+import org.springframework.stereotype.Service;
+
 import com.mekari.mokaaddons.api.persistence.entity.ProductMapping;
 import com.mekari.mokaaddons.api.persistence.repository.ProductMappingRepository;
 import com.mekari.mokaaddons.api.service.jurnal.command.saveproduct.SaveJurnalProductRequest;
@@ -10,21 +13,14 @@ import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 import com.mekari.mokaaddons.common.util.DateUtil;
 
-import org.javatuples.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class SaveProductHandler extends AbstractVoidRequestHandler<SaveProductRequest> {
 
-    private ProductMappingRepository productRepository;
-    private RequestHandlerManager handlerManager;
-
-    public SaveProductHandler(@Autowired RequestHandlerManager handlerManager, 
-            @Autowired ProductMappingRepository productRepository){
-        this.productRepository = productRepository;
-        this.handlerManager = handlerManager;
-    }
+    private final ProductMappingRepository productRepository;
+    private final RequestHandlerManager handlerManager;
 
     @Override
     protected void handleInternal(SaveProductRequest request) throws Exception {

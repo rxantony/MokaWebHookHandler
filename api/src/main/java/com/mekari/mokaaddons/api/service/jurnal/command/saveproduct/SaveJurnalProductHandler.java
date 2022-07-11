@@ -4,24 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mekari.mokaaddons.common.handler.RequestHandler;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mekari.mokaaddons.common.handler.RequestHandler;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class SaveJurnalProductHandler implements RequestHandler<SaveJurnalProductRequest, List<SaveJurnalProductResult>> {
 
     private ObjectMapper mapper;
     private static final Logger logger = LogManager.getFormatterLogger(SaveJurnalProductHandler.class);
-
-    public SaveJurnalProductHandler(@Autowired ObjectMapper mapper){
-        this.mapper = mapper;
-    }
 
     @Override
     public List<SaveJurnalProductResult> handle(SaveJurnalProductRequest request) throws Exception {

@@ -1,20 +1,18 @@
 package com.mekari.mokaaddons.webhookconsumer.service.event.command.comparedate;
 
+import org.springframework.stereotype.Service;
+
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 import com.mekari.mokaaddons.common.webhook.persistence.storage.EventSourceStorage;
 import com.mekari.mokaaddons.common.webhook.util.ExceptionUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CompareEventDateHandler implements RequestHandler<CompareEventDateRequest, CompareEventDateResult> {
 
-    private EventSourceStorage storage;
-    
-    public CompareEventDateHandler(@Autowired EventSourceStorage storage){
-        this.storage = storage;
-    }
+    private final EventSourceStorage storage;
 
     @Override
     public CompareEventDateResult handle(CompareEventDateRequest request) throws Exception {

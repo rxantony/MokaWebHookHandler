@@ -4,28 +4,25 @@ import java.io.FileInputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.api.service.product.command.save.SaveProductRequest;
 import com.mekari.mokaaddons.api.webhook.event.MokaItemReceivedEvent;
 import com.mekari.mokaaddons.common.handler.AbstractVoidRequestHandler;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class SyncProductHandler extends AbstractVoidRequestHandler<SyncProductRequest> {
 
-    private ObjectMapper mapper;
-    private RequestHandlerManager handlerManager;
+    private final ObjectMapper mapper;
+    private final RequestHandlerManager handlerManager;
 
-    public SyncProductHandler(@Autowired RequestHandlerManager handlerManager,
-            @Autowired ObjectMapper mapper){
-        this.handlerManager = handlerManager;
-        this.mapper = mapper;
-    }
     @Override
     protected void handleInternal(SyncProductRequest request) throws Exception {
 

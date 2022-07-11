@@ -1,10 +1,7 @@
 package com.mekari.mokaaddons.api.service.product.command.sync;
 
-import java.time.LocalDate;
 import java.time.Period;
 import java.util.Date;
-
-import javax.persistence.criteria.From;
 
 import com.mekari.mokaaddons.common.handler.Validateable;
 import com.mekari.mokaaddons.common.handler.VoidRequest;

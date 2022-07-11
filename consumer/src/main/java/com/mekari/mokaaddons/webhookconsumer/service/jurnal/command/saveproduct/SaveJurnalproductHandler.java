@@ -5,20 +5,22 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mekari.mokaaddons.common.handler.RequestHandler;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * sample request handler
  */
 @Service
+@RequiredArgsConstructor
 public class SaveJurnalproductHandler implements RequestHandler<SaveJurnalProductRequest, SaveJurnalProductResult> {
 
-    private @Autowired ObjectMapper mapper;
-    private static final Logger LOGGER = LogManager.getFormatterLogger(SaveJurnalproductHandler.class);
+    private final ObjectMapper mapper;
+    private static final Logger logger = LogManager.getFormatterLogger(SaveJurnalproductHandler.class);
 
     @Override
     public SaveJurnalProductResult handle(SaveJurnalProductRequest request) throws Exception {
@@ -28,7 +30,7 @@ public class SaveJurnalproductHandler implements RequestHandler<SaveJurnalProduc
             var op = Strings.isBlank(product.getId()) ? "create" : "update";
 
             var json = mapper.writeValueAsString(product);
-            LOGGER.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, json);
+            logger.debug("%s product to jurnal through http post://jurnal.id/product/%s, payload:%s", op, op, json);
             
             var id = Strings.isBlank(product.getId()) ? UUID.randomUUID().toString() : product.getId();
             var jurnalProduct = SaveJurnalProductResult.JurnalProduct.builder()
