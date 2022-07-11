@@ -2,19 +2,17 @@ package com.mekari.mokaaddons.api.controller;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mekari.mokaaddons.api.service.product.command.sync.SyncProductRequest;
 import com.mekari.mokaaddons.common.handler.RequestHandlerManager;
 
-@Component
-public class SyncController {
-    private RequestHandlerManager handlerManager;
+import lombok.RequiredArgsConstructor;
 
-    public SyncController(@Autowired RequestHandlerManager handlerManager) {
-        this.handlerManager = handlerManager;
-    }
+@Component
+@RequiredArgsConstructor
+public class SyncController {
+    private final RequestHandlerManager handlerManager;
 
     // sample case.
     public void manualProductSync(Date from, Date to) throws Exception {
